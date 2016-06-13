@@ -8,17 +8,120 @@
 	  href="../lib/jquery.mobile.min.css" />
     <script src="../lib/jquery.min.js"></script>
     <script src="../lib/jquery.mobile.min.js"></script>
+    <script src="fishwatchr_mini.js"></script>
+    <script type="text/javascript">
+      setInterval(displayTime, 1000, "#current_time");
+    </script>
   </head>
   <body>
     <div id="home" data-role="page">
       <div data-role="header">
 	<h1>FishWatchr Mini</h1>
       </div>
-      <div role="main" class="ui-content">
-	<button class="ui-btn ui-btn-icon-top ui-icon-delete ui-corner-all">サブ画面へ</a>
+      <div data-role="main" class="ui-content">
+	<div class="time">
+	  現在時刻：<span id="current_time">Processing ...</span>
+	</div>
+	<a data-role="button" class="btn-start" href="observation.html" data-icon="star">観察開始！</a>
+	<div data-role="tabs" id="tabs" data-mini="true" class="ui-body-a">
+	  <div data-role="navbar">
+	    <ul>
+	      <li><a id="username-tab" href="#username" data-ajax="false">ユーザ名</a></li>
+	      <li><a id="annotation-tab" href="#annotation" data-ajax="false">話者・ラベル</a></li>
+	      <li><a id="other-tab" href="#other" data-ajax="false">その他</a></li>
+	    </ul>
+	  </div>
+	  <div id="username" class="ui-body ui-content">
+	    <form>
+	      <label for="username-i">ユーザ名</label>
+	      <input id="username-i" name="username-i" type="text"
+		     data-clear-btn="true" data-clear-btn-text="クリア"
+		     value="name" />
+	    </form>
+	    <form>
+	      <label for="read-options">オプション：</label>
+	      <input class="ui-btn" id="read-options" type="button" data-mini="true" data-inline="true" value="ファイル読み込み" />
+	    </form>
+	  </div>
+	  <div id="annotation" class="ui-body-d ui-content">
+	    <div class="ui-field-contain">
+	      <select id="observation_mode" name="select-native-1" id="select-native-1" data-mini="true">
+		<option value="mode_speaker">観察モード：話者</option>
+		<option value="mode_label">観察モード：ラベル</option>
+		<option value="mode_speaker_label">観察モード：話者・ラベル</option>
+		<option value="mode_label_speaker">観察モード：ラベル・話者</option>
+	      </select>
+	    </div>
+	    <div class="ui-grid-a">
+	      <div class="ui-block-a">話者</div>
+	      <div class="ui-block-b">ラベル</div>
+	      
+	      <div class="ui-block-a">
+		<input id="speaker1" name="speaker1" type="text"
+		       data-clear-btn="true" data-clear-btn-text="クリア"
+		       data-mini="true"
+		       value="話者１" />
+	      </div>
+	      <div class="ui-block-b">
+		<input id="label1" name="label1" type="text"
+		       data-clear-btn="true" data-clear-btn-text="クリア"
+		       data-mini="true"
+		       value="ラベル１" />
+	      </div>
+	      
+	      <div class="ui-block-a">
+		<input id="speaker2" name="speaker2" type="text"
+		       data-clear-btn="true" data-clear-btn-text="クリア"
+		       data-mini="true"
+		       value="話者２" />
+	      </div>
+	      <div class="ui-block-b">
+		<input id="label2" name="label2" type="text"
+		       data-clear-btn="true" data-clear-btn-text="クリア"
+		       data-mini="true"
+		       value="ラベル２" />
+	      </div>
+	      
+	      <div class="ui-block-a">
+		<input id="speaker3" name="speaker3" type="text"
+		       data-mini="true"
+		       data-clear-btn="true" data-clear-btn-text="クリア" />
+	      </div>
+	      <div class="ui-block-b">
+		<input id="label3" name="label3" type="text"
+		       data-mini="true"
+		       data-clear-btn="true" data-clear-btn-text="クリア" />
+	      </div>
+	      
+	      <div class="ui-block-a">
+		<input id="speaker4" name="speaker4" type="text"
+		       data-mini="true"
+		       data-clear-btn="true" data-clear-btn-text="クリア" />
+	      </div>
+	      <div class="ui-block-b">
+		<input id="label4" name="label4" type="text"
+		       data-mini="true"
+		       data-clear-btn="true" data-clear-btn-text="クリア" />
+	      </div>
+	      
+	      <div class="ui-block-a">
+		<input id="speaker5" name="speaker5" type="text"
+		       data-mini="true"
+		       data-clear-btn="true" data-clear-btn-text="クリア" />
+	      </div>
+	      <div class="ui-block-b">
+		<input id="label5" name="label5" type="text"
+		       data-mini="true"
+		       data-clear-btn="true" data-clear-btn-text="クリア" />
+	      </div>
+	    </div>
+	  </div>
+	  <div id="other" class="ui-body-d ui-content">
+	  </div>
+	</div>
       </div>
       <div data-role="footer">
-	<h3>footer a</h3>
+	<h3>Copyright 2016 Masaya YAMAGUCHI</h3>
       </div>
     </div>
   </body>
