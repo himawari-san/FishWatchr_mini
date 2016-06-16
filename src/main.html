@@ -10,7 +10,7 @@
     <script src="../lib/jquery.mobile.min.js"></script>
     <script src="fishwatchr_mini.js"></script>
     <script type="text/javascript">
-      setInterval(displayTime, 1000, "#current_time");
+<!--      setInterval(displayTime, 1000, "#current_time"); -->
     </script>
   </head>
   <body>
@@ -20,36 +20,37 @@
       </div>
       <div data-role="main" class="ui-content">
 	<div class="time">
-	  現在時刻：<span id="current_time">Processing ...</span>
+	  現在時刻：<span id="current_time_home">Processing ...</span>
 	</div>
-	<a data-role="button" class="btn-start" href="observation.html" data-icon="star">観察開始！</a>
+	<a data-role="button" id="btn-start" href="observation.html" data-icon="star">観察開始！</a>
 	<div data-role="tabs" id="tabs" data-mini="true" class="ui-body-a">
 	  <div data-role="navbar">
 	    <ul>
-	      <li><a id="username-tab" href="#username" data-ajax="false">ユーザ名</a></li>
-	      <li><a id="annotation-tab" href="#annotation" data-ajax="false">話者・ラベル</a></li>
-	      <li><a id="other-tab" href="#other" data-ajax="false">その他</a></li>
+	      <li><a id="username-tab" href="#username-panel" data-ajax="false">ユーザ名</a></li>
+	      <li><a id="annotation-tab" href="#annotation-panel" data-ajax="false">話者・ラベル</a></li>
+	      <li><a id="data-tab" href="#data-panel" data-ajax="false">データ</a></li>
 	    </ul>
 	  </div>
-	  <div id="username" class="ui-body ui-content">
+	  <div id="username-panel" class="ui-body ui-content">
 	    <form>
-	      <label for="username-i">ユーザ名</label>
-	      <input id="username-i" name="username-i" type="text"
+	      <label for="username">ユーザ名</label>
+	      <input id="username" name="username" type="text"
 		     data-clear-btn="true" data-clear-btn-text="クリア"
-		     value="name" />
+		     placeholder="Input your username"
+		     value="" />
 	    </form>
 	    <form>
 	      <label for="read-options">オプション：</label>
 	      <input class="ui-btn" id="read-options" type="button" data-mini="true" data-inline="true" value="ファイル読み込み" />
 	    </form>
 	  </div>
-	  <div id="annotation" class="ui-body-d ui-content">
+	  <div id="annotation-panel" class="ui-body-d ui-content">
 	    <div class="ui-field-contain">
-	      <select id="observation_mode" name="select-native-1" id="select-native-1" data-mini="true">
+	      <select id="selector1-observation-mode" name="selector1-observation-mode" data-mini="true">
 		<option value="mode_speaker">観察モード：話者</option>
 		<option value="mode_label">観察モード：ラベル</option>
-		<option value="mode_speaker_label">観察モード：話者・ラベル</option>
-		<option value="mode_label_speaker">観察モード：ラベル・話者</option>
+		<option value="mode_speaker_label">観察モード：話者⇒ラベル</option>
+		<option value="mode_label_speaker">観察モード：ラベル⇒話者</option>
 	      </select>
 	    </div>
 	    <div class="ui-grid-a">
@@ -116,7 +117,20 @@
 	      </div>
 	    </div>
 	  </div>
-	  <div id="other" class="ui-body-d ui-content">
+	  <div id="data-panel" class="ui-body-d ui-content">
+	    <div class="data_list ui-body-c ui-corner-all ui-mini">
+	      <ul data-role="listview" data-split-icon="delete" data-split-theme="a" data-inset="true">
+		<li>
+		  <a href="#" ><span id="list1">（保存データ１）</span></a>
+		  <a href="#" data-rel="popup" data-position-to="window" data-transition="pop">test</a>
+		</li>
+		<li>
+		  <a href="#" ><span id="list2">（保存データ２）</span></a>
+		  <a href="#" data-rel="popup" data-position-to="window" data-transition="pop">test</a>
+	    </li>
+	  </ul>
+	</div>
+
 	  </div>
 	</div>
       </div>
