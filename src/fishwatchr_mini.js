@@ -198,8 +198,51 @@ $(document).on('tap', '.btn-annotation', function(event) {
 });
 
 
+// detect change of select menu
+$(document).on("change", "#selector2-observation-mode", function () {
+    updateAnnotationButtons();
+});
+
+
 $(function (){
 })
+
+
+function updateAnnotationButtons(){
+
+    annotationMode = $("#selector2-observation-mode").val();
+
+    var ca = 1;
+    var cb = 1;
+    
+    for(var i = 1; i <= nBoxes; i++){
+	var pn = "speaker" + i;
+	var v = annotatedSpeakers[pn];
+	
+	if(v != undefined && v != ""){
+	    var targetID = "#bt_speaker" + ca;
+	    if(annotationMode == "mode_label"){
+		$(targetID).prop("disabled", true);
+	    } else {
+		$(targetID).prop("disabled", false);
+	    }
+	    ca++;
+	} 
+	
+	pn = "label" + i;
+	v = annotatedLabels[pn];
+	if(v != undefined && v != ""){
+	    var targetID = "#bt_label" + cb;
+	    if(annotationMode == "mode_speaker"){
+		$(targetID).prop("disabled", true);
+	    } else {
+		$(targetID).prop("disabled", false);
+	    }
+	    cb++;
+	} 
+    }
+}
+
 
 
 function date2FormattedTime(date){
