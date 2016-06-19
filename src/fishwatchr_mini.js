@@ -16,6 +16,8 @@ var tempAnnotationLabel = "";
 var timerID = -1;
 var timerInterval = 500; 
 
+var deletedTargetID = "";
+
 // quoted from http://dotnsf.blog.jp/archives/1012215593.html
 if(window.history && window.history.pushState){
     console.log("hey");
@@ -55,6 +57,7 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
     if(ui.toPage.is('#observation')){
 	// start new timer
 	timerID = setInterval(displayTime, timerInterval, "#current_time_observation");
+//	timerID = setInterval(displayElapsedTime, timerInterval, "#current_time_observation");
 
 	// display username
 	$("#current_username").text(username);
@@ -205,7 +208,31 @@ $(document).on("change", "#selector2-observation-mode", function () {
 
 
 $(function (){
-})
+});
+
+
+$(document).on('tap', '.disp-button-delete', function(event) {
+    deletedTargetID = event.target.id;
+    console.log("RID:" + event.target.id);
+});
+
+
+$(document).on('tap', '#disp-delete-execute', function(event) {
+    var iEnd = annotationResults.length - 1;
+    
+    if(deletedTargetID == "disp-button1"){
+	if(iEnd >= 0) {
+	    console.log("DID:" + deletedTargetID);
+	    return;
+	}
+    } else if(deletedTargetID == "disp-button2"){
+	if(iEnd >= 1) {
+	    console.log("DID:" + deletedTargetID);
+	    return;
+	}
+    }
+});
+
 
 
 function updateAnnotationButtons(){
@@ -244,6 +271,11 @@ function updateAnnotationButtons(){
 }
 
 
+function deleteItem(target){
+    
+    
+}
+
 
 function date2FormattedTime(date){
     var hour = date.getHours();
@@ -277,6 +309,8 @@ function displayTime(elementId){
     var now = date2FormattedTime(new Date());
     $(elementId).text(now);
 }
+
+
 
 
 function displayResults(){

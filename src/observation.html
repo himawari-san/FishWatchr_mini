@@ -33,18 +33,26 @@
 	  </div>
 	</fieldset>
 
+	<!-- latest annotations -->
 	<div class="box_result ui-body-c ui-corner-all ui-mini">
-<!--	  <h3>直近のアノテーション</h3>-->
 	  <ul data-role="listview" data-split-icon="delete" data-split-theme="a" data-inset="true">
 	    <li>
 	      <a href="#" ><span id="disp1">（直近のアノテーション - なし）</span></a>
-	      <a href="#" data-rel="popup" data-position-to="window" data-transition="pop">test</a>
+	      <a href="#popupDialog" class="disp-button-delete" id="disp-button1" data-rel="popup" data-position-to="window" data-transition="pop">test</a>
 	    </li>
 	    <li>
 	      <a href="#" ><span id="disp2">（直近のアノテーション - なし）</span></a>
-	      <a href="#" data-rel="popup" data-position-to="window" data-transition="pop">test</a>
+	      <a href="#popupDialog"  class="disp-button-delete" id="disp-button2" data-rel="popup" data-position-to="window" data-transition="pop">test</a>
 	    </li>
 	  </ul>
+
+	  <div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+	    <div role="main" class="ui-content">
+              <h3 class="ui-title">選択したアノテーションを削除しますか？</h3>
+              <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Cancel</a>
+              <a href="#" id="disp-delete-execute" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow">削除</a>
+	    </div>
+	  </div>
 	</div>
 	<div class="box_button ui-body">
 	  <a data-role="button" data-corners="true" href="main.html" data-icon="star">終了</a>
