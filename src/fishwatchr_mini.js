@@ -56,8 +56,7 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
     // observation page
     if(ui.toPage.is('#observation')){
 	// start new timer
-	timerID = setInterval(displayTime, timerInterval, "#current_time_observation");
-//	timerID = setInterval(displayElapsedTime, timerInterval, "#current_time_observation");
+	timerID = setInterval(displayElapsedTime, timerInterval, "#current_time_observation");
 
 	// display username
 	$("#current_username").text(username);
@@ -310,6 +309,16 @@ function displayTime(elementId){
     $(elementId).text(now);
 }
 
+
+function displayElapsedTime(elementId){
+    $(elementId).text(getElapsedTime());
+}
+
+
+function getElapsedTime(){
+    var now = new Date();
+    return time2FormattedTime(now.getTime() - startTime.getTime());
+}
 
 
 
