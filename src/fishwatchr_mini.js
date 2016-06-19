@@ -41,8 +41,15 @@ $(document).on('pagecreate', function(event, ui){
 // pagecontainershow
 $(document).on('pagecontainershow', function(event, ui){
     if(ui.toPage.is('#home')){
-	$('#username-tab').trigger('click');
-	console.log("tabs show!!");
+	// activate the selected tab's navi
+	var activeTag = $('#tabs').tabs("option", "active");
+	switch(activeTag){
+	    case 0: $('#username-tab').trigger('click');
+	    break;
+	    case 1: $('#annotation-tab').trigger('click');
+	    break;
+	    case 2: $('#data-tab').trigger('click');
+	}
     }
 });
 
