@@ -18,6 +18,10 @@ var timerInterval = 500;
 
 var deletedTargetID = "";
 
+// key: startTime+\t+username
+// value: array of annotations
+var annotationStorage = {};
+
 // quoted from http://dotnsf.blog.jp/archives/1012215593.html
 // if(window.history && window.history.pushState){
 //     console.log("hey");
@@ -134,6 +138,7 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
     } else if(ui.toPage.is('#home')){
 	timerID = setInterval(displayTime, timerInterval, "#current_time_home");
 	console.log("new timer:" + timerID);
+	annotationResults = [];
     }
 });
 
@@ -156,8 +161,14 @@ $(document).on('pagecontainerbeforehide', function(event, ui){
 
 	// get annotation mode
 	annotationMode = $("#selector1-observation-mode").val();
+    } else if(ui.prevPage.is('#observation')){
+	// save annotations to annotationStorage
+	var savename = username + "\t" + startTime;
+	annotationStorage[savename] = annotationResults.concat();
+	console.log("observation page closed!!");
     }
 });
+
 
 // push startbutton
 $(document).on('tap', '#btn-start', function(event) {
