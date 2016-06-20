@@ -19,18 +19,18 @@ var timerInterval = 500;
 var deletedTargetID = "";
 
 // quoted from http://dotnsf.blog.jp/archives/1012215593.html
-if(window.history && window.history.pushState){
-    console.log("hey");
-    history.pushState("nohb", null, "");
-    $(window).on("popstate", function(event){
-	console.log("hey1");
-	if(!event.originalEvent.state){
-	    console.log("hey2");
-	    history.pushState("nohb", null, "");
-	    return;
-	}
-    });
-}
+// if(window.history && window.history.pushState){
+//     console.log("hey");
+//     history.pushState("nohb", null, "");
+//     $(window).on("popstate", function(event){
+// 	console.log("hey1");
+// 	if(!event.originalEvent.state){
+// 	    console.log("hey2");
+// 	    history.pushState("nohb", null, "");
+// 	    return;
+// 	}
+//     });
+// }
 
 
 // pagecreate
@@ -174,8 +174,6 @@ $(document).on('tap', '.btn-annotation', function(event) {
     var buttonID = event.target.id;
     var buttonText = event.target.innerHTML;
     
-    console.log(buttonID);
-    
     if(annotationMode == "mode_speaker"){
 	tempAnnotationSpeaker = buttonText;
 	tempAnnotationLabel = "-";
@@ -201,7 +199,6 @@ $(document).on('tap', '.btn-annotation', function(event) {
     annotation = tempAnnotationSpeaker + "," + tempAnnotationLabel + "," + currentTime + "," + elapsedTime + "," + username;
     annotationResults.push(annotation);
     displayResults();
-    console.log(annotation);
     tempAnnotationSpeaker = "-";
     tempAnnotationLabel = "-";
 });
@@ -209,11 +206,8 @@ $(document).on('tap', '.btn-annotation', function(event) {
 
 // detect change of select menu
 $(document).on("change", "#selector2-observation-mode", function () {
+    console.log("change!!");
     updateAnnotationButtons();
-});
-
-
-$(function (){
 });
 
 
@@ -229,10 +223,14 @@ $(document).on('tap', '#disp-delete-execute', function(event) {
     if(deletedTargetID == "disp-button1"){
 	if(iEnd >= 0) {
 	    console.log("DID:" + deletedTargetID);
+	    annotationResults.splice(iEnd, 1);
+	    displayResults();
 	    return;
 	}
     } else if(deletedTargetID == "disp-button2"){
 	if(iEnd >= 1) {
+	    annotationResults.splice(iEnd-1, 1);
+	    displayResults();
 	    console.log("DID:" + deletedTargetID);
 	    return;
 	}
@@ -330,11 +328,13 @@ function getElapsedTime(){
 
 
 function displayResults(){
-    var iEnd = annotationResults.length - 1;
-    var p = 1;
+    var p = annotationResults.length - 1;
 
-    for(var i = iEnd; i >= 0 && p <= 2; i--){
-	$("#disp" + p).text(annotationResults[i]);
-	p++;
+    for(var i = 1; i <= nDisp; i++){
+	if(p < 0){
+	    $("#disp" + i).text("（直近のアノテーション - なし）");
+	} else {
+	    $("#disp" + i).text(annotationResults[p--]);
+	}
     }
 }
