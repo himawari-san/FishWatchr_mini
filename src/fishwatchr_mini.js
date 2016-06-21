@@ -20,7 +20,7 @@ var deletedTargetID = "";
 
 // key: startTime+\t+username
 // value: array of annotations
-var annotationStorage = {};
+var annotationStorage = [];
 
 // quoted from http://dotnsf.blog.jp/archives/1012215593.html
 // if(window.history && window.history.pushState){
@@ -162,10 +162,11 @@ $(document).on('pagecontainerbeforehide', function(event, ui){
 	// get annotation mode
 	annotationMode = $("#selector1-observation-mode").val();
     } else if(ui.prevPage.is('#observation')){
-	// save annotations to annotationStorage
-	var savename = username + "\t" + startTime;
-	annotationStorage[savename] = annotationResults.concat();
 	console.log("observation page closed!!");
+	// save annotations to annotationStorage
+	var newdata = {starttime:startTime, username:username, annotations:annotationResults.concat()};
+	annotationStorage.push(newdata);
+	updateSavenameList();
     }
 });
 
@@ -283,6 +284,23 @@ function updateAnnotationButtons(){
 	    cb++;
 	} 
     }
+}
+
+
+function updateSavenameList(){
+    $("#savename-list").empty();
+    for(i = annotationStorage.length-1; i >= 0; i--){
+	$("#savename-list").append(
+	    "<li>" +
+		"<a href=\"#\">" +
+		date2FormattedTime(annotationStorage[i].starttime) +
+		"/" +
+		annotationStorage[i].username +
+		"</a>" +
+		"<a href=\"#popupDialog\" class=\"savename-button\" id=\"savename-button\"" + i + "\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\"></a>" +
+		"</li>");
+    }
+    $("#savename-list").listview("refresh");
 }
 
 
