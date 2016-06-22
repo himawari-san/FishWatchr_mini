@@ -28,14 +28,16 @@
 	      <li><a id="data-tab" href="#data-panel" data-ajax="false">データ</a></li>
 	    </ul>
 	  </div>
-	  <div id="username-panel" class="ui-body ui-content">
-	      <label for="username">ユーザ名</label>
-	      <input id="username" name="username" type="text"
-		     data-clear-btn="true" data-clear-btn-text="クリア"
-		     placeholder="Input your username"
-		     value="" />
-	      <label for="read-options">オプション：</label>
-	      <input class="ui-btn" id="read-options" type="button" data-mini="true" data-inline="true" value="ファイル読み込み" />
+	  <div id="username-panel" class="ui-body ui-content ui-mini">
+	    <label for="username">ユーザ名</label>
+	    <input id="username" name="username" type="text"
+		   data-clear-btn="true" data-clear-btn-text="クリア"
+		   placeholder="Input your username"
+		   value="" />
+	    <div class="ui-body">
+	      <label for="option-file">オプション：</label>
+	      <input data-clear-btn="false" id="option-file" name="option-file" value="" type="file">
+	    </div>
 	  </div>
 	  <div id="annotation-panel" class="ui-body-d ui-content">
 	    <div class="ui-field-contain">
