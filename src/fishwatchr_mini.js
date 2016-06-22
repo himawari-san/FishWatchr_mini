@@ -54,6 +54,8 @@ $(document).on('pagecontainershow', function(event, ui){
 	    break;
 	    case 2: $('#data-tab').trigger('click');
 	}
+
+	writeAnnotations();
     }
 });
 
@@ -250,6 +252,12 @@ $(document).on('tap', '#disp-delete-execute', function(event) {
 });
 
 
+$(document).on('tap', '.save-format-button', function(event) {
+    var targetID = event.target.id;
+    console.log("tid:" + targetID);
+});
+
+
 
 function updateAnnotationButtons(){
 
@@ -297,7 +305,7 @@ function updateSavenameList(){
 		"/" +
 		annotationStorage[i].username +
 		"</a>" +
-		"<a href=\"#popupDialog\" class=\"savename-button\" id=\"savename-button\"" + i + "\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\"></a>" +
+		"<a href=\"#popup-dialog-save\" class=\"savename-button\" id=\"savename-button\"" + i + "\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\"></a>" +
 		"</li>");
     }
     $("#savename-list").listview("refresh");
@@ -355,7 +363,6 @@ function getElapsedTime(){
 }
 
 
-
 function displayResults(){
     var p = annotationResults.length - 1;
 
@@ -366,4 +373,18 @@ function displayResults(){
 	    $("#disp" + i).text(annotationResults[p--]);
 	}
     }
+}
+
+
+function writeAnnotations (){
+    var decXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    var commentTypesXML = "";
+    var discussersXML = "";
+    var blob = new Blob([decXML+
+	"<tt><span>test</span></tt>"
+    ],{type: "text/html"});
+
+    console.log(URL.createObjectURL(blob));
+
+    $("#ttt").attr("href", URL.createObjectURL(blob));
 }
