@@ -36,7 +36,7 @@
 		   value="" />
 	    <div class="ui-body">
 	      <label for="option-file">オプション：</label>
-	      <input data-clear-btn="false" id="option-file" name="option-file" value="" type="file">
+	      <input data-clear-btn="false" id="option-file" name="option-file" value="" type="file" />
 	    </div>
 	  </div>
 	  <div id="annotation-panel" class="ui-body-d ui-content">
@@ -120,18 +120,31 @@
 	    </div>
 	  </div>
 	</div>
-
+	
 	<div data-role="popup" id="popup-dialog-save" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;" class="ui-mini">
 	  <div data-role="header" data-theme="a">
-	    <h1>観察結果の保存</h1>
+	    <h1>観察結果の閲覧</h1>
 	  </div>
 	  <div role="main" class="ui-content">
-            <h3 class="ui-title">観察結果をファイルに保存しますか？</h3>
+            <h3 class="ui-title">処理方法を選択してください</h3>
 	    <ul data-role="listview" data-inset="true">
-              <li><a href="#" id="save-as-tsv" class="save-format-button" data-rel="back" download="result.txt">テキスト形式</a></li>
-              <li><a href="#" id="save-as-xml" class="save-format-button" data-rel="back" download="result.xml">XML形式</a></li>
+              <li><a href="#" id="save-as-tsv" class="save-format-button" data-rel="dialog" download="result.txt">保存(TEXT)</a></li>
+              <li><a href="#" id="save-as-xml" class="save-format-button" data-rel="dialog" download="result.xml">保存(XML)</a></li>
+              <li><a href="#popup-print-annatations" id="print-as-tsv" class="print-annotation-button" data-rel="popup" data-position-to="window" data-transition="pop">一覧(TEXT)</a></li>
+              <li><a href="#popup-print-annatations" id="print-as-xml" class="print-annotation-button" data-rel="popup" data-position-to="window" data-transition="pop">一覧(XML)</a></li>
 	    </ul>
-            <a href="#" id="save-as-xml" class="ui-btn ui-shadow" data-rel="back">キャンセル</a>
+            <a href="#" class="ui-btn ui-shadow" data-rel="back">閉じる</a>
+	  </div>
+	</div>
+	
+	<div data-role="popup" id="popup-print-annatations" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;" class="ui-mini">
+	  <div data-role="header" data-theme="a">
+	    <h1>観察結果の表示</h1>
+	  </div>
+	  <div role="main" class="ui-content">
+	    <div id="print-annatations">
+	    </div>
+            <a href="#" class="ui-btn ui-shadow" data-rel="back">閉じる</a>
 	  </div>
 	</div>
       </div>

@@ -9,6 +9,12 @@ var startTime = -1;
 var username = "name";
 var annotationMode = "";
 var buttonHeightRatio = ["97%", "47%", "30.5%", "22.2%", "17.2%"];
+var fseparator = "\t";
+var fn_speaker = 0;
+var fn_label = 1;
+var fn_etime = 2;
+var fn_ctime = 3;
+var fn_username = 4;
 
 var tempAnnotationSpeaker = "";
 var tempAnnotationLabel = "";
@@ -18,9 +24,11 @@ var timerInterval = 500;
 
 var deletedTargetID = "";
 
-// key: startTime+\t+username
-// value: array of annotations
 var annotationStorage = [];
+
+var iAnnotationStorage = -1; 
+
+var osname = getOSName();
 
 // quoted from http://dotnsf.blog.jp/archives/1012215593.html
 // if(window.history && window.history.pushState){
@@ -44,6 +52,7 @@ $(document).on('pagecreate', function(event, ui){
 
 // pagecontainershow
 $(document).on('pagecontainershow', function(event, ui){
+    console.log("osname:" + osname);
     if(ui.toPage.is('#home')){
 	// activate the selected tab's navi
 	var activeTag = $('#tabs').tabs("option", "active");
@@ -54,8 +63,7 @@ $(document).on('pagecontainershow', function(event, ui){
 	    break;
 	    case 2: $('#data-tab').trigger('click');
 	}
-
-	writeAnnotations();
+//	writeAnnotations();
     }
 });
 
@@ -103,7 +111,7 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	    if(v != undefined && v != ""){
 		var newID = "bt_speaker" + ca;
 		var newTag =
-		    "<button class=\"btn-annotation\" id=\"" + newID +
+		    "<button class=\"btn-annotation ui-button\" id=\"" + newID +
 		    "\" style=\"height:" +
 		    buttonHeightRatio[na-1] + ";\">" +
 		    v +
@@ -120,7 +128,7 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	    if(v != undefined && v != ""){
 		var newID = "bt_label" + cb;
 		var newTag =
-		    "<button class=\"btn-annotation\" id=\"" + newID +
+		    "<button class=\"btn-annotation ui-button\" id=\"" + newID +
 		    "\" style=\"height:" +
 		    buttonHeightRatio[nb-1] + ";\">" +
 		    v +
@@ -152,7 +160,7 @@ $(document).on('pagecontainerbeforehide', function(event, ui){
 	// get username
 	username = $("#username").val();
 
-	// get values of speakers and labels
+	// get vauels of speakers and labels
 	for(var i = 1; i <= nBoxes; i++){
 	    var pn = "speaker" + i;
 	    annotatedSpeakers[pn] = $("#" + pn).val();
@@ -182,7 +190,7 @@ $(document).on('tap', '#btn-start', function(event) {
 // push annotation_button
 $(document).on('tap', '.btn-annotation', function(event) {
     var now = new Date();
-    var currentTime = date2FormattedTime(now);
+    var currentTime = date2FormattedDateTime(now);
     var elapsedTime = time2FormattedTime(now.getTime() - startTime.getTime());
     var annotation = "";
     var buttonID = event.target.id;
@@ -210,7 +218,7 @@ $(document).on('tap', '.btn-annotation', function(event) {
 	}
     }
     
-    annotation = tempAnnotationSpeaker + "," + tempAnnotationLabel + "," + currentTime + "," + elapsedTime + "," + username;
+    annotation = tempAnnotationSpeaker + fseparator + tempAnnotationLabel + fseparator + elapsedTime + fseparator + currentTime + fseparator + username;
     annotationResults.push(annotation);
     displayResults();
     tempAnnotationSpeaker = "-";
@@ -252,10 +260,41 @@ $(document).on('tap', '#disp-delete-execute', function(event) {
 });
 
 
-$(document).on('tap', '.save-format-button', function(event) {
+$(document).on('tap', '.print-annotation-button', function(event) {
     var targetID = event.target.id;
-    console.log("tid:" + targetID);
+    $("#print-annatations").empty();
+
+    if(targetID == "print-as-tsv"){
+	$("#print-annatations").append("<pre>" + getAnnotationsAsText() + "</pre>");
+    } else if(targetID == "print-as-xml"){
+	$("#print-annatations").append(getAnnotationsAsXML());
+    } else {
+	iAnnotationStorage = targetID.match(/\d+$/)[0];
+	$("#print-annatations").append("<pre>" + getAnnotationsAsText() + "</pre>");
+    }
 });
+
+
+$(document).on('tap', '.savename-button', function(event) {
+    // index of selected annotation set
+    iAnnotationStorage = event.target.id.match(/\d+$/)[0];
+    var savename = $("#savename_" + iAnnotationStorage).text();
+    savename.replace(":", "");
+    savename.replace("/", "_");
+    var blobTxt = getAnnotationsAsBlob ("text/plain");
+    var blobXML = getAnnotationsAsBlob ("text/xml");
+
+    $("#save-as-tsv").attr("download", "fw_mini_" + savename + ".txt");
+    $("#save-as-tsv").attr("href", URL.createObjectURL(blobTxt));
+    $("#save-as-xml").attr("download", "fw_mini_" + savename + ".xml");
+    $("#save-as-xml").attr("href", URL.createObjectURL(blobXML));
+//    $("#print-as-xml").attr("href", URL.createObjectURL(blobXML));
+//    $("#print-as-tsv").attr("href", URL.createObjectURL(blobXML));
+
+    console.log("vas:" + $("#savename_" + iAnnotationStorage).text());
+    console.log("ias:" + iAnnotationStorage);
+});
+
 
 
 
@@ -300,12 +339,12 @@ function updateSavenameList(){
     for(i = annotationStorage.length-1; i >= 0; i--){
 	$("#savename-list").append(
 	    "<li>" +
-		"<a href=\"#\">" +
+		"<a href=\"#popup-print-annatations\" class=\"print-annotation-button\" id=\"savename_" + i + "\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"dialog\">" +
 		date2FormattedTime(annotationStorage[i].starttime) +
 		"/" +
 		annotationStorage[i].username +
 		"</a>" +
-		"<a href=\"#popup-dialog-save\" class=\"savename-button\" id=\"savename-button\"" + i + "\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\"></a>" +
+		"<a href=\"#popup-dialog-save\" class=\"savename-button\" id=\"savename-button_" + i + "\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"dialog\"></a>" +
 		"</li>");
     }
     $("#savename-list").listview("refresh");
@@ -329,6 +368,19 @@ function date2FormattedTime(date){
 
     return  hour + ":" + minutes + ":" + sec;
 }
+
+
+
+function date2FormattedDateTime(date){
+    var year = date.getFullYear();
+    var month = date.getMonth();
+    month = month < 10 ? month = "0" + month : month;
+    var day = date.getDay();
+    day = day < 10 ? day = "0" + day : day;
+
+    return  year + "-" + month + "-" + day + " " + date2FormattedTime(date);
+}
+
 
 
 function time2FormattedTime(time){
@@ -376,15 +428,115 @@ function displayResults(){
 }
 
 
-function writeAnnotations (){
+function getAnnotationsAsText(){
+
+    if(iAnnotationStorage < 0) return;
+
+    var annotationInfo = annotationStorage[iAnnotationStorage];
+    var result = "";
+
+    for (var v of annotationInfo.annotations){
+	result += v + "\n";
+    }
+
+    return(result);
+}
+
+
+function getAnnotationsAsXML (){
+    if(iAnnotationStorage < 0) return;
+
+    var annotationInfo = annotationStorage[iAnnotationStorage];
+    var result = "";
+
     var decXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     var commentTypesXML = "";
     var discussersXML = "";
-    var blob = new Blob([decXML+
-	"<tt><span>test</span></tt>"
-    ],{type: "text/html"});
+    var commentXML = "";
 
-    console.log(URL.createObjectURL(blob));
+    var commentTypes = {};
+    var discussers = {};
 
-    $("#ttt").attr("href", URL.createObjectURL(blob));
+    for(var v of annotationInfo.annotations){
+	var fv = v.split(fseparator);
+	commentTypes[fv[fn_label]]++;
+	discussers[fv[fn_speaker]]++;
+    }
+
+    commentTypesXML = "<comment_types>\n";
+    for(var v in commentTypes){
+	commentTypesXML += "<li name=\"" + v + "\" color=\"-65536\" />\n";
+    }
+    commentTypesXML += "</comment_types>\n";
+    
+    
+    discussersXML = "<discussers>\n";
+    for(var v in discussers){
+	discussersXML += "<li name=\"" + v + "\" />\n";
+    }
+    discussersXML += "</discussers>\n";
+    
+    commentXML =
+	"<set name=\"noname\" original_start_time=\"" +
+	date2FormattedDateTime(startTime) + "\" correction_time=\"0\">\n";
+    for(var v of annotationInfo.annotations){
+	var fv = v.split(fseparator);
+	var speaker = fv[fn_speaker];
+	var label = fv[fn_label];
+	var ctime = fv[fn_ctime];
+	var etime = fv[fn_etime];
+
+	commentXML += "<comment date=\"" + ctime + "\"" +
+	    " commenter=\"" + username + "\"" +
+	    " discusser=\"" + speaker + "\"" +
+	    " comment_type=\"" + label + "\"" +
+	    " comment_time=\"" + etime + "\"" +
+	    " comment_time_end=\"-1\"></comment>\n";
+    }
+    commentXML += "</set>\n";
+
+    result =
+	decXML +
+	"<comment_list start_time=\"" + date2FormattedDateTime(startTime) + "\" media_file=\"\">\n" +
+	commentTypesXML +
+	discussersXML +
+	commentXML +
+	"</comment_list>\n";
+
+    return(result);
 }
+
+
+function getAnnotationsAsBlob (fileType){
+    if(iAnnotationStorage < 0) return;
+
+    var blob = new Blob();
+
+    if(fileType == "text/plain"){
+	blob = new Blob([getAnnotationsAsText()], {type: "text/plain"});
+    } else if(fileType == "text/xml"){
+	blob = new Blob([getAnnotationsAsXML()], {type: "text/html"});
+    }
+
+    return blob;
+}
+
+
+function getOSName(){
+    var ua = navigator.userAgent;
+    
+    if(ua.match(/window/i)){
+	return "Windows";
+    } else if(ua.match(/linux/i)){
+	return "Linux";
+    } else if(ua.match(/android/i)){
+	return "Android";
+    } else if(ua.match(/mac/i)){
+	return "Mac";
+    } else if(ua.match(/iphone|ipad/i)){
+	return "iOS";
+    } else {
+	return ua;
+    }
+}
+
