@@ -30,6 +30,8 @@ var iAnnotationStorage = -1;
 
 var osname = getOSName();
 
+var dataHandlingMode = "print-as-tsv";
+
 // quoted from http://dotnsf.blog.jp/archives/1012215593.html
 // if(window.history && window.history.pushState){
 //     console.log("hey");
@@ -233,6 +235,13 @@ $(document).on("change", "#selector2-observation-mode", function () {
 });
 
 
+$(document).on("change", "#selector-data-handling", function (event) {
+    console.log("update buttons!!");
+    updateSavenameButtons();
+});
+
+
+
 $(document).on('tap', '.disp-button-delete', function(event) {
     deletedTargetID = event.target.id;
     console.log("RID:" + event.target.id);
@@ -260,42 +269,39 @@ $(document).on('tap', '#disp-delete-execute', function(event) {
 });
 
 
-$(document).on('tap', '.print-annotation-button', function(event) {
-    var targetID = event.target.id;
-    $("#print-annatations").empty();
+$(document).on('tap', '.savename-button', function(event) {
+    // index of selected annotation set
+    iAnnotationStorage = event.target.id.match(/\d+$/)[0];
 
-    if(targetID == "print-as-tsv"){
-	$("#print-annatations").append("<pre>" + getAnnotationsAsText() + "</pre>");
-    } else if(targetID == "print-as-xml"){
-	$("#print-annatations").append(getAnnotationsAsXML());
-    } else {
-	iAnnotationStorage = targetID.match(/\d+$/)[0];
-	$("#print-annatations").append("<pre>" + getAnnotationsAsText() + "</pre>");
+    dataHandlingMode = $("#selector-data-handling").val();
+
+    var savename = $("#savename_" + iAnnotationStorage).text();
+    savename.replace(":", "");
+    savename.replace("/", "_");
+
+    var selectedID = "#" + event.target.id;
+
+    console.log("hey!");
+
+    switch(dataHandlingMode){
+    case "print-as-tsv":
+	$("#print-annatations").empty();
+	$("#print-annatations").append(sanitize(getAnnotationsAsText()).replace(/\n/g, "<br />\n"));
+	break;
+    case "print-as-xml":
+	$("#print-annatations").empty();
+	$("#print-annatations").append(sanitize(getAnnotationsAsXML()).replace(/\n/g, "<br />\n"));
+	break;
     }
 });
 
 
-$(document).on('tap', '.savename-button', function(event) {
-    // index of selected annotation set
-    iAnnotationStorage = event.target.id.match(/\d+$/)[0];
-    var savename = $("#savename_" + iAnnotationStorage).text();
-    savename.replace(":", "");
-    savename.replace("/", "_");
-    var blobTxt = getAnnotationsAsBlob ("text/plain");
-    var blobXML = getAnnotationsAsBlob ("text/xml");
-
-    $("#save-as-tsv").attr("download", "fw_mini_" + savename + ".txt");
-    $("#save-as-tsv").attr("href", URL.createObjectURL(blobTxt));
-    $("#save-as-xml").attr("download", "fw_mini_" + savename + ".xml");
-    $("#save-as-xml").attr("href", URL.createObjectURL(blobXML));
-//    $("#print-as-xml").attr("href", URL.createObjectURL(blobXML));
-//    $("#print-as-tsv").attr("href", URL.createObjectURL(blobXML));
-
-    console.log("vas:" + $("#savename_" + iAnnotationStorage).text());
-    console.log("ias:" + iAnnotationStorage);
-});
-
-
+function sanitize(str){
+    return str.replace(/&/g, "&amp;").
+	replace(/</g, "&lt;").
+	replace(/>/g, "&gt;").
+	replace(/"/g, "&quot;");
+}
 
 
 function updateAnnotationButtons(){
@@ -337,23 +343,49 @@ function updateAnnotationButtons(){
 function updateSavenameList(){
     $("#savename-list").empty();
     for(i = annotationStorage.length-1; i >= 0; i--){
+	var username = annotationStorage[i].username == "" ?
+	    "noname" :
+	    annotationStorage[i].username;
+
 	$("#savename-list").append(
 	    "<li>" +
-		"<a href=\"#popup-print-annatations\" class=\"print-annotation-button\" id=\"savename_" + i + "\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"dialog\">" +
+		"<a href=\"#\" class=\"ui-btn ui-btn-inline savename-button\" id=\"savename_" + i + "\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"dialog\">" +
 		date2FormattedTime(annotationStorage[i].starttime) +
-		"/" +
-		annotationStorage[i].username +
+		"/" + username +
 		"</a>" +
-		"<a href=\"#popup-dialog-save\" class=\"savename-button\" id=\"savename-button_" + i + "\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"dialog\"></a>" +
 		"</li>");
     }
+    updateSavenameButtons();
     $("#savename-list").listview("refresh");
 }
 
 
-function deleteItem(target){
-    
-    
+function updateSavenameButtons(){
+    dataHandlingMode = $("#selector-data-handling").val();
+
+    $(".savename-button").each(function() {
+	switch(dataHandlingMode){
+	case "print-as-tsv":
+	    $(this).prop("href", "#popup-print-annatations");
+	    $(this).removeAttr("download");
+	    break;
+	case "print-as-xml":
+	    $(this).prop("href", "#popup-print-annatations");
+	    $(this).removeAttr("download");
+	    break;
+	case "save-as-tsv":
+	    iAnnotationStorage = this.id.match(/\d+$/)[0];
+	    var blobTxt = getAnnotationsAsBlob ("text/plain");
+	    $(this).prop("download", "fw_mini_" + ".txt");
+	    $(this).prop("href", URL.createObjectURL(blobTxt));
+	    break;
+	case "save-as-xml":
+	    iAnnotationStorage = this.id.match(/\d+$/)[0];
+	    var blobXML = getAnnotationsAsBlob ("text/xml");
+	    $(this).prop("download", "fw_mini_" +  ".xml");
+	    $(this).prop("href", URL.createObjectURL(blobXML));
+	}
+    });
 }
 
 

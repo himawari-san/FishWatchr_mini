@@ -114,26 +114,19 @@
 	  </div>
 	  <div id="data-panel" class="ui-body-d ui-content">
 	    <div class="ui-body-c ui-corner-all ui-mini">
+	      <div class="ui-field-contain">
+		<label for="selector-data-handling">処理方法：</label>
+		<select name="selector-data-handling" id="selector-data-handling">
+		  <option value="print-as-tsv">一覧(TEXT)</option>
+		  <option value="print-as-xml">一覧(XML)</option>
+		  <option value="save-as-tsv">保存(TEXT)</option>
+		  <option value="save-as-xml">保存(XML)</option>
+		</select>
+	      </div>
 	      <ul id="savename-list" data-role="listview" data-split-icon="action" data-split-theme="a" data-inset="true">
 		<li>（保存データ - なし）</li>
 	      </ul>
 	    </div>
-	  </div>
-	</div>
-	
-	<div data-role="popup" id="popup-dialog-save" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;" class="ui-mini">
-	  <div data-role="header" data-theme="a">
-	    <h1>観察結果の閲覧</h1>
-	  </div>
-	  <div role="main" class="ui-content">
-            <h3 class="ui-title">処理方法を選択してください</h3>
-	    <ul data-role="listview" data-inset="true">
-              <li><a href="#" id="save-as-tsv" class="save-format-button" data-rel="dialog" download="result.txt">保存(TEXT)</a></li>
-              <li><a href="#" id="save-as-xml" class="save-format-button" data-rel="dialog" download="result.xml">保存(XML)</a></li>
-              <li><a href="#popup-print-annatations" id="print-as-tsv" class="print-annotation-button" data-rel="popup" data-position-to="window" data-transition="pop">一覧(TEXT)</a></li>
-              <li><a href="#popup-print-annatations" id="print-as-xml" class="print-annotation-button" data-rel="popup" data-position-to="window" data-transition="pop">一覧(XML)</a></li>
-	    </ul>
-            <a href="#" class="ui-btn ui-shadow" data-rel="back">閉じる</a>
 	  </div>
 	</div>
 	
