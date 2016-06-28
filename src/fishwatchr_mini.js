@@ -6,7 +6,8 @@ var annotationResults = [];
 var pResults = -1;
 var nDisp = 2;
 var startTime = -1;
-var username = "name";
+var username = "";
+var groupname = "";
 var annotationMode = "";
 var buttonHeightRatio = ["97%", "47%", "30.5%", "22.2%", "17.2%"];
 var fseparator = "\t";
@@ -159,8 +160,8 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 $(document).on('pagecontainerbeforehide', function(event, ui){
 
     if(ui.prevPage.is('#home')){
-	// get username
-	username = $("#username").val();
+	// get groupname
+	groupname = $("#groupname").val();
 
 	// get vauels of speakers and labels
 	for(var i = 1; i <= nBoxes; i++){
@@ -186,6 +187,14 @@ $(document).on('pagecontainerbeforehide', function(event, ui){
 // push startbutton
 $(document).on('tap', '#btn-start', function(event) {
     startTime = new Date();
+
+    // get username
+    username = $("#username").val();
+    if(username == ""){
+	$("#popupWarning").popup("open");
+	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
+	return false;
+    }
 });
 
 
@@ -292,6 +301,23 @@ $(document).on('tap', '.savename-button', function(event) {
 	$("#print-annatations").empty();
 	$("#print-annatations").append(sanitize(getAnnotationsAsXML()).replace(/\n/g, "<br />\n"));
 	break;
+    case "save2svr-as-tsv":
+	$.ajax({
+	    url: "storeAnnotations.php",
+	    type: "post",
+	    dataType: "json",
+	    data: {
+		savename: "test1",
+		group: "test2",
+		databody: "test3"
+	    }
+	})
+	.done(function (response){
+	    console.log(response.data);
+	})
+	.fail(function (){
+	    console.log("ajax fail!!");
+	});
     }
 });
 
@@ -384,6 +410,10 @@ function updateSavenameButtons(){
 	    var blobXML = getAnnotationsAsBlob ("text/xml");
 	    $(this).prop("download", "fw_mini_" +  ".xml");
 	    $(this).prop("href", URL.createObjectURL(blobXML));
+	    break;
+	case "save2svr-as-tsv":
+	    $(this).prop("href", "#");
+	    $(this).removeAttr("download");
 	}
     });
 }

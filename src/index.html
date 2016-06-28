@@ -34,8 +34,9 @@
 		   data-clear-btn="true" data-clear-btn-text="クリア"
 		   placeholder="Input your username"
 		   value="" />
+	    <br />
 	    <h3 class="ui-bar ui-bar-a ui-corner-all">オプション</h3>
-	    <div class="ui-body">
+	    <div class="ui-body ui-body-a">
 	      <label for="groupname">グループ名</label>
 	      <input id="groupname" name="groupname" type="text"
 		     data-clear-btn="true" data-clear-btn-text="クリア"
@@ -133,6 +134,16 @@
 		<li>（保存データ - なし）</li>
 	      </ul>
 	    </div>
+	  </div>
+	</div>
+
+	<div data-role="popup" id="popupWarning" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;">
+	  <div data-role="header">
+	    <h3>エラー</h3>
+	    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+	  </div>
+	  <div role="main" class="ui-content">
+	    <p>ユーザ名を指定してください。</p>
 	  </div>
 	</div>
 	
