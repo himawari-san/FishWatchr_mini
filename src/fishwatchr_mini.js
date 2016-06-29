@@ -160,6 +160,9 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 $(document).on('pagecontainerbeforehide', function(event, ui){
 
     if(ui.prevPage.is('#home')){
+	// get username
+	username = $("#username").val();
+	
 	// get groupname
 	groupname = $("#groupname").val();
 
@@ -282,15 +285,19 @@ $(document).on('tap', '.savename-button', function(event) {
     // index of selected annotation set
     iAnnotationStorage = event.target.id.match(/\d+$/)[0];
 
+    // get dataHandlingMode from the menu
     dataHandlingMode = $("#selector-data-handling").val();
 
+    // get savename
     var savename = $("#savename_" + iAnnotationStorage).text();
     savename.replace(":", "");
     savename.replace("/", "_");
 
-    var selectedID = "#" + event.target.id;
+    // get groupname
+    groupname = $("#groupname").val();
 
-    console.log("hey!");
+    var dataBody = "";
+    var fileType = "";
 
     switch(dataHandlingMode){
     case "print-as-tsv":
@@ -302,21 +309,32 @@ $(document).on('tap', '.savename-button', function(event) {
 	$("#print-annatations").append(sanitize(getAnnotationsAsXML()).replace(/\n/g, "<br />\n"));
 	break;
     case "save2svr-as-tsv":
+	dataBody = getAnnotationsAsText();
+	fileType = "txt";
+    case "save2svr-as-xml":
+	if(dataBody == ""){
+	    dataBody = getAnnotationsAsXML();
+	    fileType = "xml";
+	}
+    case "store":
 	$.ajax({
-	    url: "storeAnnotations.php",
+	    url: "store.php",
 	    type: "post",
 	    dataType: "json",
 	    data: {
-		savename: "test1",
-		group: "test2",
-		databody: "test3"
+		savename: savename,
+		groupname: groupname,
+		fileType: fileType,
+		databody: dataBody
 	    }
 	})
 	.done(function (response){
-	    console.log(response.data);
+	    $("#popupURL").popup("open");
+	    $("#resultDataURL").prop("href", response.result_url);
+	    console.log(response.result_url);
 	})
-	.fail(function (){
-	    console.log("ajax fail!!");
+	.fail(function (jqXHR, textStatus){
+	    console.log("ajax fail!!," + textStatus);
 	});
     }
 });
@@ -511,7 +529,7 @@ function getAnnotationsAsXML (){
     var annotationInfo = annotationStorage[iAnnotationStorage];
     var result = "";
 
-    var decXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    var decXML = '<?xml version="1.0" encoding="UTF-8"?>' + "\n";
     var commentTypesXML = "";
     var discussersXML = "";
     var commentXML = "";
