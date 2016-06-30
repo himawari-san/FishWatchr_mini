@@ -48,10 +48,11 @@ var dataHandlingMode = "print-as-tsv";
 // }
 
 
-// pagecreate
-$(document).on('pagecreate', function(event, ui){
+// pagecontainershow
+$(document).on('pagecontainerchange', function(event, ui){
+    history.pushState(null, null, null);
+    console.log("change!!");
 });
-
 
 // pagecontainershow
 $(document).on('pagecontainershow', function(event, ui){
@@ -248,7 +249,6 @@ $(document).on('tap', '.btn-annotation', function(event) {
 
 // detect change of select menu
 $(document).on("change", "#selector2-observation-mode", function () {
-    console.log("change!!");
     updateAnnotationButtons();
 });
 
