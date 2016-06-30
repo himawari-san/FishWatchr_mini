@@ -473,7 +473,7 @@ function updateSavenameButtons(){
 	    $(this).prop("download", "fw_mini_" + username +  ".xml");
 	    $(this).prop("href", URL.createObjectURL(blobXML));
 	    break;
-	case "save2svr-as-tsv":
+	case "save-to-server":
 	    $(this).prop("href", "#");
 	    $(this).removeAttr("download");
 	}
