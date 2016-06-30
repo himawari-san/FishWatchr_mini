@@ -119,43 +119,53 @@
 	      </div>
 	    </div>
 	  </div>
-	  <div id="data-panel" class="ui-body-d ui-content">
+	  <div id="data-panel" class="ui-body-d ui-content ui-corner-all ui-mini">
+	    <div class="ui-field-contain">
+	      <label for="selector-data-handling">処理：</label>
+	      <select name="selector-data-handling" id="selector-data-handling">
+		<option value="print-as-tsv">表示(Text)</option>
+		<option value="print-as-xml">表示(XML)</option>
+		<option value="save-as-tsv">ダウンロード(Text)</option>
+		<option value="save-as-xml">ダウンロード(XML)</option>
+		<option value="save-to-server">サーバ保存</option>
+	      </select>
+	    </div>
+	    <ul id="savename-list" data-role="listview" data-split-icon="action" data-split-theme="a" data-inset="true">
+	      <li>（保存データ - なし）</li>
+	    </ul>
 	    <div class="ui-body-c ui-corner-all ui-mini">
-	      <div class="ui-field-contain">
-		<label for="selector-data-handling">処理方法：</label>
-		<select name="selector-data-handling" id="selector-data-handling">
-		  <option value="print-as-tsv">表示(Text)</option>
-		  <option value="print-as-xml">表示(XML)</option>
-		  <option value="save-as-tsv">ダウンロード(Text)</option>
-		  <option value="save-as-xml">ダウンロード(XML)</option>
-		  <option value="save2svr-as-tsv">サーバ保存(Text)</option>
-		  <option value="save2svr-as-xml">サーバ保存(XML)</option>
-		</select>
-	      </div>
-	      <ul id="savename-list" data-role="listview" data-split-icon="action" data-split-theme="a" data-inset="true">
-		<li>（保存データ - なし）</li>
-	      </ul>
+	      <a id="btn-get-archive" class="ui-input-btn ui-btn ui-btn-inline" href="#">グループの結果</a>
 	    </div>
 	  </div>
 	</div>
-
+	
 	<div data-role="popup" id="popupWarning" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;">
 	  <div data-role="header">
 	    <h3>エラー</h3>
 	    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
 	  </div>
 	  <div role="main" class="ui-content">
-	    <p>ユーザ名を指定してください。</p>
+	    <p id="popupWarning-message"></p>
 	  </div>
 	</div>
 
 	<div data-role="popup" id="popupURL" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;">
 	  <div data-role="header">
-	    <h3>結果データのURL</h3>
+	    <h3>結果データ</h3>
 	    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
 	  </div>
 	  <div role="main" class="ui-content">
-	    <p>観察結果は，<a href="#" id="resultDataURL" target="_blank">FishWatchr mini のサイト</a>からダウンロードしてください。このリンクは，１日程度有効です。</p>
+	    <p>観察結果は，FishWatchr mini のサイトに保存されました。次のリンク（<a href="#" id="resultDataURLText" target="_blank">Text形式</a>，<a href="#" id="resultDataURLXML" target="_blank">XML形式</a>）からダウンロードしてください。このリンクは，１日程度有効です。</p>
+	  </div>
+	</div>
+
+	<div data-role="popup" id="popupGetZipURL" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;">
+	  <div data-role="header">
+	    <h3>グループ結果データ</h3>
+	    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+	  </div>
+	  <div role="main" class="ui-content">
+	    <p>指定されたグループの結果を <a href="#" id="resultDataURLZIP" target="_blank">FishWatchr mini のサイト</a>からダウンロードします。このリンクは，１日程度有効です。</p>
 	  </div>
 	</div>
 	

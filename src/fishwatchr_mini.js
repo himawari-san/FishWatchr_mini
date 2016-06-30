@@ -194,6 +194,7 @@ $(document).on('tap', '#btn-start', function(event) {
     // get username
     username = $("#username").val();
     if(username == ""){
+	$("#popupWarning-message").text("ユーザ名を指定してください。");
 	$("#popupWarning").popup("open");
 	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	return false;
@@ -308,36 +309,80 @@ $(document).on('tap', '.savename-button', function(event) {
 	$("#print-annatations").empty();
 	$("#print-annatations").append(sanitize(getAnnotationsAsXML()).replace(/\n/g, "<br />\n"));
 	break;
-    case "save2svr-as-tsv":
-	dataBody = getAnnotationsAsText();
-	fileType = "txt";
-    case "save2svr-as-xml":
-	if(dataBody == ""){
-	    dataBody = getAnnotationsAsXML();
-	    fileType = "xml";
-	}
-    case "store":
-	$.ajax({
-	    url: "store.php",
-	    type: "post",
-	    dataType: "json",
-	    data: {
-		savename: savename,
-		groupname: groupname,
-		fileType: fileType,
-		databody: dataBody
-	    }
-	})
-	.done(function (response){
-	    $("#popupURL").popup("open");
-	    $("#resultDataURL").prop("href", response.result_url);
-	    console.log(response.result_url);
-	})
-	.fail(function (jqXHR, textStatus){
-	    console.log("ajax fail!!," + textStatus);
-	});
+    case "save-to-server":
+	var resultURLText = "#";
+	var resultURLXML = "#";
+	store(savename, groupname, "txt", getAnnotationsAsText())
+	    .done(function (response){
+		resultURLText = response.result_url;
+	    })
+	    .fail(function (jqXHR, textStatus){
+		console.log("store text data," + textStatus);
+	    });
+	store(savename, groupname, "xml", getAnnotationsAsXML())
+	    .done(function (response){
+		resultURLXML = response.result_url;
+		$("#resultDataURLText").prop("href", resultURLText);
+		$("#resultDataURLXML").prop("href", resultURLXML);
+		$("#popupURL").popup("open");
+	    })
+	    .fail(function (jqXHR, textStatus){
+		console.log("store xml data," + textStatus);
+	    });
     }
 });
+
+
+function store(savename, groupname, fileType, dataBody){
+    var jqXHR = $.ajax({
+	url: "store.php",
+	type: "post",
+	dataType: "json",
+	data: {
+	    savename: savename,
+	    groupname: groupname,
+	    fileType: fileType,
+	    databody: dataBody
+	}
+    });
+
+    return jqXHR;
+}
+
+
+
+$(document).on('tap', '#btn-get-archive', function(event) {
+    // get groupname
+    groupname = $("#groupname").val();
+
+    if(groupname == ""){
+	$("#popupWarning-message").text("グループ名を指定してください。");
+	$("#popupWarning").popup("open");
+	return false;
+    }
+    
+    var dataBody = "";
+    var fileType = "";
+    
+    $.ajax({
+	url: "archive.php",
+	type: "post",
+	dataType: "json",
+	data: {
+	    groupname: groupname
+	}
+    })
+    .done(function (response){
+	$("#resultDataURLZIP").prop("href", response.result_url);
+	$("#popupGetZipURL").popup("open");
+	console.log(response.result_url);
+    })
+    .fail(function (jqXHR, textStatus){
+	console.log("ajax fail!!," + textStatus);
+    });
+});
+
+
 
 
 function sanitize(str){
