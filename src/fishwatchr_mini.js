@@ -451,7 +451,7 @@ function updateSavenameList(){
 	    "<li>" +
 		"<a href=\"#\" class=\"ui-btn ui-btn-inline savename-button\" id=\"savename_" + i + "\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"dialog\">" +
 		username + "/" +
-		date2FormattedDateTime(annotationStorage[i].starttime) +
+		date2FormattedDateTime(annotationStorage[i].starttime).replace(/-/g, "") +
 		"</a>" +
 		"</li>");
     }
