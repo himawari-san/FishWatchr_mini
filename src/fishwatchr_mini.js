@@ -291,8 +291,7 @@ $(document).on('tap', '.savename-button', function(event) {
 
     // get savename
     var savename = $("#savename_" + iAnnotationStorage).text();
-    savename.replace(":", "");
-    savename.replace("/", "_");
+    savename = savename.replace(":", "").replace("/", "_").replace(" ", "_");
 
     // get groupname
     groupname = $("#groupname").val();
@@ -439,8 +438,8 @@ function updateSavenameList(){
 	$("#savename-list").append(
 	    "<li>" +
 		"<a href=\"#\" class=\"ui-btn ui-btn-inline savename-button\" id=\"savename_" + i + "\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"dialog\">" +
-		date2FormattedTime(annotationStorage[i].starttime) +
-		"/" + username +
+		username + "/" +
+		date2FormattedDateTime(annotationStorage[i].starttime) +
 		"</a>" +
 		"</li>");
     }
@@ -465,13 +464,13 @@ function updateSavenameButtons(){
 	case "save-as-tsv":
 	    iAnnotationStorage = this.id.match(/\d+$/)[0];
 	    var blobTxt = getAnnotationsAsBlob ("text/plain");
-	    $(this).prop("download", "fw_mini_" + ".txt");
+	    $(this).prop("download", "fw_mini_" + username + ".txt");
 	    $(this).prop("href", URL.createObjectURL(blobTxt));
 	    break;
 	case "save-as-xml":
 	    iAnnotationStorage = this.id.match(/\d+$/)[0];
 	    var blobXML = getAnnotationsAsBlob ("text/xml");
-	    $(this).prop("download", "fw_mini_" +  ".xml");
+	    $(this).prop("download", "fw_mini_" + username +  ".xml");
 	    $(this).prop("href", URL.createObjectURL(blobXML));
 	    break;
 	case "save2svr-as-tsv":
