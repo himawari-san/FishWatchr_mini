@@ -211,8 +211,8 @@ $(document).on('tap', '#btn-start', function(event) {
 // push annotation_button
 $(document).on('tap', '.btn-annotation', function(event) {
     var now = new Date();
-    var currentTime = date2FormattedDateTime(now);
-    var elapsedTime = time2FormattedTime(now.getTime() - startTime.getTime());
+    var currentTime = date2FormattedDateTime(now, 1);
+    var elapsedTime = time2FormattedTime(now.getTime() - startTime.getTime(), 1);
     var annotation = "";
     var buttonID = event.target.id;
     var buttonText = event.target.innerHTML;
@@ -493,44 +493,69 @@ function updateSavenameButtons(){
 }
 
 
-function date2FormattedTime(date){
+function date2FormattedTime(date, flagMsec){
     var hour = date.getHours();
     var minutes = date.getMinutes();
     var sec = date.getSeconds();
+    var msec = date.getMilliseconds();
+    var result = "";
 
     hour = hour < 10 ? hour = "0" + hour : hour;
     minutes = minutes < 10 ? minutes = "0" + minutes : minutes;
     sec = sec < 10 ? sec = "0" + sec : sec;
+    if(msec < 10){
+	msec = "00" + msec;
+    } else if(msec < 100){
+	msec = "0" + msec;
+    }
 
-    return  hour + ":" + minutes + ":" + sec;
+    result = hour + ":" + minutes + ":" + sec;
+    if(flagMsec){
+	result +=  "." + msec;
+    }
+
+    return result;
 }
 
 
 
-function date2FormattedDateTime(date){
+function date2FormattedDateTime(date, flagMsec){
     var year = date.getFullYear();
-    var month = date.getMonth();
+    var month = date.getMonth() + 1;
     month = month < 10 ? month = "0" + month : month;
-    var day = date.getDay();
+    var day = date.getDate();
     day = day < 10 ? day = "0" + day : day;
 
-    return  year + "-" + month + "-" + day + " " + date2FormattedTime(date);
+    return  year + "-" + month + "-" + day + " " + date2FormattedTime(date, flagMsec);
 }
 
 
 
-function time2FormattedTime(time){
+function time2FormattedTime(time, flagMsec){
     var hour = Math.floor(time / 3600000);
     time -= hour * 3600000;
     var minutes = Math.floor(time / 60000);
     time -= minutes * 60000;
     var sec = Math.floor(time / 1000);
-
+    time -= sec * 1000;
+    var msec = time;
+    var result = "";
+    
     hour = hour < 10 ? hour = "0" + hour : hour;
     minutes = minutes < 10 ? minutes = "0" + minutes : minutes;
     sec = sec < 10 ? sec = "0" + sec : sec;
+    if(msec < 10){
+	msec = "00" + msec;
+    } else if(msec < 100){
+	msec = "0" + msec;
+    }
 
-    return  hour + ":" + minutes + ":" + sec;
+    result = hour + ":" + minutes + ":" + sec;
+    if(flagMsec){
+	result +=  "." + msec;
+    }
+
+    return result;
 }
 
 
@@ -541,13 +566,8 @@ function displayTime(elementId){
 
 
 function displayElapsedTime(elementId){
-    $(elementId).text(getElapsedTime());
-}
-
-
-function getElapsedTime(){
     var now = new Date();
-    return time2FormattedTime(now.getTime() - startTime.getTime());
+    $(elementId).text(time2FormattedTime(now.getTime() - startTime.getTime()));
 }
 
 
@@ -572,10 +592,14 @@ function getAnnotationsAsText(){
     var result = "";
 
     for (var v of annotationInfo.annotations){
-	result += v + "\n";
+	var fv = v.split(fseparator);
+	fv[fn_ctime] = fv[fn_ctime].replace(/\.\d\d\d$/, "");
+	fv[fn_etime] = fv[fn_etime].replace(/\.\d\d\d$/, "");
+
+	result += fv.join(fseparator) + "\n";
     }
 
-    return(result);
+    return result;
 }
 
 
@@ -614,7 +638,7 @@ function getAnnotationsAsXML (){
     
     commentXML =
 	"<set name=\"noname\" original_start_time=\"" +
-	date2FormattedDateTime(startTime) + "\" correction_time=\"0\">\n";
+	date2FormattedDateTime(startTime, 1) + "\" correction_time=\"0\">\n";
     for(var v of annotationInfo.annotations){
 	var fv = v.split(fseparator);
 	var speaker = fv[fn_speaker];
@@ -633,7 +657,7 @@ function getAnnotationsAsXML (){
 
     result =
 	decXML +
-	"<comment_list start_time=\"" + date2FormattedDateTime(startTime) + "\" media_file=\"\">\n" +
+	"<comment_list start_time=\"" + date2FormattedDateTime(startTime, 1) + "\" media_file=\"\">\n" +
 	commentTypesXML +
 	discussersXML +
 	commentXML +
