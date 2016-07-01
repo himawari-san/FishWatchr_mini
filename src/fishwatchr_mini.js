@@ -1,5 +1,8 @@
 var now = "";
-var nBoxes = 5;
+var nBoxes = 8;
+var buttonAreaRatio1 = "300px";
+var buttonAreaRatio2 = "450px";
+var buttonAreaRatioChange = 5; // if <=5 ratio1, otherwise ratio2 
 var annotatedSpeakers = {};
 var annotatedLabels = {};
 var annotationResults = [];
@@ -9,7 +12,7 @@ var startTime = -1;
 var username = "";
 var groupname = "";
 var annotationMode = "";
-var buttonHeightRatio = ["97%", "47%", "30.5%", "22.2%", "17.2%"];
+var buttonHeightRatio = ["97%", "47%", "30.5%", "22.2%", "17.2%", "14.5%", "12.2%", "10.4%"];
 var fseparator = "\t";
 var fn_speaker = 0;
 var fn_label = 1;
@@ -102,6 +105,16 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	    pn = "label" + i;
 	    v = annotatedLabels[pn];
 	    if(v != undefined && v != ""){nb++;} 
+	}
+
+
+	// change the size of panels for buttons 
+	if(na > buttonAreaRatioChange || nb > buttonAreaRatioChange){
+	    $("#panel-a").prop("style", "height:" + buttonAreaRatio2);
+	    $("#panel-b").prop("style", "height:" + buttonAreaRatio2);
+	} else {
+	    $("#panel-a").prop("style", "height:" + buttonAreaRatio1);
+	    $("#panel-b").prop("style", "height:" + buttonAreaRatio1);
 	}
 
 

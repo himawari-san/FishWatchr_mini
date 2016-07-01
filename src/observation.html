@@ -13,15 +13,15 @@
   <body>
     <div id="observation" data-role="page">
       <div data-role="main" class="ui-content" >
-	<div class="time_username ui-body-c">
-	  <span id="current_username">Username ...</span> (<span id="current_time_observation">Processing ...</span>)
-	</div>
 	<fieldset class="ui-grid-a ui-body ui-corner-all">
 	  <div id="panel-a" class="ui-block-a" style="height:300px">
 	    <button class="btn-annotation" id="bt_speaker1" style="height:97%;">話者１</button>
 	  </div>
 	  <div id="panel-b" class="ui-block-b" style="height:300px">
 	    <button class="btn-annotation" id="bt_label1" style="height:97%;">ラベル１</button>
+	  </div>
+	  <div class="time_username ui-body-c" style="text-align:center">
+	    <span id="current_username">Username ...</span> (<span id="current_time_observation">Processing ...</span>)
 	  </div>
 	  <div class="ui-body">
 	    <select id="selector2-observation-mode" data-mini="true">
@@ -32,6 +32,7 @@
 	    </select>
 	  </div>
 	</fieldset>
+
 
 	<!-- latest annotations -->
 	<div class="box_result ui-body-c ui-corner-all ui-mini">
