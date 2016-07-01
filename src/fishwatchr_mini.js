@@ -23,7 +23,7 @@ var tempAnnotationLabel = "";
 var timerID = -1;
 var timerInterval = 500; 
 
-var deletedTargetID = "";
+//var deletedTargetID = "";
 
 var annotationStorage = [];
 
@@ -260,15 +260,15 @@ $(document).on("change", "#selector-data-handling", function (event) {
 
 
 
+// $(document).on('tap', '.disp-button-delete', function(event) {
+//     deletedTargetID = event.target.id;
+//     console.log("RID:" + event.target.id);
+// });
+
+
 $(document).on('tap', '.disp-button-delete', function(event) {
-    deletedTargetID = event.target.id;
-    console.log("RID:" + event.target.id);
-});
-
-
-$(document).on('tap', '#disp-delete-execute', function(event) {
+    var deletedTargetID = event.target.id;
     var iEnd = annotationResults.length - 1;
-    
     if(deletedTargetID == "disp-button1"){
 	if(iEnd >= 0) {
 	    console.log("DID:" + deletedTargetID);
