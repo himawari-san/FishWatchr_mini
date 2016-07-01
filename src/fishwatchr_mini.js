@@ -170,10 +170,10 @@ $(document).on('pagecontainerbeforehide', function(event, ui){
 	// get vauels of speakers and labels
 	for(var i = 1; i <= nBoxes; i++){
 	    var pn = "speaker" + i;
-	    annotatedSpeakers[pn] = $("#" + pn).val();
+	    annotatedSpeakers[pn] = sanitizeJ($("#" + pn).val());
 	    
 	    pn = "label" + i;
-	    annotatedLabels[pn] = $("#" + pn).val();
+	    annotatedLabels[pn] = sanitizeJ($("#" + pn).val());
 	}
 
 	// get annotation mode
@@ -402,6 +402,15 @@ function sanitize(str){
 	replace(/>/g, "&gt;").
 	replace(/"/g, "&quot;");
 }
+
+
+function sanitizeJ(str){
+    return str.replace(/&/g, "＆").
+	replace(/</g, "＜").
+	replace(/>/g, "＞").
+	replace(/"/g, "”");
+}
+
 
 
 function updateAnnotationButtons(){
