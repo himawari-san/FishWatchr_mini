@@ -567,6 +567,18 @@ function time2FormattedTime(time, flagMsec){
     return result;
 }
 
+function formattedTime2Sec(ftime){
+    if(ftime.match(/^(\d\d):(\d\d):(\d\d)\.(\d\d\d)/)){
+	return (RegExp.$1*1000) * 3600 +
+	    (RegExp.$2*1000) * 60 +
+	    (RegExp.$3*1000) +
+	    (RegExp.$4*1);
+    } else {
+	return -1;
+    }
+}
+
+
 
 function displayTime(elementId){
     var now = date2FormattedTime(new Date());
@@ -653,7 +665,7 @@ function getAnnotationsAsXML (){
 	var speaker = fv[fn_speaker];
 	var label = fv[fn_label];
 	var ctime = fv[fn_ctime];
-	var etime = fv[fn_etime];
+	var etime = formattedTime2Sec(fv[fn_etime]);
 
 	commentXML += "<comment date=\"" + ctime + "\"" +
 	    " commenter=\"" + username + "\"" +
