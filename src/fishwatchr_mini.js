@@ -70,7 +70,15 @@ $(document).on('pagecontainershow', function(event, ui){
 	    break;
 	    case 2: $('#data-tab').trigger('click');
 	}
-//	writeAnnotations();
+
+	if(osname == "iOS"){
+	    $('#selector-download-tsv').prop("disabled", true);
+	    $('#selector-download-xml').prop("disabled", true);
+	} else {
+	    $('#selector-download-tsv').prop("disabled", false);
+	    $('#selector-download-xml').prop("disabled", false);
+	}
+	
     }
 });
 
@@ -725,10 +733,10 @@ function getOSName(){
 	return "Linux";
     } else if(ua.match(/android/i)){
 	return "Android";
+    } else if(ua.match(/iphone|ipad/i)){
+	return "iOS"; // the order is important
     } else if(ua.match(/mac/i)){
 	return "Mac";
-    } else if(ua.match(/iphone|ipad/i)){
-	return "iOS";
     } else {
 	return ua;
     }

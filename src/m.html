@@ -34,7 +34,6 @@
 		   data-clear-btn="true" data-clear-btn-text="クリア"
 		   placeholder="Your username"
 		   value="" />
-	    <br />
 	    <h3 class="ui-bar ui-bar-a ui-corner-all">オプション</h3>
 	    <div class="ui-body ui-body-a">
 	      <label for="groupname">グループ名</label>
@@ -183,8 +182,8 @@
 	      <select name="selector-data-handling" id="selector-data-handling">
 		<option value="print-as-tsv">表示(Text)</option>
 		<option value="print-as-xml">表示(XML)</option>
-		<option value="save-as-tsv">ダウンロード(Text)</option>
-		<option value="save-as-xml">ダウンロード(XML)</option>
+		<option value="save-as-tsv" id="selector-download-tsv">ダウンロード(Text)</option>
+		<option value="save-as-xml" id="selector-download-xml">ダウンロード(XML)</option>
 		<option value="save-to-server">サーバ保存</option>
 	      </select>
 	    </div>
