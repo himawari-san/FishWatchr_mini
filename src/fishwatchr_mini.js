@@ -54,8 +54,7 @@ var dataHandlingMode = "print-as-tsv";
 
 $(document).ready(function(){
     $(window).on("beforeunload", function(event){
-	console.log("hey before unload!");
-	return "hey you!";
+	return "unload this page?";
     });
     console.log("document ready!!");
 });
