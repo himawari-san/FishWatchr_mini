@@ -26,6 +26,8 @@ var tempAnnotationLabel = "";
 var timerID = -1;
 var timerInterval = 500; 
 
+var cRead = 0;
+
 //var deletedTargetID = "";
 
 var annotationStorage = [];
@@ -50,12 +52,20 @@ var dataHandlingMode = "print-as-tsv";
 //     });
 // }
 
+$(document).ready(function(){
+    $(window).on("beforeunload", function(event){
+	console.log("hey before unload!");
+	return "hey you!";
+    });
+    console.log("document ready!!");
+});
 
-// pagecontainershow
+
 $(document).on('pagecontainerchange', function(event, ui){
     history.pushState(null, null, null);
-    console.log("change!!");
+    console.log("history change!!");
 });
+
 
 // pagecontainershow
 $(document).on('pagecontainershow', function(event, ui){
