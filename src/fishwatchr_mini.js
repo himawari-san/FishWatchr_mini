@@ -333,6 +333,7 @@ $(document).on('tap', '.savename-button', function(event) {
     if(groupname != "" && groupname.match(/^[A-Za-z0-9]+$/) == null){
 	$("#popupWarning-message").text("グループ名は，数字，もしくは，アルファベットのみで構成してください。");
 	$("#popupWarning").popup("open");
+	return false;
     }
 
     var dataBody = "";
@@ -400,6 +401,7 @@ $(document).on('tap', '#btn-get-archive', function(event) {
     } else if(groupname.match(/^[A-Za-z0-9]+$/) == null){
 	$("#popupWarning-message").text("グループ名は，数字，もしくは，アルファベットのみで構成してください。");
 	$("#popupWarning").popup("open");
+	return false;
     }
     
     var dataBody = "";
