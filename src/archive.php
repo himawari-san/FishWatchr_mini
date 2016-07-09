@@ -3,6 +3,8 @@ require_once(".ht_fw_mini.inc");
 
 header('Content-Type: application/json');
 
+setlocale(LC_ALL, 'ja_JP.UTF-8');
+
 $txt_dir = "txt/";
 $xml_dir = "xml/";
 

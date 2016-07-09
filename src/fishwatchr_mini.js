@@ -229,8 +229,9 @@ $(document).on('tap', '#btn-start', function(event) {
 	$("#popupWarning").popup("open");
 	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	return false;
-    } else if(username.match(/^[A-Za-z0-9]+$/) == null){
-	$("#popupWarning-message").text("ユーザ名は，数字，もしくは，アルファベットのみで構成してください。");
+//    } else if(username.match(/[\s!-\/:-@\[-\^`\{-~]/)){
+    } else if(username.match(/^[A-Za-z0-9_]+$/) == null){
+	$("#popupWarning-message").text("ユーザ名は，数字・アルファベット・アンダーバーのみで構成してください。");
 	$("#popupWarning").popup("open");
 	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	return false;
@@ -330,8 +331,8 @@ $(document).on('tap', '.savename-button', function(event) {
 
     // get groupname
     groupname = $("#groupname").val();
-    if(groupname != "" && groupname.match(/^[A-Za-z0-9]+$/) == null){
-	$("#popupWarning-message").text("グループ名は，数字，もしくは，アルファベットのみで構成してください。");
+    if(groupname != "" && groupname.match(/^[A-Za-z0-9_]+$/) == null){
+	$("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
 	$("#popupWarning").popup("open");
 	return false;
     }
@@ -398,8 +399,8 @@ $(document).on('tap', '#btn-get-archive', function(event) {
 	$("#popupWarning-message").text("グループ名を指定してください。");
 	$("#popupWarning").popup("open");
 	return false;
-    } else if(groupname.match(/^[A-Za-z0-9]+$/) == null){
-	$("#popupWarning-message").text("グループ名は，数字，もしくは，アルファベットのみで構成してください。");
+    } else if(groupname.match(/^[A-Za-z0-9_]+$/) == null){
+	$("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
 	$("#popupWarning").popup("open");
 	return false;
     }
