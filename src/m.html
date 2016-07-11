@@ -43,7 +43,7 @@
 		     placeholder="Your groupname (optional)"
 		     value="" />
 	      <label for="option-file">設定ファイル：</label>
-	      <a href="#popup-set-url" id="btn-load-settings" data-rel="popup" data-history="false" class="ui-btn uis-shadow ui-corner-all ui-btn-inline ui-icon-gear ui-btn-icon-left">(未入力)</a>
+	      <a href="#popup-set-url" id="btn-load-settings" data-rel="popup" data-history="false" class="ui-btn uis-shadow ui-corner-all ui-btn-inline ui-icon-gear ui-btn-icon-left" data-position-to="window">(未入力)</a>
 	    </div>
 	  </div>
 	  <div id="annotation-panel" class="ui-body-d ui-content">
@@ -192,7 +192,7 @@
 	      <li>（保存データ - なし）</li>
 	    </ul>
 	    <div class="ui-body-c ui-corner-all ui-mini">
-	      <a id="btn-get-archive" class="ui-input-btn ui-btn ui-btn-inline" href="#">グループの結果</a>
+	      <a id="btn-get-archive" class="ui-input-btn ui-btn ui-btn-inline ui-icon-action ui-btn-icon-right ui-corner-all" href="#">グループの結果</a>
 	    </div>
 	  </div>
 	</div>
@@ -242,8 +242,8 @@
 	    <h1>設定ファイル用URL</h1>
 	  </div>
 	  <div role="main" class="ui-content">
-	    <p>input url</p>
-	    <input id="urlSettings" type="url" value="" />
+	    <p>設定ファイルのURLを入力してください</p>
+	    <input id="urlSettings" type="url" value="" data-clear-btn="true" data-clear-btn-text="クリア" />
             <a href="#" id="popup-set-url-ok" class="ui-btn ui-shadow ui-btn-inline" data-rel="back">　設　定　</a>
             <a href="#" id="popup-set-url-cancel" class="ui-btn ui-shadow ui-btn-inline" data-rel="back">キャンセル</a>
 	  </div>
