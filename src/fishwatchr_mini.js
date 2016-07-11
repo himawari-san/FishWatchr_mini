@@ -38,6 +38,9 @@ var osname = getOSName();
 
 var dataHandlingMode = "print-as-tsv";
 
+var urlSettings = "";
+var resultDialog = "cancel";
+
 // quoted from http://dotnsf.blog.jp/archives/1012215593.html
 // if(window.history && window.history.pushState){
 //     console.log("hey");
@@ -55,6 +58,61 @@ var dataHandlingMode = "print-as-tsv";
 $(document).ready(function(){
     $(window).on("beforeunload", function(event){
 	return "unload this page?";
+    });
+
+    $("#popup-set-url").on("popupafterclose", function(event, ui){
+	if(resultDialog == "cancel"){
+	    return;
+	}
+	if($("#urlSettings").val() == ""){
+	    $("#popupWarning-message").text("URLを指定してください。");
+	    $("#popupWarning").popup("open");
+	} else {
+	    urlSettings = $("#urlSettings").val();
+	    $.getJSON(urlSettings)
+		.done(function(data) {
+		    // read groupname
+		    if(!checkGroupname(data["groupname"])){
+			$("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+		$("#popupWarning").popup("open");
+			return;
+		    } else {
+		    groupname = data["groupname"];
+			$("#groupname").prop("value", groupname);
+		    }
+		    
+		    // read labels
+		    $.each(data["labels"], function(key, value){
+			if(value != ""){
+			    $("#label" + (key+1)).prop("value", sanitizeJ(value));
+			}
+		    });
+		    
+		    // read speakers
+		    $.each(data["speakers"], function(key, value){
+			if(value != ""){
+			    $("#speaker" + (key+1)).prop("value", sanitizeJ(value));
+			}
+		    });
+		    
+		    /// set selector value
+		    $("#selector1-observation-mode")
+			.val(data["observation-mode"])
+			.selectmenu('refresh');
+		    
+		    // set button text
+		    if($("#urlSettings").val() != ""){
+			$("#btn-load-settings").text(urlSettings);
+		    } else {
+			$("#btn-load-settings").text("(未入力)");
+		    }
+		})
+		.fail(function(){
+		    $("#popupWarning-message").text("設定の読み込みに失敗しました。");
+		$("#popupWarning").popup("open");
+		    console.log("fail!!");
+		});
+	}
     });
     console.log("document ready!!");
 });
@@ -427,6 +485,14 @@ $(document).on('tap', '#btn-get-archive', function(event) {
 });
 
 
+$(document).on('tap', '#popup-set-url-ok', function(event) {
+    resultDialog = "ok";
+});
+
+$(document).on('tap', '#popup-set-url-cancel', function(event) {
+    resultDialog = "cancel";
+});
+
 
 
 function sanitize(str){
@@ -754,3 +820,11 @@ function getOSName(){
     }
 }
 
+
+function checkGroupname(groupname){
+    if(groupname.match(/^[A-Za-z0-9_]+$/)){
+	return true;
+    } else {
+	return false;
+    }
+}

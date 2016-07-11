@@ -43,7 +43,7 @@
 		     placeholder="Your groupname (optional)"
 		     value="" />
 	      <label for="option-file">設定ファイル：</label>
-	      <input data-clear-btn="false" id="option-file" name="option-file" value="" type="file" disabled="true" />
+	      <a href="#popup-set-url" id="btn-load-settings" data-rel="popup" data-history="false" class="ui-btn uis-shadow ui-corner-all ui-btn-inline ui-icon-gear ui-btn-icon-left">(未入力)</a>
 	    </div>
 	  </div>
 	  <div id="annotation-panel" class="ui-body-d ui-content">
@@ -235,6 +235,17 @@
 	    <div id="print-annatations" class="ui-body">
 	    </div>
             <a href="#" class="ui-btn ui-shadow" data-rel="back">閉じる</a>
+	  </div>
+	</div>
+	<div data-role="popup" id="popup-set-url" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;" class="ui-mini">
+	  <div data-role="header" data-theme="a">
+	    <h1>設定ファイル用URL</h1>
+	  </div>
+	  <div role="main" class="ui-content">
+	    <p>input url</p>
+	    <input id="urlSettings" type="url" value="" />
+            <a href="#" id="popup-set-url-ok" class="ui-btn ui-shadow ui-btn-inline" data-rel="back">　設　定　</a>
+            <a href="#" id="popup-set-url-cancel" class="ui-btn ui-shadow ui-btn-inline" data-rel="back">キャンセル</a>
 	  </div>
 	</div>
       </div>
