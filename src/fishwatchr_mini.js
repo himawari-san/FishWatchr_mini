@@ -69,49 +69,55 @@ $(document).ready(function(){
 	    $("#popupWarning").popup("open");
 	} else {
 	    urlSettings = $("#urlSettings").val();
-	    $.getJSON(urlSettings)
-		.done(function(data) {
-		    // read groupname
-		    if(!checkGroupname(data["groupname"])){
-			$("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+
+	    $.ajax({
+		url: "read.php",
+		type: "post",
+		dataType: "json",
+		data: {url: urlSettings}
+	    })
+	    .done(function(data) {
+		// read groupname
+		if(!checkGroupname(data["groupname"])){
+		    $("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
 		$("#popupWarning").popup("open");
-			return;
-		    } else {
+		    return;
+		} else {
 		    groupname = data["groupname"];
-			$("#groupname").prop("value", groupname);
+		    $("#groupname").prop("value", groupname);
+		}
+		
+		// read labels
+		$.each(data["labels"], function(key, value){
+		    if(value != ""){
+			$("#label" + (key+1)).prop("value", sanitizeJ(value));
 		    }
-		    
-		    // read labels
-		    $.each(data["labels"], function(key, value){
-			if(value != ""){
-			    $("#label" + (key+1)).prop("value", sanitizeJ(value));
-			}
-		    });
-		    
-		    // read speakers
-		    $.each(data["speakers"], function(key, value){
-			if(value != ""){
-			    $("#speaker" + (key+1)).prop("value", sanitizeJ(value));
-			}
-		    });
-		    
-		    /// set selector value
-		    $("#selector1-observation-mode")
-			.val(data["observation-mode"])
-			.selectmenu('refresh');
-		    
-		    // set button text
-		    if($("#urlSettings").val() != ""){
-			$("#btn-load-settings").text(urlSettings);
-		    } else {
-			$("#btn-load-settings").text("(未入力)");
-		    }
-		})
-		.fail(function(){
-		    $("#popupWarning-message").text("設定の読み込みに失敗しました。");
-		$("#popupWarning").popup("open");
-		    console.log("fail!!");
 		});
+		
+		// read speakers
+		$.each(data["speakers"], function(key, value){
+		    if(value != ""){
+			$("#speaker" + (key+1)).prop("value", sanitizeJ(value));
+		    }
+		});
+		
+		/// set selector value
+		$("#selector1-observation-mode")
+		    .val(data["observation-mode"])
+		    .selectmenu('refresh');
+		
+		// set button text
+		if($("#urlSettings").val() != ""){
+		    $("#btn-load-settings").text(urlSettings);
+		} else {
+		    $("#btn-load-settings").text("(未入力)");
+		}
+	    })
+	    .fail(function(){
+		$("#popupWarning-message").text("設定の読み込みに失敗しました。");
+		$("#popupWarning").popup("open");
+		console.log("fail!!");
+	    });
 	}
     });
     console.log("document ready!!");
