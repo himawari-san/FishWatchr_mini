@@ -89,16 +89,12 @@ $(document).ready(function(){
 		
 		// read labels
 		$.each(data["labels"], function(key, value){
-		    if(value != ""){
-			$("#label" + (key+1)).prop("value", sanitizeJ(value));
-		    }
+		    $("#label" + (key+1)).prop("value", sanitizeJ(value));
 		});
 		
 		// read speakers
 		$.each(data["speakers"], function(key, value){
-		    if(value != ""){
-			$("#speaker" + (key+1)).prop("value", sanitizeJ(value));
-		    }
+		    $("#speaker" + (key+1)).prop("value", sanitizeJ(value));
 		});
 		
 		/// set selector value
