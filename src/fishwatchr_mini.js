@@ -80,7 +80,7 @@ $(document).ready(function(){
 		// read groupname
 		if(!checkGroupname(data["groupname"])){
 		    $("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
-		$("#popupWarning").popup("open");
+		    $("#popupWarning").popup("open");
 		    return;
 		} else {
 		    groupname = data["groupname"];
@@ -338,6 +338,27 @@ $(document).on('tap', '.btn-annotation', function(event) {
 });
 
 
+// recording the current time
+$(document).on('tap', '#btn-get-basetime', function(event) {
+    var newStartTime = new Date();
+    var newname = "_sys_group_base_time";
+    var dummyResults = [];
+
+    if(!checkGroupname($("#groupname").val())){
+	$("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+	$("#popupWarning").popup("open");
+	return;
+    } else {
+	newname += "_" + $("#groupname").val();
+    }
+
+    
+    var newdata = {starttime:newStartTime, username:newname, annotations:dummyResults.concat()};
+    annotationStorage.push(newdata);
+    updateSavenameList();
+});
+
+	       
 // detect change of select menu
 $(document).on("change", "#selector2-observation-mode", function () {
     updateAnnotationButtons();
