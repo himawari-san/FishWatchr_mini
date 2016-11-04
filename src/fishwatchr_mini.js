@@ -795,7 +795,7 @@ function getAnnotationsAsXML (){
     
     commentXML =
 	"<set name=\"noname\" original_start_time=\"" +
-	date2FormattedDateTime(startTime, 1) + "\" correction_time=\"0\">\n";
+	date2FormattedDateTime(annotationInfo.starttime, 1) + "\" correction_time=\"0\">\n";
     for(var v of annotationInfo.annotations){
 	var fv = v.split(fseparator);
 	var speaker = fv[fn_speaker];
@@ -814,7 +814,7 @@ function getAnnotationsAsXML (){
 
     result =
 	decXML +
-	"<comment_list start_time=\"" + date2FormattedDateTime(startTime, 1) + "\" media_file=\"\">\n" +
+	"<comment_list start_time=\"" + date2FormattedDateTime(annotationInfo.starttime, 1) + "\" media_file=\"\">\n" +
 	commentTypesXML +
 	discussersXML +
 	commentXML +
