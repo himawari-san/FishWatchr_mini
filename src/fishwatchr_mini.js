@@ -39,7 +39,9 @@ var osname = getOSName();
 var dataHandlingMode = "print-as-tsv";
 
 var urlSettings = "";
+var configUrlOption = "";
 var resultDialog = "cancel";
+
 
 // quoted from http://dotnsf.blog.jp/archives/1012215593.html
 // if(window.history && window.history.pushState){
@@ -69,54 +71,64 @@ $(document).ready(function(){
 	    $("#popupWarning").popup("open");
 	} else {
 	    urlSettings = $("#urlSettings").val();
-
-	    $.ajax({
-		url: "read.php",
-		type: "post",
-		dataType: "json",
-		data: {url: urlSettings}
-	    })
-	    .done(function(data) {
-		// read groupname
-		if(!checkGroupname(data["groupname"])){
-		    $("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
-		    $("#popupWarning").popup("open");
-		    return;
-		} else {
-		    groupname = data["groupname"];
-		    $("#groupname").prop("value", groupname);
-		}
-		
-		// read labels
-		$.each(data["labels"], function(key, value){
-		    $("#label" + (key+1)).prop("value", sanitizeJ(value));
-		});
-		
-		// read speakers
-		$.each(data["speakers"], function(key, value){
-		    $("#speaker" + (key+1)).prop("value", sanitizeJ(value));
-		});
-		
-		/// set selector value
-		$("#selector1-observation-mode")
-		    .val(data["observation-mode"])
-		    .selectmenu('refresh');
-		
-		// set button text
-		if($("#urlSettings").val() != ""){
-		    $("#btn-load-settings").text(urlSettings);
-		} else {
-		    $("#btn-load-settings").text("(未入力)");
-		}
-	    })
-	    .fail(function(){
-		$("#popupWarning-message").text("設定の読み込みに失敗しました。");
-		$("#popupWarning").popup("open");
-		console.log("fail!!");
-	    });
+	    loadSettings(urlSettings);
 	}
     });
     console.log("document ready!!");
+});
+
+
+function loadSettings(url){
+    $.ajax({
+	url: "read.php",
+	type: "post",
+	dataType: "json",
+	data: {url: url}
+    }).done(function(data) {
+	// read groupname
+	if(!checkGroupname(data["groupname"])){
+	    $("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+	    $("#popupWarning").popup("open");
+	    return;
+	} else {
+	    groupname = data["groupname"];
+	    $("#groupname").prop("value", groupname);
+	}
+	
+	// read labels
+	$.each(data["labels"], function(key, value){
+	    $("#label" + (key+1)).prop("value", sanitizeJ(value));
+	});
+	
+	// read speakers
+	$.each(data["speakers"], function(key, value){
+	    $("#speaker" + (key+1)).prop("value", sanitizeJ(value));
+	});
+	
+	/// set selector value
+	$("#selector1-observation-mode")
+	    .val(data["observation-mode"])
+	    .selectmenu('refresh');
+	
+	// set button text
+	$("#btn-load-settings").text(url);
+    }).fail(function(){
+	$("#popupWarning-message").text("設定の読み込みに失敗しました。");
+	$("#popupWarning").popup("open");
+	console.log("fail!!");
+    });
+}
+
+
+$(document).on('pagecreate', '#home', function(event, ui){
+    // get an url option for 
+    configUrlOption = location.search;
+
+    if(location.search.match(/\?config=(.+)/)){
+	var configUrl = RegExp.$1;
+	loadSettings(configUrl);
+	console.log("config url:" + configUrl);
+    }
 });
 
 
@@ -147,7 +159,6 @@ $(document).on('pagecontainershow', function(event, ui){
 	    $('#selector-download-tsv').prop("disabled", false);
 	    $('#selector-download-xml').prop("disabled", false);
 	}
-	
     }
 });
 
@@ -239,6 +250,9 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 
 	// initialize selectmenu
 	$("#selector2-observation-mode").val(annotationMode).selectmenu("refresh");
+
+	// update the url of the top page 
+	$("#link_to_top").prop("href", "m.html" + configUrlOption);
     } else if(ui.toPage.is('#home')){
 	timerID = setInterval(displayTime, timerInterval, "#current_time_home");
 	console.log("new timer:" + timerID);
