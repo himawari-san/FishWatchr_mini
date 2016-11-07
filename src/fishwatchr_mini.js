@@ -355,7 +355,7 @@ $(document).on('tap', '.btn-annotation', function(event) {
 // recording the current time
 $(document).on('tap', '#btn-get-basetime', function(event) {
     var newStartTime = new Date();
-    var newname = "_sys_group_base_time";
+    var newname = "_sys_basetime";
     var dummyResults = [];
 
     if(!checkGroupname($("#groupname").val())){
