@@ -42,6 +42,7 @@ var urlSettings = "";
 var configUrlOption = "";
 var resultDialog = "cancel";
 
+var cBaseTime = 0;
 
 // quoted from http://dotnsf.blog.jp/archives/1012215593.html
 // if(window.history && window.history.pushState){
@@ -363,7 +364,8 @@ $(document).on('tap', '#btn-get-basetime', function(event) {
 	$("#popupWarning").popup("open");
 	return;
     } else {
-	newname += "_" + $("#groupname").val();
+	newname += "_" + cBaseTime + "_" + $("#groupname").val();
+	cBaseTime++;
     }
 
     
