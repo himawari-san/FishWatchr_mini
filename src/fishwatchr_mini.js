@@ -113,6 +113,15 @@ function loadSettings(url){
 	
 	// set button text
 	$("#btn-load-settings").text(url);
+
+	// set auto-save option
+	if(data["auto-save"] == "true"){
+	    $("#flip-auto-save-on").attr("selected", "");
+	    $("#flip-auto-save-off").removeAttr("selected");
+	} else {
+	    $("#flip-auto-save-on").removeAttr("selected");
+	    $("#flip-auto-save-off").attr("selected", "");
+	}
     }).fail(function(){
 	$("#popupWarning-message").text("設定の読み込みに失敗しました。");
 	$("#popupWarning").popup("open");
@@ -289,6 +298,13 @@ $(document).on('pagecontainerbeforehide', function(event, ui){
 	var newdata = {starttime:startTime, username:username, annotations:annotationResults.concat()};
 	annotationStorage.push(newdata);
 	updateSavenameList();
+
+	if($("#flip-auto-save-on").prop("selected")){
+	    saveToServer();
+	    console.log("auto-save");
+	} else {
+	    console.log("no auto-save");
+	}
     }
 });
 
@@ -372,6 +388,13 @@ $(document).on('tap', '#btn-get-basetime', function(event) {
     var newdata = {starttime:newStartTime, username:newname, annotations:dummyResults.concat()};
     annotationStorage.push(newdata);
     updateSavenameList();
+
+    if($("#flip-auto-save-on").prop("selected")){
+	saveToServer();
+	console.log("auto-save");
+    } else {
+	console.log("no auto-save");
+    }
 });
 
 	       
@@ -416,12 +439,21 @@ $(document).on('tap', '.disp-button-delete', function(event) {
 
 
 $(document).on('tap', '.savename-button', function(event) {
-    // index of selected annotation set
-    iAnnotationStorage = event.target.id.match(/\d+$/)[0];
+    saveToServer(event);
+});
 
+
+function saveToServer(event){
+    // index of selected annotation set
+    if(event == null){
+	iAnnotationStorage = 0;
+    } else {
+	iAnnotationStorage = event.target.id.match(/\d+$/)[0];
+    }
+    
     // get dataHandlingMode from the menu
     dataHandlingMode = $("#selector-data-handling").val();
-
+    
     // get savename
     var savename = $("#savename_" + iAnnotationStorage).text();
     savename = savename.replace(":", "").replace("/", "_").replace(" ", "_");
@@ -433,9 +465,6 @@ $(document).on('tap', '.savename-button', function(event) {
 	$("#popupWarning").popup("open");
 	return false;
     }
-
-    var dataBody = "";
-    var fileType = "";
 
     switch(dataHandlingMode){
     case "print-as-tsv":
@@ -467,7 +496,7 @@ $(document).on('tap', '.savename-button', function(event) {
 		console.log("store xml data," + textStatus);
 	    });
     }
-});
+}
 
 
 function store(savename, groupname, fileType, dataBody){
