@@ -444,15 +444,16 @@ $(document).on('tap', '.savename-button', function(event) {
 
 
 function saveToServer(event){
-    // index of selected annotation set
     if(event == null){
+	// when auto-save
 	iAnnotationStorage = 0;
+	dataHandlingMode = "save-to-server";
     } else {
+	// index of selected annotation set
 	iAnnotationStorage = event.target.id.match(/\d+$/)[0];
+	// get dataHandlingMode from the menu
+	dataHandlingMode = $("#selector-data-handling").val();
     }
-    
-    // get dataHandlingMode from the menu
-    dataHandlingMode = $("#selector-data-handling").val();
     
     // get savename
     var savename = $("#savename_" + iAnnotationStorage).text();
