@@ -122,6 +122,7 @@ function loadSettings(url){
 	    $("#flip-auto-save-on").removeAttr("selected");
 	    $("#flip-auto-save-off").attr("selected", "");
 	}
+	$("flip-auto-save").checkboxradio( "refresh" );
     }).fail(function(){
 	$("#popupWarning-message").text("設定の読み込みに失敗しました。");
 	$("#popupWarning").popup("open");
