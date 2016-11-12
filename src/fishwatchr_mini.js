@@ -378,7 +378,7 @@ $(document).on('tap', '#btn-get-basetime', function(event) {
     if(!checkGroupname($("#groupname").val())){
 	$("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
 	$("#popupWarning").popup("open");
-	return;
+	return false;
     } else {
 	newname += "_" + cBaseTime + "_" + $("#groupname").val();
 	cBaseTime++;
