@@ -116,13 +116,10 @@ function loadSettings(url){
 
 	// set auto-save option
 	if(data["auto-save"] == "true"){
-	    $("#flip-auto-save-on").attr("selected", "");
-	    $("#flip-auto-save-off").removeAttr("selected");
+	    $( "#flip-auto-save" ).val("on").flipswitch("refresh");
 	} else {
-	    $("#flip-auto-save-on").removeAttr("selected");
-	    $("#flip-auto-save-off").attr("selected", "");
+	    $( "#flip-auto-save" ).val("off").flipswitch("refresh");
 	}
-	$("flip-auto-save").checkboxradio( "refresh" );
     }).fail(function(){
 	$("#popupWarning-message").text("設定の読み込みに失敗しました。");
 	$("#popupWarning").popup("open");
