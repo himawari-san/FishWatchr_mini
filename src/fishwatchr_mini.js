@@ -444,7 +444,7 @@ $(document).on('tap', '.savename-button', function(event) {
 function saveToServer(event){
     if(event == null){
 	// when auto-save
-	iAnnotationStorage = 0;
+	iAnnotationStorage = annotationStorage.length-1;
 	dataHandlingMode = "save-to-server";
     } else {
 	// index of selected annotation set
