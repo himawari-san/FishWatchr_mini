@@ -34,6 +34,8 @@ var annotationStorage = [];
 
 var iAnnotationStorage = -1; 
 
+var mergedAnnotations = [];
+
 var osname = getOSName();
 
 var dataHandlingMode = "print-as-tsv";
@@ -167,6 +169,8 @@ $(document).on('pagecontainershow', function(event, ui){
 	    $('#selector-download-tsv').prop("disabled", false);
 	    $('#selector-download-xml').prop("disabled", false);
 	}
+    } else if(ui.toPage.is('#graph')){
+	drawGraph("selector-type-graph");
     }
 });
 
@@ -441,6 +445,20 @@ $(document).on('tap', '.savename-button', function(event) {
 });
 
 
+$(document).on('tap', '.graph-selector', function(event) {
+    var selectorID = event.target.id;
+
+    drawGraph(event.target.id);
+
+    // switch(selectorID){
+    // 	case "selector-type-graph":
+	
+    // 	break;
+    // 	case "selector-timeline-graph":
+    // }
+
+});
+
 function saveToServer(event){
     if(event == null){
 	// when auto-save
@@ -494,6 +512,7 @@ function saveToServer(event){
 	    .fail(function (jqXHR, textStatus){
 		console.log("store xml data," + textStatus);
 	    });
+	break;
     }
 }
 
@@ -895,4 +914,156 @@ function checkGroupname(groupname){
     } else {
 	return false;
     }
+}
+
+
+function getSelectedGraph(){
+    //aa
+    var ids = $('.graph-selector .ui-btn-active').id;
+    if(ids){
+	return ids.get(0);
+    } else {
+	return 'selector-type-graph';
+    }
+}
+
+
+function drawGraph(graphType){
+    var type = {};
+    var x = ['x'];
+    var y = ['freq'];
+    
+    groupname = $("#groupname").val();
+    mergedAnnotations = [];
+    
+    $.ajax({
+	url: "get_merged_data.php",
+	type: "post",
+	dataType: "text",
+	data: {groupname: groupname},
+	//async: false
+    }).done(function(data) {
+	//aa
+	var arrayAnnotations = data.split("\n");
+	var arrayColumns = [];
+	var flagLegend = true;
+
+	for(var i = 0; i < arrayAnnotations.length; i++){
+	    if(arrayAnnotations[i] == "") continue;
+	    var arrayFields = arrayAnnotations[i].split("\t");
+	    arrayFields.push(Date.parse(arrayFields[3].replace(/-/g, "/")));
+	    mergedAnnotations[i] = arrayFields;
+	}
+	
+	// sort by date
+	mergedAnnotations.sort(function(a, b){
+	    var a1 = a.toString().split("\t");
+	    var b1 = b.toString().split("\t");
+	    if(a1[5] < b1[5]){
+		return -1;
+	    } else {
+		return 1;
+	    }
+	});
+
+	if(graphType == 'selector-type-graph'|| graphType == ""){
+	    for(var i = 0; i < mergedAnnotations.length; i++){
+		var value = mergedAnnotations[i][1];
+		if(value in type){
+		    type[value]++;
+		} else {
+		    type[value] = 1;
+		}
+	    }
+	    
+	    for(var i in type){
+		x.push(i);
+		y.push(type[i]);
+	    }
+	    arrayColumns[0] = x;
+	    arrayColumns[1] = y;
+	    flagLegend = false;
+	} else {
+	    var temp = {};
+	    var categoryFreqs = {};
+	    var categories = {};
+
+	    for(var i = 0; i < mergedAnnotations.length; i++){
+//		var time = Math.floor(Math.random()*200);
+		var time = Math.floor(mergedAnnotations[i][5]/600000);
+		var category = mergedAnnotations[i][1];
+		
+		if(time in type){
+		    type[time]++;
+		} else {
+		    type[time] = 1;
+		}
+
+		if(category in categories == false){
+		    categories[category] = 1;
+		}
+		
+		var key = category + "\t" + time;
+		if(key in temp){
+		    temp[key]++;
+		} else {
+		    temp[key] = 1;
+		}
+	    }
+
+
+	    for(var i in type){
+		x.push(i);
+		y.push(type[i]);
+
+		for(var category in categories){
+		    var key = category + "\t" + i;
+		    if(category in categoryFreqs == false){
+			categoryFreqs[category] = [category];
+		    }
+
+		    if(key in temp){
+			categoryFreqs[category].push(temp[key]);
+		    } else {
+			categoryFreqs[category].push(0);
+		    }
+		}
+	    }
+	    arrayColumns[0] = x;
+	    arrayColumns[1] = y;
+
+	    for(var category in categories){
+		arrayColumns.push(categoryFreqs[category]);
+	    }
+	}
+	    
+	console.log(x);
+	console.log(y);
+	console.log("gse:" + getSelectedGraph());
+	console.log("len:" + mergedAnnotations.length);
+	console.log("len:" + mergedAnnotations.length);
+	
+	var chart = c3.generate({
+	    bindto: '#graph_body',
+	    data: {
+		x: 'x',
+		columns: arrayColumns,
+		types: {
+		    freq: 'bar'
+		}
+	    },
+	    axis: {
+		x: {
+		    type: 'category'
+		}
+	    },
+	    legend: {
+		show: flagLegend,
+		position: 'bottom'
+	    },
+	    zoom: {
+		enabled: false
+	    }
+	});
+    });
 }
