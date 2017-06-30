@@ -990,7 +990,7 @@ function drawGraph(graphType){
 
 	    for(var i = 0; i < mergedAnnotations.length; i++){
 //		var time = Math.floor(Math.random()*200);
-		var time = Math.floor(mergedAnnotations[i][5]/600000);
+		var time = Math.floor(mergedAnnotations[i][5]/300000);
 		var category = mergedAnnotations[i][1];
 		
 		if(time in type){
@@ -1013,7 +1013,8 @@ function drawGraph(graphType){
 
 
 	    for(var i in type){
-		x.push(i);
+		var d = new Date(i*300000);
+		x.push(d.toTimeString().replace(/GMT.*/,""));
 		y.push(type[i]);
 
 		for(var category in categories){
@@ -1041,7 +1042,6 @@ function drawGraph(graphType){
 	console.log(y);
 	console.log("gse:" + getSelectedGraph());
 	console.log("len:" + mergedAnnotations.length);
-	console.log("len:" + mergedAnnotations.length);
 	
 	var chart = c3.generate({
 	    bindto: '#graph_body',
@@ -1057,9 +1057,18 @@ function drawGraph(graphType){
 		    type: 'category'
 		}
 	    },
+	    padding: {
+		bottom: 20
+	    },
 	    legend: {
 		show: flagLegend,
-		position: 'bottom'
+		position: 'bottom',
+		inset: {
+		    anchor: 'top-right',
+		    x: 20,
+		    y: 10,
+		    step: 2
+		}
 	    },
 	    zoom: {
 		enabled: false
