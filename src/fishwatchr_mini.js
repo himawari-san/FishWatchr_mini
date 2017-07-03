@@ -35,6 +35,13 @@ var annotationStorage = [];
 var iAnnotationStorage = -1; 
 
 var mergedAnnotations = [];
+var mergedAnnotationsCurrent = [];
+var firstAnnotationTime = 0;
+var lastAnnotationTime = 0;
+
+var histgramInterval = 60; // sec
+
+var selectedGraph = 'selector-type-graph'; // default graph
 
 var osname = getOSName();
 
@@ -170,7 +177,38 @@ $(document).on('pagecontainershow', function(event, ui){
 	    $('#selector-download-xml').prop("disabled", false);
 	}
     } else if(ui.toPage.is('#graph')){
-	drawGraph("selector-type-graph");
+	$("#slider-1").on("slidestop", function(e){
+	    histgramInterval = $(this).val();
+	    if(selectedGraph == 'selector-timeline-graph'){
+		drawGraph("selector-timeline-graph");
+	    }
+	});
+
+	// The following change event handlers are based on http://jsfiddle.net/ezanker/fu26u/204/
+	var time1 = $("#time1").val()*1000;
+	var time2 = $("#time2").val()*1000;
+
+	$("#time1").on("change", function(){
+	    var time = date2FormattedDateTime(new Date($(this).val()*1000)).replace(/^.+ /, "").replace(/:..$/, "");
+            $(this).closest(".timeRangeSlider").find(".timeLabel").val(time);
+            $(this).closest(".timeRangeSlider").find(".ui-slider-handle").eq(0).prop("title", time);
+	});
+	$("#time1").on("slidestop", function(e){
+	    updateMergedAnnotationsCurrent($("#time1").val()*1000, $("#time2").val()*1000);
+	    drawGraph(selectedGraph);
+	});
+	
+	$("#time2").on("change", function(){
+	    var time = date2FormattedDateTime(new Date($(this).val()*1000)).replace(/^.+ /, "").replace(/:..$/, "");
+            $(this).closest(".timeRangeSlider").find(".timeLabel2").val(time);
+            $(this).closest(".timeRangeSlider").find(".ui-slider-handle").eq(1).prop("title", time);
+	});
+	$("#time2").on("slidestop", function(e){
+	    updateMergedAnnotationsCurrent($("#time1").val()*1000, $("#time2").val()*1000);
+	    drawGraph(selectedGraph);
+	});
+
+	generateGraph("selector-type-graph");
     }
 });
 
@@ -446,17 +484,8 @@ $(document).on('tap', '.savename-button', function(event) {
 
 
 $(document).on('tap', '.graph-selector', function(event) {
-    var selectorID = event.target.id;
-
-    drawGraph(event.target.id);
-
-    // switch(selectorID){
-    // 	case "selector-type-graph":
-	
-    // 	break;
-    // 	case "selector-timeline-graph":
-    // }
-
+    selectedGraph = event.target.id;
+    drawGraph(selectedGraph);
 });
 
 function saveToServer(event){
@@ -917,24 +946,22 @@ function checkGroupname(groupname){
 }
 
 
-function getSelectedGraph(){
-    //aa
-    var ids = $('.graph-selector .ui-btn-active').id;
-    if(ids){
-	return ids.get(0);
-    } else {
-	return 'selector-type-graph';
+function updateMergedAnnotationsCurrent(begin, end){
+    mergedAnnotationsCurrent = new Array();
+
+    var j = 0;
+    for(var i = 0; i < mergedAnnotations.length; i++){
+	var time = mergedAnnotations[i][5];
+	if(time < begin || time > end) continue;
+	mergedAnnotationsCurrent[j++] = mergedAnnotations[i];
     }
 }
 
 
-function drawGraph(graphType){
-    var type = {};
-    var x = ['x'];
-    var y = ['freq'];
-    
+function generateGraph(graphType){
     groupname = $("#groupname").val();
     mergedAnnotations = [];
+    mergedAnnotationsCurrent = [];
     
     $.ajax({
 	url: "get_merged_data.php",
@@ -945,9 +972,7 @@ function drawGraph(graphType){
     }).done(function(data) {
 	//aa
 	var arrayAnnotations = data.split("\n");
-	var arrayColumns = [];
-	var flagLegend = true;
-
+	
 	for(var i = 0; i < arrayAnnotations.length; i++){
 	    if(arrayAnnotations[i] == "") continue;
 	    var arrayFields = arrayAnnotations[i].split("\t");
@@ -957,122 +982,163 @@ function drawGraph(graphType){
 	
 	// sort by date
 	mergedAnnotations.sort(function(a, b){
-	    var a1 = a.toString().split("\t");
-	    var b1 = b.toString().split("\t");
-	    if(a1[5] < b1[5]){
+	    if(a[5] < b[5]){
 		return -1;
 	    } else {
 		return 1;
 	    }
 	});
+	
+	// copy 
+	for(var i = 0; i < mergedAnnotations.length; i++){
+	    mergedAnnotationsCurrent[i] = mergedAnnotations[i];
+	}
+	
+	firstAnnotationTime = mergedAnnotations[0][5]/1000;
+	lastAnnotationTime = mergedAnnotations[mergedAnnotations.length-1][5]/1000;
 
-	if(graphType == 'selector-type-graph'|| graphType == ""){
-	    for(var i = 0; i < mergedAnnotations.length; i++){
-		var value = mergedAnnotations[i][1];
-		if(value in type){
-		    type[value]++;
-		} else {
-		    type[value] = 1;
-		}
-	    }
-	    
-	    for(var i in type){
-		x.push(i);
-		y.push(type[i]);
-	    }
-	    arrayColumns[0] = x;
-	    arrayColumns[1] = y;
-	    flagLegend = false;
-	} else {
-	    var temp = {};
-	    var categoryFreqs = {};
-	    var categories = {};
+	$("#time1").val(firstAnnotationTime);
+	$("#time1label").val(date2FormattedDateTime(new Date(firstAnnotationTime*1000)).replace(/^.+ /, "").replace(/:..$/, ""));
+	$("#time1").prop("min", firstAnnotationTime);
+	$("#time1").prop("max", lastAnnotationTime);
+	$("#time1").prop("value", firstAnnotationTime);
+	$("#time2").val(lastAnnotationTime);
+	$("#time2label").val(date2FormattedDateTime(new Date(lastAnnotationTime*1000)).replace(/^.+ /, "").replace(/:..$/, ""));
+	$("#time2").prop("min", firstAnnotationTime);
+	$("#time2").prop("max", lastAnnotationTime);
+	$("#time2").prop("value", lastAnnotationTime);
 
-	    for(var i = 0; i < mergedAnnotations.length; i++){
-//		var time = Math.floor(Math.random()*200);
-		var time = Math.floor(mergedAnnotations[i][5]/300000);
-		var category = mergedAnnotations[i][1];
-		
-		if(time in type){
-		    type[time]++;
-		} else {
-		    type[time] = 1;
-		}
+	drawGraph(graphType);
+    });
+}
 
-		if(category in categories == false){
-		    categories[category] = 1;
-		}
-		
-		var key = category + "\t" + time;
-		if(key in temp){
-		    temp[key]++;
-		} else {
-		    temp[key] = 1;
-		}
-	    }
-
-
-	    for(var i in type){
-		var d = new Date(i*300000);
-		x.push(d.toTimeString().replace(/GMT.*/,""));
-		y.push(type[i]);
-
-		for(var category in categories){
-		    var key = category + "\t" + i;
-		    if(category in categoryFreqs == false){
-			categoryFreqs[category] = [category];
-		    }
-
-		    if(key in temp){
-			categoryFreqs[category].push(temp[key]);
-		    } else {
-			categoryFreqs[category].push(0);
-		    }
-		}
-	    }
-	    arrayColumns[0] = x;
-	    arrayColumns[1] = y;
-
-	    for(var category in categories){
-		arrayColumns.push(categoryFreqs[category]);
+function drawGraph(graphType){
+    var type = {};
+    var x = ['x'];
+    var y = ['freq'];
+    var arrayColumns = [];
+    var flagLegend = true;
+    
+    if(graphType == 'selector-type-graph'|| graphType == ""){
+	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
+	    var value = mergedAnnotationsCurrent[i][1];
+	    if(value in type){
+		type[value]++;
+	    } else {
+		type[value] = 1;
 	    }
 	}
-	    
-	console.log(x);
-	console.log(y);
-	console.log("gse:" + getSelectedGraph());
-	console.log("len:" + mergedAnnotations.length);
 	
-	var chart = c3.generate({
-	    bindto: '#graph_body',
-	    data: {
-		x: 'x',
-		columns: arrayColumns,
-		types: {
-		    freq: 'bar'
+	for(var i in type){
+	    x.push(i);
+	    y.push(type[i]);
+	}
+	arrayColumns[0] = x;
+	arrayColumns[1] = y;
+	flagLegend = false;
+    } else {
+	var temp = {};
+	var categoryFreqs = {};
+	var categories = {};
+	var prevTime = 0;
+	
+	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
+	    var time = Math.floor(mergedAnnotationsCurrent[i][5]/histgramInterval/1000);
+	    var category = mergedAnnotationsCurrent[i][1];
+
+	    // insert axises whose frequency is 0
+	    if(time - prevTime > 1 && prevTime != 0){
+		var addedTime = prevTime + 1;
+		while(addedTime < time){
+		    type[addedTime] = 0;
+		    addedTime++;
 		}
-	    },
-	    axis: {
-		x: {
-		    type: 'category'
-		}
-	    },
-	    padding: {
-		bottom: 20
-	    },
-	    legend: {
-		show: flagLegend,
-		position: 'bottom',
-		inset: {
-		    anchor: 'top-right',
-		    x: 20,
-		    y: 10,
-		    step: 2
-		}
-	    },
-	    zoom: {
-		enabled: false
 	    }
-	});
+	    prevTime = time;
+	    
+	    if(time in type){
+		type[time]++;
+	    } else {
+		type[time] = 1;
+	    }
+	    
+	    if(category in categories == false){
+		categories[category] = 1;
+	    }
+	    
+	    var key = category + "\t" + time;
+	    if(key in temp){
+		temp[key]++;
+	    } else {
+		temp[key] = 1;
+	    }
+	}
+	
+	
+	for(var i in type){
+	    var d = new Date(i * histgramInterval * 1000);
+	    x.push(d.toTimeString().replace(/GMT.*/,"").replace(/:/g,""));
+	    y.push(type[i]);
+	    
+	    for(var category in categories){
+		var key = category + "\t" + i;
+		if(category in categoryFreqs == false){
+		    categoryFreqs[category] = [category];
+		}
+		
+		if(key in temp){
+		    categoryFreqs[category].push(temp[key]);
+		} else {
+		    categoryFreqs[category].push(0);
+		}
+	    }
+	}
+	arrayColumns[0] = x;
+	arrayColumns[1] = y;
+	
+	for(var category in categories){
+	    arrayColumns.push(categoryFreqs[category]);
+	}
+    }
+    
+    console.log(x);
+    console.log(y);
+    console.log("len:" + mergedAnnotationsCurrent.length);
+    
+    var chart = c3.generate({
+	bindto: '#graph_body',
+	data: {
+	    x: 'x',
+	    columns: arrayColumns,
+	    types: {
+		freq: 'bar'
+	    }
+	},
+	axis: {
+	    x: {
+		type: 'category',
+	    }
+	},
+	padding: {
+	    bottom: 60
+	},
+	legend: {
+	    show: flagLegend,
+	    position: 'bottom',
+	    inset: {
+		anchor: 'top-right',
+		x: 20,
+		y: 10,
+		step: 2
+	    }
+	},
+	tooltip: {
+	    format: {
+		title: function (x) { return arrayColumns[0][x+1].replace(/(..)(..)(..)/,"$1:$2:$3"); }
+	    }
+	},
+	zoom: {
+	    enabled: false
+	}
     });
 }

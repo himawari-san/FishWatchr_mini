@@ -1,0 +1,21 @@
+.time-slider input[type=number] {
+    display: none; 
+}
+.time-slider .timeLabel{
+    position: relative;
+    top: -38px;
+}
+.timeRangeSlider {
+    position: relative;
+}
+.timeRangeSlider .timeLabel{
+    position: absolute;
+    top: 0px;    
+}
+
+.timeRangeSlider .timeLabel2{
+    position: absolute;
+    top: 0px;
+    right: 0;
+    left: auto;
+}
