@@ -19,7 +19,7 @@
       <div data-role="main" class="ui-content" >
 	<div data-role="navbar">
 	  <ul>
-	    <li><a id="selector-type-graph" class="graph-selector ui-btn-active" href="#">種別</a></li>
+	    <li><a id="selector-type-graph" class="graph-selector ui-btn-active" href="#">属性別</a></li>
 	    <li><a id="selector-timeline-graph" class="graph-selector" href="#">時間</a></li>
 	  </ul>
 	</div>
@@ -41,8 +41,19 @@
           </div>
           <input type="text" data-role="none" id="time1label" class="timeLabel ui-shadow-inset ui-body-inherit ui-corner-all ui-slider-input" value="" readonly="true" />
           <input type="text" data-role="none" id="time2label" class="timeLabel2 ui-body-inherit ui-corner-all ui-slider-input" value="" readonly="true" />
-
         </div>
+
+
+	<div class="ui-field-contain ui-grid-solo">
+          <fieldset data-role="controlgroup" data-type="horizontal2" data-mini="true">
+            <legend>属性：</legend>
+            <input class="attribute-selector" id="attribute-label" name="attribute" type="radio" value="label" checked="" />
+            <label for="attribute-label">ラベル</label>
+            <input class="attribute-selector" id="attribute-speaker" name="attribute" type="radio" value="speaker" />
+            <label for="attribute-speaker">話者</label>
+          </fieldset>
+	</div>
+	
 	<div class="box_button ui-body">
 	  <a id="link_to_top" data-role="button" data-corners="true" href="m.html" data-icon="star">戻る</a>
 	</div>

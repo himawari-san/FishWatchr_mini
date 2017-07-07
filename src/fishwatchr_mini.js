@@ -42,6 +42,7 @@ var lastAnnotationTime = 0;
 var histgramInterval = 60; // sec
 
 var selectedGraph = 'selector-type-graph'; // default graph
+var selectedAttribute = 'attribute-label';
 
 var osname = getOSName();
 
@@ -179,9 +180,7 @@ $(document).on('pagecontainershow', function(event, ui){
     } else if(ui.toPage.is('#graph')){
 	$("#slider-1").on("slidestop", function(e){
 	    histgramInterval = $(this).val();
-	    if(selectedGraph == 'selector-timeline-graph'){
-		drawGraph("selector-timeline-graph");
-	    }
+	    drawGraph();
 	});
 
 	// The following change event handlers are based on http://jsfiddle.net/ezanker/fu26u/204/
@@ -195,7 +194,7 @@ $(document).on('pagecontainershow', function(event, ui){
 	});
 	$("#time1").on("slidestop", function(e){
 	    updateMergedAnnotationsCurrent($("#time1").val()*1000, $("#time2").val()*1000);
-	    drawGraph(selectedGraph);
+	    drawGraph();
 	});
 	
 	$("#time2").on("change", function(){
@@ -205,10 +204,11 @@ $(document).on('pagecontainershow', function(event, ui){
 	});
 	$("#time2").on("slidestop", function(e){
 	    updateMergedAnnotationsCurrent($("#time1").val()*1000, $("#time2").val()*1000);
-	    drawGraph(selectedGraph);
+	    drawGraph();
 	});
 
-	generateGraph("selector-type-graph");
+	selectedGraph = "selector-type-graph";
+	generateGraph();
     }
 });
 
@@ -485,8 +485,15 @@ $(document).on('tap', '.savename-button', function(event) {
 
 $(document).on('tap', '.graph-selector', function(event) {
     selectedGraph = event.target.id;
-    drawGraph(selectedGraph);
+    drawGraph();
 });
+
+
+$(document).on('change', '.attribute-selector', function(event) {
+    selectedAttribute = event.target.id;
+    drawGraph();
+});
+
 
 function saveToServer(event){
     if(event == null){
@@ -958,7 +965,7 @@ function updateMergedAnnotationsCurrent(begin, end){
 }
 
 
-function generateGraph(graphType){
+function generateGraph(){
     groupname = $("#groupname").val();
     mergedAnnotations = [];
     mergedAnnotationsCurrent = [];
@@ -1008,20 +1015,21 @@ function generateGraph(graphType){
 	$("#time2").prop("max", lastAnnotationTime);
 	$("#time2").prop("value", lastAnnotationTime);
 
-	drawGraph(graphType);
+	drawGraph();
     });
 }
 
-function drawGraph(graphType){
+function drawGraph(){
     var type = {};
     var x = ['x'];
     var y = ['freq'];
     var arrayColumns = [];
     var flagLegend = true;
+    var iAttribute = selectedAttribute == 'attribute-speaker' ? 0 : 1;
     
-    if(graphType == 'selector-type-graph'|| graphType == ""){
+    if(selectedGraph == 'selector-type-graph'|| selectedGraph == ""){
 	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
-	    var value = mergedAnnotationsCurrent[i][1];
+	    var value = mergedAnnotationsCurrent[i][iAttribute];
 	    if(value in type){
 		type[value]++;
 	    } else {
@@ -1044,7 +1052,7 @@ function drawGraph(graphType){
 	
 	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
 	    var time = Math.floor(mergedAnnotationsCurrent[i][5]/histgramInterval/1000);
-	    var category = mergedAnnotationsCurrent[i][1];
+	    var category = mergedAnnotationsCurrent[i][iAttribute];
 
 	    // insert axises whose frequency is 0
 	    if(time - prevTime > 1 && prevTime != 0){
