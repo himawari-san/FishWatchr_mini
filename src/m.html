@@ -184,31 +184,50 @@
 	    </div>
 	  </div>
 	  <div id="data-panel" class="ui-body-d ui-content ui-corner-all ui-mini">
-	    <div class="ui-field-contain">
-	      <label for="selector-data-handling">処理：</label>
-	      <select name="selector-data-handling" id="selector-data-handling">
-		<option value="print-as-tsv">表示(Text)</option>
-		<option value="print-as-xml">表示(XML)</option>
-		<option value="save-as-tsv" id="selector-download-tsv">ダウンロード(Text)</option>
-		<option value="save-as-xml" id="selector-download-xml">ダウンロード(XML)</option>
-		<option value="save-to-server">サーバ保存</option>
-	      </select>
+	    <div class="ui-grid-solo">
+	      <a id="btn-show-graph" class="ui-input-btn ui-btn ui-icon-eye ui-btn-icon-right ui-corner-all" href="graph.html">グラフ表示</a>
 	    </div>
-	    <div class="ui-body-c ui-corner-all ui-mini">
-	      <a id="btn-get-archive" class="ui-input-btn ui-btn ui-btn-inline ui-icon-action ui-btn-icon-right ui-corner-all" href="#">グループの結果</a>
-	      <a id="btn-get-basetime" class="ui-input-btn ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-right ui-corner-all" href="#">時間情報の記録</a>
-	      <a id="btn-show-graph" class="ui-input-btn ui-btn ui-btn-inline ui-icon-eye ui-btn-icon-right ui-corner-all" href="graph.html">グラフ表示</a>
-	      <div class="ui-field-contain">
+	    <!--
+		<div class="ui-block-b" style="text-align:right; position:relative; top:10px">
+		  <label for="name111">外れ値：</label>
+		</div>
+		-->
+	    <div class="ui-grid-a">
+	      <div class="ui-block-a">
+		<a id="btn-get-archive" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-right ui-corner-all" href="#">グループ結果</a>
+	      </div>
+	      <div class="ui-block-b">
+		<a id="btn-get-basetime" class="ui-input-btn ui-btn ui-icon-edit ui-btn-icon-right ui-corner-all" href="#">時間記録</a>
+	      </div>
+	    </div>
+	    <div class="ui-grid-a">
+	      <div class="ui-block-a">
 		<label for="flip-auto-save">オートセーブ：</label>
 		<select name="flip-auto-save" id="flip-auto-save" data-role="flipswitch">
 		  <option id="flip-auto-save-off" value="off" selected="">Off</option>
 		  <option id="flip-auto-save-on" value="on">On</option>
 		</select>
 	      </div>
+	      <div class="ui-block-b">
+		<label for="name111">外れ値検出：</label>
+		<input type="text" name="name111" id="name111" value="" placeholder="外れ値（秒）" />
+	      </div>
 	    </div>
-	    <ul id="savename-list" data-role="listview" data-split-icon="action" data-split-theme="a" data-inset="true">
-	      <li>（保存データ - なし）</li>
-	    </ul>
+	    <div class="ui-body ui-body-a">
+	      <div class="ui-field-contain ui-hide-label">
+		<label for="selector-data-handling">処理：</label>
+		<select name="selector-data-handling" id="selector-data-handling">
+		  <option value="print-as-tsv">表示(Text)</option>
+		  <option value="print-as-xml">表示(XML)</option>
+		  <option value="save-as-tsv" id="selector-download-tsv">ダウンロード(Text)</option>
+		  <option value="save-as-xml" id="selector-download-xml">ダウンロード(XML)</option>
+		  <option value="save-to-server">サーバ保存</option>
+		</select>
+	      </div>
+	      <ul id="savename-list" data-role="listview" data-split-icon="action" data-split-theme="a" data-inset="true">
+		<li>（保存データ - なし）</li>
+	      </ul>
+	    </div>
 	  </div>
 	</div>
 	
