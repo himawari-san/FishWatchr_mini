@@ -439,7 +439,31 @@ $(document).on('tap', '#btn-get-basetime', function(event) {
     }
 });
 
-	       
+
+// draw charts
+$(document).on('tap', '#btn-show-graph', function(event) {
+    thresholdOutlier = $("#threshold-outlier").val();
+    groupname = $("#groupname").val();
+
+    if(thresholdOutlier == ""){
+	thresholdOutlier = Number.MAX_VALUE;
+    } else if(isNaN(thresholdOutlier) || thresholdOutlier < 0){
+	console.log("th:" + thresholdOutlier);
+	$("#popupWarning-message").text("０より大きい値を指定してください。");
+	$("#popupWarning").popup("open");
+	$("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
+	return false;
+    } else if(!checkGroupname($("#groupname").val())){
+	$("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+	$("#popupWarning").popup("open");
+	$("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
+	return false;
+    } else {
+	thresholdOutlier *= 1000; // milisec
+    }
+});
+
+
 // detect change of select menu
 $(document).on("change", "#selector2-observation-mode", function () {
     updateAnnotationButtons();
@@ -968,18 +992,9 @@ function updateMergedAnnotationsCurrent(begin, end){
 
 
 function generateGraph(){
+    // groupname, thresholdOutlier are needed to set
     var timeMedian = -1;
     var prevTime = -1;
-    groupname = $("#groupname").val();
-    thresholdOutlier = $("#threshold-outlier").val();
-    if(thresholdOutlier == "" || thresholdOutlier == undefined){
-	thresholdOutlier = Number.MAX_VALUE;
-    } else if(thresholdOutlier < 0){
-	console.log("invalid input");
-	return;
-    }
-    thresholdOutlier *= 1000;
-
     mergedAnnotations = [];
     mergedAnnotationsCurrent = [];
     
@@ -1011,7 +1026,9 @@ function generateGraph(){
 
 	// median
 	var len = mergedAnnotations.length;
-	if(len % 2 == 0){
+	if(len == 0){
+	    timeMedian = 0;
+	} else if(len % 2 == 0){
 	    timeMedian = (mergedAnnotations[len/2][5] + mergedAnnotations[len/2 + 1][5]) / 2;
 	} else {
 	    timeMedian = mergedAnnotations[(len+1)/2][5];
@@ -1046,8 +1063,14 @@ function generateGraph(){
 	    mergedAnnotationsCurrent[i] = mergedAnnotations[i];
 	}
 	
-	firstAnnotationTime = mergedAnnotationsCurrent[0][5]/1000;
-	lastAnnotationTime = mergedAnnotationsCurrent[mergedAnnotationsCurrent.length-1][5]/1000;
+	if(mergedAnnotations.length != 0){
+	    firstAnnotationTime = mergedAnnotationsCurrent[0][5]/1000;
+	    lastAnnotationTime = mergedAnnotationsCurrent[mergedAnnotationsCurrent.length-1][5]/1000;
+	} else {
+	    // dummy time
+	    firstAnnotationTime = new Date(2000, 1, 1, 0, 0, 0) / 1000;
+	    lastAnnotationTime = new Date(2000, 1, 1, 1, 0, 0) / 1000;
+	}
 
 	$("#time1").val(firstAnnotationTime);
 	$("#time1label").val(date2FormattedDateTime(new Date(firstAnnotationTime*1000)).replace(/^.+ /, "").replace(/:..$/, ""));
