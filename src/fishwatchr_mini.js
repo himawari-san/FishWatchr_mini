@@ -44,6 +44,8 @@ var histgramInterval = 60; // sec
 var selectedGraph = 'selector-type-graph'; // default graph
 var selectedAttribute = 'attribute-label';
 
+var thresholdOutlier = 1800;
+
 var osname = getOSName();
 
 var dataHandlingMode = "print-as-tsv";
@@ -966,7 +968,18 @@ function updateMergedAnnotationsCurrent(begin, end){
 
 
 function generateGraph(){
+    var timeMedian = -1;
+    var prevTime = -1;
     groupname = $("#groupname").val();
+    thresholdOutlier = $("#threshold-outlier").val();
+    if(thresholdOutlier == "" || thresholdOutlier == undefined){
+	thresholdOutlier = Number.MAX_VALUE;
+    } else if(thresholdOutlier < 0){
+	console.log("invalid input");
+	return;
+    }
+    thresholdOutlier *= 1000;
+
     mergedAnnotations = [];
     mergedAnnotationsCurrent = [];
     
@@ -995,14 +1008,46 @@ function generateGraph(){
 		return 1;
 	    }
 	});
+
+	// median
+	var len = mergedAnnotations.length;
+	if(len % 2 == 0){
+	    timeMedian = (mergedAnnotations[len/2][5] + mergedAnnotations[len/2 + 1][5]) / 2;
+	} else {
+	    timeMedian = mergedAnnotations[(len+1)/2][5];
+	}
+	
+	var iStart = 0;
+	var iEnd = len;
+	for(var i = 0; i < mergedAnnotations.length; i++){
+	    // outliers
+	    if(prevTime != -1 && mergedAnnotations[i][5] - prevTime > thresholdOutlier){
+		if(timeMedian > mergedAnnotations[i][5]){
+		    iStart = i;
+		} else {
+		    iEnd = i;
+		    break;
+		}
+	    }
+	    prevTime = mergedAnnotations[i][5];
+	}
+
+	console.log("is:" + iStart + "," + iEnd + "," + thresholdOutlier + "," + timeMedian); 
+	var tempArray = [];
+	var j = 0;
+	for(var i = iStart; i < iEnd; i++){
+	    tempArray[j++] = mergedAnnotations[i];
+	}
+	mergedAnnotations = tempArray;
+
 	
 	// copy 
 	for(var i = 0; i < mergedAnnotations.length; i++){
 	    mergedAnnotationsCurrent[i] = mergedAnnotations[i];
 	}
 	
-	firstAnnotationTime = mergedAnnotations[0][5]/1000;
-	lastAnnotationTime = mergedAnnotations[mergedAnnotations.length-1][5]/1000;
+	firstAnnotationTime = mergedAnnotationsCurrent[0][5]/1000;
+	lastAnnotationTime = mergedAnnotationsCurrent[mergedAnnotationsCurrent.length-1][5]/1000;
 
 	$("#time1").val(firstAnnotationTime);
 	$("#time1label").val(date2FormattedDateTime(new Date(firstAnnotationTime*1000)).replace(/^.+ /, "").replace(/:..$/, ""));
