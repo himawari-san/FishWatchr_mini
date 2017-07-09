@@ -56,20 +56,6 @@ var resultDialog = "cancel";
 
 var cBaseTime = 0;
 
-// quoted from http://dotnsf.blog.jp/archives/1012215593.html
-// if(window.history && window.history.pushState){
-//     console.log("hey");
-//     history.pushState("nohb", null, "");
-//     $(window).on("popstate", function(event){
-// 	console.log("hey1");
-// 	if(!event.originalEvent.state){
-// 	    console.log("hey2");
-//	    history.pushState("nohb", null, "");
-// 	    return;
-// 	}
-//     });
-// }
-
 $(document).ready(function(){
     $(window).on("beforeunload", function(event){
 	return "unload this page?";
@@ -448,7 +434,6 @@ $(document).on('tap', '#btn-show-graph', function(event) {
     if(thresholdOutlier == ""){
 	thresholdOutlier = Number.MAX_VALUE;
     } else if(isNaN(thresholdOutlier) || thresholdOutlier < 0){
-	console.log("th:" + thresholdOutlier);
 	$("#popupWarning-message").text("０より大きい値を指定してください。");
 	$("#popupWarning").popup("open");
 	$("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
@@ -474,13 +459,6 @@ $(document).on("change", "#selector-data-handling", function (event) {
     console.log("update buttons!!");
     updateSavenameButtons();
 });
-
-
-
-// $(document).on('tap', '.disp-button-delete', function(event) {
-//     deletedTargetID = event.target.id;
-//     console.log("RID:" + event.target.id);
-// });
 
 
 $(document).on('tap', '.disp-button-delete', function(event) {
@@ -1005,7 +983,6 @@ function generateGraph(){
 	data: {groupname: groupname},
 	//async: false
     }).done(function(data) {
-	//aa
 	var arrayAnnotations = data.split("\n");
 	
 	for(var i = 0; i < arrayAnnotations.length; i++){
@@ -1049,7 +1026,6 @@ function generateGraph(){
 	    prevTime = mergedAnnotations[i][5];
 	}
 
-	console.log("is:" + iStart + "," + iEnd + "," + thresholdOutlier + "," + timeMedian); 
 	var tempArray = [];
 	var j = 0;
 	for(var i = iStart; i < iEnd; i++){
@@ -1176,10 +1152,6 @@ function drawGraph(){
 	    arrayColumns.push(categoryFreqs[category]);
 	}
     }
-    
-    console.log(x);
-    console.log(y);
-    console.log("len:" + mergedAnnotationsCurrent.length);
     
     var chart = c3.generate({
 	bindto: '#graph_body',
