@@ -403,16 +403,24 @@ $(document).on('tap', '#btn-get-basetime', function(event) {
     var newname = "_sys_basetime";
     var dummyResults = [];
 
-    if(!checkGroupname($("#groupname").val())){
-	$("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+    var trueGroupname = $("#groupname").val();
+    if(trueGroupname.match(/\$$/)){
+	trueGroupname = trueGroupname.replace(/.$/, "");
+	
+	if(!checkGroupname(trueGroupname)){
+	    $("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+	    $("#popupWarning").popup("open");
+	    return false;
+	} else {
+	    newname += "_" + cBaseTime + "_" + trueGroupname;
+	    cBaseTime++;
+	}
+    } else {
+	$("#popupWarning-message").text("この機能は，管理者のみが実行できます。");
 	$("#popupWarning").popup("open");
 	return false;
-    } else {
-	newname += "_" + cBaseTime + "_" + $("#groupname").val();
-	cBaseTime++;
     }
 
-    
     var newdata = {starttime:newStartTime, username:newname, annotations:dummyResults.concat()};
     annotationStorage.push(newdata);
     updateSavenameList();
