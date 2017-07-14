@@ -18,6 +18,7 @@ if(!isset($_POST['groupname'])){
 $groupname = $_POST['groupname'];
 
 $groupfiles = glob($data_dir . "*_" . $groupname . ".txt");
+$annotations = "";
 foreach($groupfiles as $file){
     $annotations .= file_get_contents($file);
 }
