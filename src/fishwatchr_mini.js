@@ -397,6 +397,72 @@ $(document).on('tap', '.btn-annotation', function(event) {
 });
 
 
+// save settings
+$(document).on('tap', '#btn-save-settings', function(event) {
+    var trueGroupname = $("#groupname").val();
+    if(trueGroupname.match(/\$$/)){
+	trueGroupname = trueGroupname.replace(/.$/, "");
+	
+	if(!checkGroupname(trueGroupname)){
+	    $("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+	    $("#popupWarning").popup("open");
+	    return false;
+	}
+    } else {
+	$("#popupWarning-message").text("この機能は，管理者のみが実行できます。");
+	$("#popupWarning").popup("open");
+	return false;
+    }
+
+    var speakers = [];
+    var labels = [];
+    var mode = $("#selector1-observation-mode").val();
+    var auto_save = $("#flip-auto-save").val() == "on" ? "true" : "false";
+    
+    for(var i = 1; i <=8; i++){
+	speakers.push($("#speaker" + i).val())
+	labels.push($("#label" + i).val())
+    } 
+
+    var settingsJSON = {
+	"groupname": trueGroupname,
+	"speakers": speakers,
+	"labels": labels,
+	"observation-mode": mode,
+	"auto-save": auto_save
+    };
+    
+    var jqXHR = $.ajax({
+	url: "save_settings.php",
+	type: "post",
+	dataType: "json",
+	data: {
+	    savename: trueGroupname,
+	    databody: settingsJSON
+	}
+    }).done(function (response){
+	var url = response.url;
+	var error = response.error;
+
+	if(error == "already_exists") {
+	    $("#popup-title").text("エラー");
+	    $("#popup-message-body").html("<p>このグループの設定はすでに<a href=\"" + url + "\"  target=\"_blank\">登録</a>されています。別のグループ名を付けてください。</p>");
+	    $("#popup-message").popup("open");
+	} else if(error == "fail_to_copy" || error == "fail_to_save") {
+	    $("#popup-title").text("エラー");
+	    $("#popup-message-body").html("<p>サーバ側でエラー" + error + "が発生しました。</p>");
+	    $("#popup-message").popup("open");
+	} else {
+	    $("#popup-title").text("保存完了");
+	    $("#popup-message-body").html("<p>設定ファイルは，<a href=\"" + url + "\"  target=\"_blank\">サーバ上</a>に保存されました。</p>");
+	    $("#popup-message").popup("open");
+	}
+    }).fail(function (jqXHR, textStatus, error){
+	console.log("store xml data, " + textStatus + ", " + error);
+    });
+});
+
+
 // recording the current time
 $(document).on('tap', '#btn-get-basetime', function(event) {
     var newStartTime = new Date();

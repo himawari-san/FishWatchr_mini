@@ -50,6 +50,7 @@
 		     value="" />
 	      <label for="option-file">設定ファイル：</label>
 	      <a href="#popup-set-url" id="btn-load-settings" data-rel="popup" data-history="false" class="ui-btn uis-shadow ui-corner-all ui-btn-inline ui-icon-gear ui-btn-icon-left" data-position-to="window">(未入力)</a>
+	      <a id="btn-save-settings" class="ui-input-btn  ui-btn-inline ui-btn ui-icon-edit ui-btn-icon-right ui-corner-all" href="#">保存</a>
 	    </div>
 	  </div>
 	  <div id="annotation-panel" class="ui-body-d ui-content">
@@ -281,6 +282,16 @@
 	    <input id="urlSettings" type="url" value="" data-clear-btn="true" data-clear-btn-text="クリア" />
             <a href="#" id="popup-set-url-ok" class="ui-btn ui-shadow ui-btn-inline" data-rel="back">　設　定　</a>
             <a href="#" id="popup-set-url-cancel" class="ui-btn ui-shadow ui-btn-inline" data-rel="back">キャンセル</a>
+	  </div>
+	</div>
+	<div data-role="popup" id="popup-message" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;" class="ui-mini">
+	  <div data-role="header" data-theme="a">
+	    <h1 id="popup-title"></h1>
+	  </div>
+	  <div role="main" class="ui-content">
+	    <div id="popup-message-body" class="ui-body">
+	    </div>
+            <a href="#" class="ui-btn ui-shadow" data-rel="back">閉じる</a>
 	  </div>
 	</div>
       </div>
