@@ -8,6 +8,10 @@ FishWatchr Mini is an educational observation support system for mobile devices.
 * [C3.js (ver.0.4.14 or later)](http://c3js.org/)
 
 
+# Demo and User Manual
+- Visit [https://csd.ninjal.ac.jp/f/m.html](https://csd.ninjal.ac.jp/f/m.html) to try FishWatchr Mini!
+- [Japanese User Manual](http://www2.ninjal.ac.jp/lrc/index.php?%B4%D1%BB%A1%BB%D9%B1%E7%A5%C4%A1%BC%A5%EB%20FishWatchr%2FMini) 
+
 # Install
 1. Put files included in the src directory to a directory (FWM_DIR) in a Web server.
 2. Install JQuery Mobile, C3.js in FWM_DIR
