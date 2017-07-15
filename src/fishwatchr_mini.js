@@ -56,6 +56,9 @@ var resultDialog = "cancel";
 
 var cBaseTime = 0;
 
+var startRecordingTime = 0;
+var timeFilePrefix = "_sys_basetime";
+
 $(document).ready(function(){
     $(window).on("beforeunload", function(event){
 	return "unload this page?";
@@ -466,7 +469,7 @@ $(document).on('tap', '#btn-save-settings', function(event) {
 // recording the current time
 $(document).on('tap', '#btn-get-basetime', function(event) {
     var newStartTime = new Date();
-    var newname = "_sys_basetime";
+    var newname = timeFilePrefix;
     var dummyResults = [];
 
     var trueGroupname = $("#groupname").val();
@@ -1047,17 +1050,31 @@ function generateGraph(){
     // groupname, thresholdOutlier are needed to set
     var timeMedian = -1;
     var prevTime = -1;
+
+    startRecordingTime = 0;
     mergedAnnotations = [];
     mergedAnnotationsCurrent = [];
-    
+
     $.ajax({
 	url: "get_merged_data.php",
 	type: "post",
 	dataType: "text",
-	data: {groupname: groupname},
+	data: {
+	    groupname: groupname,
+	    timefile: timeFilePrefix
+	},
 	//async: false
     }).done(function(data) {
 	var arrayAnnotations = data.split("\n");
+
+	// get start-recording-time
+	if(arrayAnnotations.length == 0){
+	    // do nothing
+	} else if(arrayAnnotations[0].match(new RegExp("^" + timeFilePrefix + "\t(.+)"))){
+	    // get and remove a time information record
+	    startRecordingTime = Date.parse(RegExp.$1.replace(/-/g, "/").replace(/\.\d\d\d$/, ""));
+	    arrayAnnotations.shift();
+	}
 	
 	for(var i = 0; i < arrayAnnotations.length; i++){
 	    if(arrayAnnotations[i] == "") continue;
@@ -1074,6 +1091,11 @@ function generateGraph(){
 		return 1;
 	    }
 	});
+
+	// startRecordingTime is the time of the first record, if no time information record
+	if(startRecordingTime == 0 && mergedAnnotations.length > 0){
+	    startRecordingTime = mergedAnnotations[0][5];
+	}
 
 	// median
 	var len = mergedAnnotations.length;
@@ -1141,6 +1163,7 @@ function drawGraph(){
     var type = {};
     var x = ['x'];
     var y = ['freq'];
+    var xTimes = [];
     var arrayColumns = [];
     var flagLegend = true;
     var iAttribute = selectedAttribute == 'attribute-speaker' ? 0 : 1;
@@ -1205,7 +1228,8 @@ function drawGraph(){
 	    var d = new Date(i * histgramInterval * 1000);
 	    x.push(d.toTimeString().replace(/GMT.*/,"").replace(/:/g,""));
 	    y.push(type[i]);
-	    
+	    xTimes.push(d);
+ 
 	    for(var category in categories){
 		var key = category + "\t" + i;
 		if(category in categoryFreqs == false){
@@ -1256,7 +1280,10 @@ function drawGraph(){
 	},
 	tooltip: {
 	    format: {
-		title: function (x) { return arrayColumns[0][x+1].replace(/(..)(..)(..)/,"$1:$2:$3"); }
+		title: function (x) {
+		    // real time and elapsed time
+		    return arrayColumns[0][x+1].replace(/(..)(..)(..)/,"$1:$2:$3") 
+			+ " (" + time2FormattedTime(xTimes[x] - startRecordingTime) + ")"; }
 	    }
 	},
 	zoom: {

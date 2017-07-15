@@ -16,9 +16,21 @@ if(!isset($_POST['groupname'])){
 }
 
 $groupname = $_POST['groupname'];
+$time_file_prefix = $_POST['timefile'];
+
+$annotations = "";
+
+$timefiles = glob($data_dir . $time_file_prefix . "_0_*" . $groupname . ".xml");
+if(count($timefiles) != 0){
+    $temp = file_get_contents($timefiles[0]);
+    if(preg_match('/ original_start_time="(.+?)"/', $temp, $matches)){
+        $annotations = $time_file_prefix . "\t" . $matches[1] . "\n";
+    }
+}
+
+
 
 $groupfiles = glob($data_dir . "*_" . $groupname . ".txt");
-$annotations = "";
 foreach($groupfiles as $file){
     $annotations .= file_get_contents($file);
 }
