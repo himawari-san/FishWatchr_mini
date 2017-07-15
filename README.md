@@ -9,14 +9,14 @@ FishWatchr Mini is an educational observation support system for mobile devices.
 
 
 # Install
-- Put files included in the src directory to a directory (FWM_DIR) in a Web server.
-- Install JQuery Mobile, C3.js in FWM_DIR
--- jquery.mobile.min.js, jquery.mobile.min.css
--- jquery.min.js (for JQuery Mobile)
--- c3.min.js, c3.min.css
--- d3.min.js (for C3.js)
-- Write .ht_fw_mini.inc based on sample.ht_fw_mini.inc, and put it in FWM_DIR.
-- Set up directories in the Web server based on the .ht_fw_mini.inc.
+1. Put files included in the src directory to a directory (FWM_DIR) in a Web server.
+2. Install JQuery Mobile, C3.js in FWM_DIR
+    * jquery.mobile.min.js, jquery.mobile.min.css
+    * jquery.min.js (for JQuery Mobile)
+    * c3.min.js, c3.min.css
+    * d3.min.js (for C3.js)
+3. Write .ht_fw_mini.inc based on sample.ht_fw_mini.inc, and put it in FWM_DIR.
+4. Set up directories in the Web server based on the .ht_fw_mini.inc.
 
 # Licence
 GNU GPL v3
