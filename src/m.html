@@ -25,13 +25,15 @@
 	<div class="time">
 	  現在時刻：<span id="current_time_home">Processing ...</span>
 	</div>
-	<div id="chart"></div>
-	<a data-role="button" id="btn-start" href="observation.html" data-icon="star">観察開始！</a>
+	<div style="padding-top:10px; padding-bottom:10px">
+	  <a data-role="button" id="btn-start" href="observation.html" data-icon="star">観察開始！</a>
+	</div>
 	<div data-role="tabs" id="tabs" data-mini="true" class="ui-body-a">
 	  <div data-role="navbar">
 	    <ul>
 	      <li><a id="username-tab" href="#username-panel" data-ajax="false">ユーザ名</a></li>
-	      <li><a id="annotation-tab" href="#annotation-panel" data-ajax="false">話者・ラベル</a></li>
+	      <li><a id="annotation-tab" href="#annotation-panel" data-ajax="false">ボタン</a></li>
+	      <li><a id="chart-tab" href="#chart-panel" data-ajax="false">グラフ</a></li>
 	      <li><a id="data-tab" href="#data-panel" data-ajax="false">データ</a></li>
 	    </ul>
 	  </div>
@@ -184,28 +186,19 @@
 	      </div>
 	    </div>
 	  </div>
+
+	  <div id="chart-panel" class="ui-body ui-content ui-corner-all ui-mini">
+	    <a data-role="button" id="btn-show-graph" class="ui-input-btn ui-btn ui-shadow ui-icon-eye ui-btn-icon-right ui-corner-all" href="graph.html">グラフ表示</a>
+	    <div class="ui-body ui-body-a">
+	      <label for="threshold-outlier" title="アノテーション間がこの値を超える場合，外れ値検出の基準となります。">外れ値検出：</label>
+	      <input type="text" name="threshold-outlier" id="threshold-outlier" value="1800" placeholder="(sec)" />
+	    </div>
+	  </div>
 	  <div id="data-panel" class="ui-body-d ui-content ui-corner-all ui-mini">
-	    <div class="ui-grid-solo">
-	      <a id="btn-show-graph" class="ui-input-btn ui-btn ui-icon-eye ui-btn-icon-right ui-corner-all" href="graph.html">グラフ表示</a>
-	    </div>
-	    <!--
-		<div class="ui-block-b" style="text-align:right; position:relative; top:10px">
-		  <label for="name111">外れ値：</label>
-		</div>
-		-->
-	    <div class="ui-grid-a">
-	      <div class="ui-block-a">
-		<label for="flip-auto-save">オートセーブ：</label>
-		<select name="flip-auto-save" id="flip-auto-save" data-role="flipswitch">
-		  <option id="flip-auto-save-off" value="off" selected="">Off</option>
-		  <option id="flip-auto-save-on" value="on">On</option>
-		</select>
-	      </div>
-	      <div class="ui-block-b">
-		<label for="threshold-outlier" title="アノテーション間がこの値を超える場合，外れ値検出の基準となります。">外れ値検出：</label>
-		<input type="text" name="threshold-outlier" id="threshold-outlier" value="1800" placeholder="(sec)" />
-	      </div>
-	    </div>
+	    <ul id="savename-list" data-role="listview" data-split-icon="action" data-split-theme="a" data-inset="true">
+	      <li>（保存データ - なし）</li>
+	    </ul>
+
 	    <div class="ui-body ui-body-a">
 	      <div class="ui-field-contain ui-hide-label">
 		<label for="selector-data-handling">処理：</label>
@@ -217,18 +210,30 @@
 		  <option value="save-to-server">サーバ保存</option>
 		</select>
 	      </div>
-	      <ul id="savename-list" data-role="listview" data-split-icon="action" data-split-theme="a" data-inset="true">
-		<li>（保存データ - なし）</li>
-	      </ul>
-	    </div>
-	    <div class="ui-grid-a">
-	      <div class="ui-block-a">
-		<a id="btn-get-archive" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-right ui-corner-all" href="#">グループ結果</a>
+	      <label for="flip-auto-save">オートセーブ：</label>
+	      <select name="flip-auto-save" id="flip-auto-save" data-role="flipswitch">
+		<option id="flip-auto-save-off" value="off" selected="">Off</option>
+		<option id="flip-auto-save-on" value="on">On</option>
+	      </select>
+	      <div class="ui-grid-a">
+		<div class="ui-block-a">
+		  <a id="btn-get-archive" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-right ui-corner-all" href="#">グループ結果</a>
+		</div>
+		<div class="ui-block-b">
+		  <a id="btn-get-basetime" class="ui-input-btn ui-btn ui-icon-edit ui-btn-icon-right ui-corner-all" href="#">時間記録</a>
+		</div>
 	      </div>
-	      <div class="ui-block-b">
-		<a id="btn-get-basetime" class="ui-input-btn ui-btn ui-icon-edit ui-btn-icon-right ui-corner-all" href="#">時間記録</a>
-	      </div>
 	    </div>
+	  </div>
+	</div>
+	
+	<div data-role="popup" id="popupWarning" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;">
+	  <div data-role="header">
+	    <h3>エラー</h3>
+	    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+	  </div>
+	  <div role="main" class="ui-content">
+	    <p id="popupWarning-message"></p>
 	  </div>
 	</div>
 	
@@ -269,7 +274,6 @@
 	  <div role="main" class="ui-content">
 	    <div id="print-annatations" class="ui-body">
 	    </div>
-	    <div id="chart2"></div>
             <a href="#" class="ui-btn ui-shadow" data-rel="back">閉じる</a>
 	  </div>
 	</div>
