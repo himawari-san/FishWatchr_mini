@@ -180,7 +180,7 @@ $(document).on('pagecontainershow', function(event, ui){
 	// The following change event handlers are based on http://jsfiddle.net/ezanker/fu26u/204/
 	$("#time1").on("change", function(){
 	    var time = selectedTimeStyle == "elapsed-time-style"
-		? time2FormattedTime(Number($(this).val()))
+		? time2FormattedTime(Number($(this).val())).replace(/:..$/, "")
 		: date2FormattedDateTime(new Date(Number($(this).val()))).replace(/^.+ /, "").replace(/:..$/, "");
             $(this).closest(".timeRangeSlider").find(".timeLabel").val(time);
             $(this).closest(".timeRangeSlider").find(".ui-slider-handle").eq(0).prop("title", time);
@@ -197,7 +197,7 @@ $(document).on('pagecontainershow', function(event, ui){
 	
 	$("#time2").on("change", function(){
 	    var time = selectedTimeStyle == "elapsed-time-style"
-		? time2FormattedTime(Number($(this).val()))
+		? time2FormattedTime(Number($(this).val())).replace(/:..$/, "")
 		: date2FormattedDateTime(new Date(Number($(this).val()))).replace(/^.+ /, "").replace(/:..$/, "");
             $(this).closest(".timeRangeSlider").find(".timeLabel2").val(time);
             $(this).closest(".timeRangeSlider").find(".ui-slider-handle").eq(1).prop("title", time);
