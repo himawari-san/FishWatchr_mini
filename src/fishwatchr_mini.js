@@ -43,6 +43,7 @@ var histgramInterval = 60; // sec
 
 var selectedGraph = 'selector-type-graph'; // default graph
 var selectedAttribute = 'attribute-label';
+var selectedTimeStyle = 'real-time-style';
 
 var thresholdOutlier = 1800;
 
@@ -177,30 +178,40 @@ $(document).on('pagecontainershow', function(event, ui){
 	});
 
 	// The following change event handlers are based on http://jsfiddle.net/ezanker/fu26u/204/
-	var time1 = $("#time1").val()*1000;
-	var time2 = $("#time2").val()*1000;
-
 	$("#time1").on("change", function(){
-	    var time = date2FormattedDateTime(new Date($(this).val()*1000)).replace(/^.+ /, "").replace(/:..$/, "");
+	    var time = selectedTimeStyle == "elapsed-time-style"
+		? time2FormattedTime(Number($(this).val()))
+		: date2FormattedDateTime(new Date(Number($(this).val()))).replace(/^.+ /, "").replace(/:..$/, "");
             $(this).closest(".timeRangeSlider").find(".timeLabel").val(time);
             $(this).closest(".timeRangeSlider").find(".ui-slider-handle").eq(0).prop("title", time);
 	});
 	$("#time1").on("slidestop", function(e){
-	    updateMergedAnnotationsCurrent($("#time1").val()*1000, $("#time2").val()*1000);
+	    $("#time1").trigger("change"); // update title
+	    var offset = selectedTimeStyle == "elapsed-time-style"
+		? startRecordingTime : 0;
+	    updateMergedAnnotationsCurrent(
+		Number($("#time1").val()) + offset,
+		Number($("#time2").val()) + offset);
 	    drawGraph();
 	});
 	
 	$("#time2").on("change", function(){
-	    var time = date2FormattedDateTime(new Date($(this).val()*1000)).replace(/^.+ /, "").replace(/:..$/, "");
+	    var time = selectedTimeStyle == "elapsed-time-style"
+		? time2FormattedTime(Number($(this).val()))
+		: date2FormattedDateTime(new Date(Number($(this).val()))).replace(/^.+ /, "").replace(/:..$/, "");
             $(this).closest(".timeRangeSlider").find(".timeLabel2").val(time);
             $(this).closest(".timeRangeSlider").find(".ui-slider-handle").eq(1).prop("title", time);
 	});
 	$("#time2").on("slidestop", function(e){
-	    updateMergedAnnotationsCurrent($("#time1").val()*1000, $("#time2").val()*1000);
+	    $("#time2").trigger("change"); // update title
+	    var offset = selectedTimeStyle == "elapsed-time-style"
+		? startRecordingTime : 0;
+	    updateMergedAnnotationsCurrent(
+		Number($("#time1").val()) + offset,
+		Number($("#time2").val()) + offset);
 	    drawGraph();
 	});
 
-	selectedGraph = "selector-type-graph";
 	generateGraph();
     }
 });
@@ -300,6 +311,9 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	timerID = setInterval(displayTime, timerInterval, "#current_time_home");
 	console.log("new timer:" + timerID);
 	annotationResults = [];
+    } else if(ui.toPage.is('#graph')){
+	selectedGraph = "selector-type-graph";
+	selectedAttribute = "attribute-label";
     }
 });
 
@@ -576,6 +590,11 @@ $(document).on('change', '.attribute-selector', function(event) {
     selectedAttribute = event.target.id;
     drawGraph();
 });
+
+$(document).on('change', '.time-style-selector', function(event) {
+    selectedTimeStyle = event.target.id;
+});
+
 
 
 function saveToServer(event){
@@ -1138,24 +1157,32 @@ function generateGraph(){
 	}
 	
 	if(mergedAnnotations.length != 0){
-	    firstAnnotationTime = mergedAnnotationsCurrent[0][5]/1000;
-	    lastAnnotationTime = mergedAnnotationsCurrent[mergedAnnotationsCurrent.length-1][5]/1000;
+	    firstAnnotationTime = mergedAnnotationsCurrent[0][5];
+	    lastAnnotationTime = mergedAnnotationsCurrent[mergedAnnotationsCurrent.length-1][5];
 	} else {
 	    // dummy time
-	    firstAnnotationTime = new Date(2000, 1, 1, 0, 0, 0) / 1000;
-	    lastAnnotationTime = new Date(2000, 1, 1, 1, 0, 0) / 1000;
+	    firstAnnotationTime = new Date(2000, 1, 1, 0, 0, 0).getTime();
+	    lastAnnotationTime = new Date(2000, 1, 1, 1, 0, 0).getTime();
 	}
 
-	$("#time1").val(firstAnnotationTime);
-	$("#time1label").val(date2FormattedDateTime(new Date(firstAnnotationTime*1000)).replace(/^.+ /, "").replace(/:..$/, ""));
-	$("#time1").prop("min", firstAnnotationTime);
-	$("#time1").prop("max", lastAnnotationTime);
-	$("#time1").prop("value", firstAnnotationTime);
-	$("#time2").val(lastAnnotationTime);
-	$("#time2label").val(date2FormattedDateTime(new Date(lastAnnotationTime*1000)).replace(/^.+ /, "").replace(/:..$/, ""));
-	$("#time2").prop("min", firstAnnotationTime);
-	$("#time2").prop("max", lastAnnotationTime);
-	$("#time2").prop("value", lastAnnotationTime);
+	var offset = 0;
+	if(selectedTimeStyle == "elapsed-time-style"){
+	    offset = startRecordingTime;
+	    $("#time1label").val(time2FormattedTime(firstAnnotationTime-offset).replace(/:..$/, ""));
+	    $("#time2label").val(time2FormattedTime(lastAnnotationTime-offset).replace(/:..$/, ""));
+	} else {
+	    $("#time1label").val(date2FormattedDateTime(new Date(firstAnnotationTime)).replace(/^.+ /, "").replace(/:..$/, ""));
+	    $("#time2label").val(date2FormattedDateTime(new Date(lastAnnotationTime)).replace(/^.+ /, "").replace(/:..$/, ""));
+	}
+	
+	$("#time1").val(firstAnnotationTime - offset);
+	$("#time1").prop("min", firstAnnotationTime - offset);
+	$("#time1").prop("max", lastAnnotationTime - offset);
+	$("#time1").prop("value", firstAnnotationTime - offset);
+	$("#time2").val(lastAnnotationTime - offset);
+	$("#time2").prop("min", firstAnnotationTime - offset);
+	$("#time2").prop("max", lastAnnotationTime - offset);
+	$("#time2").prop("value", lastAnnotationTime - offset);
 
 	drawGraph();
     });
@@ -1225,12 +1252,17 @@ function drawGraph(){
 	    }
 	}
 	
-	
 	for(var i in type){
 	    var d = new Date(i * histgramInterval * 1000);
-	    x.push(d.toTimeString().replace(/GMT.*/,"").replace(/:/g,""));
+	    if(selectedTimeStyle == "real-time-style"){
+		x.push(d.toTimeString().replace(/GMT.*/,"").replace(/:/g,""));
+		xTimes.push(time2FormattedTime(d - startRecordingTime).replace(/:/g,""));
+	    } else {
+		// elapsed-time-style
+		x.push(time2FormattedTime(d - startRecordingTime).replace(/:/g,""));
+		xTimes.push(d.toTimeString().replace(/GMT.*/,"").replace(/:/g,""));
+	    }
 	    y.push(type[i]);
-	    xTimes.push(d);
  
 	    for(var category in categories){
 		var key = category + "\t" + i;
@@ -1284,8 +1316,14 @@ function drawGraph(){
 	    format: {
 		title: function (x) {
 		    // real time and elapsed time
-		    return arrayColumns[0][x+1].replace(/(..)(..)(..)/,"$1:$2:$3") 
-			+ " (" + time2FormattedTime(xTimes[x] - startRecordingTime) + ")"; }
+		    if(selectedGraph == 'selector-timeline-graph'){
+			return arrayColumns[0][x+1].replace(/(..)(..)(..)/,"$1:$2:$3") 
+			    + " (" + xTimes[x].replace(/(..)(..)(..)/,"$1:$2:$3") + ")";
+		    } else {
+			// selector-type-graph
+			return arrayColumns[0][x+1];
+		    }
+		}
 	    }
 	},
 	zoom: {
