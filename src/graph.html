@@ -44,14 +44,27 @@
         </div>
 
 
-	<div class="ui-field-contain ui-grid-solo">
-          <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-            <legend>属性：</legend>
-            <input class="attribute-selector" id="attribute-label" name="attribute" type="radio" value="label" checked="" />
-            <label for="attribute-label">ラベル</label>
-            <input class="attribute-selector" id="attribute-speaker" name="attribute" type="radio" value="speaker" />
-            <label for="attribute-speaker">話者</label>
-          </fieldset>
+	<div class="ui-field-contain ui-grid-solo ui-mini">
+	  <div class="ui-grid-a">
+	    <div class="ui-block-a">
+              <fieldset data-role="controlgroup" data-type="horizontal">
+		<legend>属性：</legend>
+		<input class="attribute-selector" id="attribute-label" name="attribute" type="radio" value="label" checked="" />
+		<label for="attribute-label">ラベル</label>
+		<input class="attribute-selector" id="attribute-speaker" name="attribute" type="radio" value="speaker" />
+		<label for="attribute-speaker">話者</label>
+              </fieldset>
+	    </div>
+	    <div class="ui-block-b">
+	      <fieldset data-role="controlgroup" data-type="horizontal">
+		<legend>時間表示：</legend>
+		<input class="time-style-selector" id="real-time-style" name="time-style" type="radio" value="real-time" checked="" />
+		<label for="real-time-style">　時刻　</label>
+		<input class="time-style-selector" id="elapsed-time-style" name="time-style" type="radio" value="elapsed-time" />
+		<label for="elapsed-time-style">経過時間</label>
+	      </fieldset>
+	    </div>
+	  </div>
 	</div>
 	
 	<div class="box_button ui-body">

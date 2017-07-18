@@ -593,6 +593,8 @@ $(document).on('change', '.attribute-selector', function(event) {
 
 $(document).on('change', '.time-style-selector', function(event) {
     selectedTimeStyle = event.target.id;
+    setSlider();
+    drawGraph();
 });
 
 
@@ -1165,27 +1167,30 @@ function generateGraph(){
 	    lastAnnotationTime = new Date(2000, 1, 1, 1, 0, 0).getTime();
 	}
 
-	var offset = 0;
-	if(selectedTimeStyle == "elapsed-time-style"){
-	    offset = startRecordingTime;
-	    $("#time1label").val(time2FormattedTime(firstAnnotationTime-offset).replace(/:..$/, ""));
-	    $("#time2label").val(time2FormattedTime(lastAnnotationTime-offset).replace(/:..$/, ""));
-	} else {
-	    $("#time1label").val(date2FormattedDateTime(new Date(firstAnnotationTime)).replace(/^.+ /, "").replace(/:..$/, ""));
-	    $("#time2label").val(date2FormattedDateTime(new Date(lastAnnotationTime)).replace(/^.+ /, "").replace(/:..$/, ""));
-	}
-	
-	$("#time1").val(firstAnnotationTime - offset);
-	$("#time1").prop("min", firstAnnotationTime - offset);
-	$("#time1").prop("max", lastAnnotationTime - offset);
-	$("#time1").prop("value", firstAnnotationTime - offset);
-	$("#time2").val(lastAnnotationTime - offset);
-	$("#time2").prop("min", firstAnnotationTime - offset);
-	$("#time2").prop("max", lastAnnotationTime - offset);
-	$("#time2").prop("value", lastAnnotationTime - offset);
-
+	setSlider();
 	drawGraph();
     });
+}
+
+function setSlider(){
+    var offset = 0;
+    if(selectedTimeStyle == "elapsed-time-style"){
+	offset = startRecordingTime;
+	$("#time1label").val(time2FormattedTime(firstAnnotationTime-offset).replace(/:..$/, ""));
+	$("#time2label").val(time2FormattedTime(lastAnnotationTime-offset).replace(/:..$/, ""));
+    } else {
+	$("#time1label").val(date2FormattedDateTime(new Date(firstAnnotationTime)).replace(/^.+ /, "").replace(/:..$/, ""));
+	$("#time2label").val(date2FormattedDateTime(new Date(lastAnnotationTime)).replace(/^.+ /, "").replace(/:..$/, ""));
+    }
+	
+    $("#time1").val(firstAnnotationTime - offset);
+    $("#time1").prop("min", firstAnnotationTime - offset);
+    $("#time1").prop("max", lastAnnotationTime - offset);
+    $("#time1").prop("value", firstAnnotationTime - offset);
+    $("#time2").val(lastAnnotationTime - offset);
+    $("#time2").prop("min", firstAnnotationTime - offset);
+    $("#time2").prop("max", lastAnnotationTime - offset);
+    $("#time2").prop("value", lastAnnotationTime - offset);
 }
 
 function drawGraph(){
