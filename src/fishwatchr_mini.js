@@ -181,6 +181,9 @@ $(document).on('pagecontainershow', function(event, ui){
 	    $('#selector-download-tsv').prop("disabled", false);
 	    $('#selector-download-xml').prop("disabled", false);
 	}
+
+	$("#" + selectedTimeStyle + "-home").trigger("click"); // tricky code. no click, no refresh.
+	$("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio("refresh");
     } else if(ui.toPage.is('#graph')){
 	$("#slider-1").on("slidestop", function(e){
 	    histgramInterval = $(this).val();
@@ -223,6 +226,10 @@ $(document).on('pagecontainershow', function(event, ui){
 	});
 
 	generateGraph();
+
+	$("#" + selectedGraph).trigger("click");
+	$("#" + selectedAttribute).prop("checked", true).checkboxradio("refresh");
+	$("#" + selectedTimeStyle).prop("checked", true).checkboxradio("refresh");
     }
 });
 
@@ -321,11 +328,7 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	timerID = setInterval(displayTime, timerInterval, "#current_time_home");
 	console.log("new timer:" + timerID);
 	annotationResults = [];
-	$("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio("refresh");
     } else if(ui.toPage.is('#graph')){
-	$("#" + selectedGraph).trigger("click");
-	$("#" + selectedAttribute).prop("checked", true).checkboxradio("refresh");
-	$("#" + selectedTimeStyle).prop("checked", true).checkboxradio("refresh");
     }
 });
 
