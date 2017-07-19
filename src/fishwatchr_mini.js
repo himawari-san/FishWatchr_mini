@@ -132,8 +132,8 @@ function loadSettings(url){
 	thresholdOutlier = data["thresholdOutlier"];
 	$("#threshold-outlier").prop("value", thresholdOutlier);
 	
-    }).fail(function(){
-	$("#popupWarning-message").text("設定の読み込みに失敗しました。");
+    }).fail(function (jqXHR, textStatus, error){
+	$("#popupWarning-message").text("設定の読み込みに失敗しました。\n"+ textStatus + ", " + error);
 	$("#popupWarning").popup("open");
 	console.log("fail!!");
     });
