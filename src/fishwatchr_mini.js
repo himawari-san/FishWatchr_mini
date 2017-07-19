@@ -122,6 +122,16 @@ function loadSettings(url){
 	} else {
 	    $( "#flip-auto-save" ).val("off").flipswitch("refresh");
 	}
+
+	// set selectedTimeStyle
+	selectedTimeStyle = data["time-style"];
+	$("#" + selectedTimeStyle + "-home").trigger("click"); // tricky code. no click, no refresh.
+	$("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio('refresh');
+
+	// set thresholdOutlier
+	thresholdOutlier = data["thresholdOutlier"];
+	$("#threshold-outlier").prop("value", thresholdOutlier);
+	
     }).fail(function(){
 	$("#popupWarning-message").text("設定の読み込みに失敗しました。");
 	$("#popupWarning").popup("open");
@@ -439,6 +449,7 @@ $(document).on('tap', '#btn-save-settings', function(event) {
     var labels = [];
     var mode = $("#selector1-observation-mode").val();
     var auto_save = $("#flip-auto-save").val() == "on" ? "true" : "false";
+    var currentThresholdOutlier = $("#threshold-outlier").val();
     
     for(var i = 1; i <=8; i++){
 	speakers.push($("#speaker" + i).val())
@@ -450,7 +461,9 @@ $(document).on('tap', '#btn-save-settings', function(event) {
 	"speakers": speakers,
 	"labels": labels,
 	"observation-mode": mode,
-	"auto-save": auto_save
+	"auto-save": auto_save,
+	"time-style": selectedTimeStyle,
+	"thresholdOutlier" : currentThresholdOutlier
     };
     
     var jqXHR = $.ajax({
