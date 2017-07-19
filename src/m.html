@@ -38,21 +38,26 @@
 	    </ul>
 	  </div>
 	  <div id="username-panel" class="ui-body ui-content ui-mini">
-	    <label for="username">ユーザ名</label>
-	    <input id="username" name="username" type="text"
-		   data-clear-btn="true" data-clear-btn-text="クリア"
-		   placeholder="Your username"
-		   value="" />
-	    <h3 class="ui-bar ui-bar-a ui-corner-all">オプション</h3>
-	    <div class="ui-body ui-body-a">
-	      <label for="groupname">グループ名</label>
-	      <input id="groupname" name="groupname" type="text"
+	    <div class="ui-field-contain">
+	      <label for="username">ユーザ名：</label>
+	      <input id="username" name="username" type="text"
 		     data-clear-btn="true" data-clear-btn-text="クリア"
-		     placeholder="Your groupname (optional)"
+		     placeholder="Your username"
 		     value="" />
-	      <label for="option-file">設定ファイル：</label>
-	      <a href="#popup-set-url" id="btn-load-settings" data-rel="popup" data-history="false" class="ui-btn uis-shadow ui-corner-all ui-btn-inline ui-icon-gear ui-btn-icon-left" data-position-to="window">(未入力)</a>
-	      <a id="btn-save-settings" class="ui-input-btn  ui-btn-inline ui-btn ui-icon-edit ui-btn-icon-right ui-corner-all" href="#">保存</a>
+	    </div>
+	    <div class="ui-body ui-body-a">
+	      <div class="ui-field-contain">
+		<label for="groupname">グループ名：</label>
+		<input id="groupname" name="groupname" type="text"
+		       data-clear-btn="true" data-clear-btn-text="クリア"
+		       placeholder=""
+		       value="" />
+	      </div>
+	      <div class="ui-field-contain">
+		<label for="option-file">設定ファイル：</label>
+		<a href="#popup-set-url" id="btn-load-settings" data-rel="popup" data-history="false" class="ui-btn uis-shadow ui-corner-all ui-btn-inline ui-icon-gear ui-btn-icon-left" data-position-to="window">(未入力)</a>
+		<a id="btn-save-settings" class="ui-input-btn  ui-btn-inline ui-btn ui-icon-edit ui-btn-icon-right ui-corner-all" href="#">保存</a>
+	      </div>
 	    </div>
 	  </div>
 	  <div id="annotation-panel" class="ui-body-d ui-content">
@@ -222,11 +227,13 @@
 		  <option value="save-to-server">サーバ保存</option>
 		</select>
 	      </div>
-	      <label for="flip-auto-save">オートセーブ：</label>
-	      <select name="flip-auto-save" id="flip-auto-save" data-role="flipswitch">
-		<option id="flip-auto-save-off" value="off" selected="">Off</option>
-		<option id="flip-auto-save-on" value="on">On</option>
-	      </select>
+	      <div class="ui-field-contain">
+		<label for="flip-auto-save">オートセーブ：</label>
+		<select name="flip-auto-save" id="flip-auto-save" data-role="flipswitch">
+		  <option id="flip-auto-save-off" value="off" selected="">Off</option>
+		  <option id="flip-auto-save-on" value="on">On</option>
+		</select>
+	      </div>
 	      <div class="ui-grid-a">
 		<div class="ui-block-a">
 		  <a id="btn-get-archive" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-right ui-corner-all" href="#">グループ結果</a>
