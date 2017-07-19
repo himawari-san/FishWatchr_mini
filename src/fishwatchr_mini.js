@@ -311,6 +311,7 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	timerID = setInterval(displayTime, timerInterval, "#current_time_home");
 	console.log("new timer:" + timerID);
 	annotationResults = [];
+	$("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio("refresh");
     } else if(ui.toPage.is('#graph')){
 	$("#" + selectedGraph).trigger("click");
 	$("#" + selectedAttribute).prop("checked", true).checkboxradio("refresh");
@@ -593,7 +594,7 @@ $(document).on('change', '.attribute-selector', function(event) {
 });
 
 $(document).on('change', '.time-style-selector', function(event) {
-    selectedTimeStyle = event.target.id;
+    selectedTimeStyle = event.target.value;
     setSlider();
     drawGraph();
 });

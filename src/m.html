@@ -190,8 +190,19 @@
 	  <div id="chart-panel" class="ui-body ui-content ui-corner-all ui-mini">
 	    <a data-role="button" id="btn-show-graph" class="ui-input-btn ui-btn ui-shadow ui-icon-eye ui-btn-icon-right ui-corner-all" href="graph.html">グラフ表示</a>
 	    <div class="ui-body ui-body-a">
-	      <label for="threshold-outlier" title="アノテーション間がこの値を超える場合，外れ値検出の基準となります。">外れ値検出(sec)：</label>
-	      <input type="text" name="threshold-outlier" id="threshold-outlier" value="1800" placeholder="(sec)" />
+	      <div class="ui-field-contain">
+		<label for="threshold-outlier" title="アノテーション間がこの値を超える場合，外れ値検出の基準となります。">外れ値検出(sec)：</label>
+		<input type="text" name="threshold-outlier" id="threshold-outlier" value="1800" placeholder="(sec)" />
+	      </div>
+	      <div class="ui-field-contain">
+		<fieldset data-role="controlgroup" data-type="horizontal">
+		  <legend>時間表示：</legend>
+		  <input class="time-style-selector" id="real-time-style-home" name="time-style-home" type="radio" value="real-time-style" />
+		  <label for="real-time-style-home">　時刻　</label>
+		  <input class="time-style-selector" id="elapsed-time-style-home" name="time-style-home" type="radio" value="elapsed-time-style" />
+		  <label for="elapsed-time-style-home">経過時間</label>
+		</fieldset>
+	      </div>
 	    </div>
 	  </div>
 	  
