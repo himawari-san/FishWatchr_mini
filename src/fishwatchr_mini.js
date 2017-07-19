@@ -82,6 +82,11 @@ $(document).ready(function(){
 
 
 function loadSettings(url){
+    $.mobile.loading('show', {
+	text: "Now loading",
+	textVisible: true,
+	textonly: false
+    });
     $.ajax({
 	url: "read.php",
 	type: "post",
@@ -136,6 +141,8 @@ function loadSettings(url){
 	$("#popupWarning-message").text("設定の読み込みに失敗しました。\n"+ textStatus + ", " + error);
 	$("#popupWarning").popup("open");
 	console.log("fail!!");
+    }).always(function(){
+	$.mobile.loading("hide");
     });
 }
 
