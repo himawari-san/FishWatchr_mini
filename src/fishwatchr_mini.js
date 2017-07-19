@@ -312,8 +312,9 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	console.log("new timer:" + timerID);
 	annotationResults = [];
     } else if(ui.toPage.is('#graph')){
-	selectedGraph = "selector-type-graph";
-	selectedAttribute = "attribute-label";
+	$("#" + selectedGraph).trigger("click");
+	$("#" + selectedAttribute).prop("checked", true).checkboxradio("refresh");
+	$("#" + selectedTimeStyle).prop("checked", true).checkboxradio("refresh");
     }
 });
 
