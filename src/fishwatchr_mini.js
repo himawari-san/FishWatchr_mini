@@ -338,6 +338,7 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	console.log("new timer:" + timerID);
 	annotationResults = [];
     } else if(ui.toPage.is('#graph')){
+	$("#link_to_top_graph").prop("href", "m.html" + configUrlOption);
     }
 });
 
