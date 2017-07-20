@@ -131,12 +131,16 @@ function loadSettings(url){
 	}
 
 	// set selectedTimeStyle
-	selectedTimeStyle = data["time-style"];
+	if(data["time-style"] == "elapsed-time-style" || data["time-style"] == "real-time-style"){
+	    selectedTimeStyle = data["time-style"];
+	}
 	$("#" + selectedTimeStyle + "-home").trigger("click"); // tricky code. no click, no refresh.
 	$("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio('refresh');
 
 	// set thresholdOutlier
-	thresholdOutlier = data["thresholdOutlier"];
+	if(Number(data["thresholdOutlier"]) != NaN){
+	    thresholdOutlier = data["thresholdOutlier"];
+	}
 	$("#threshold-outlier").prop("value", thresholdOutlier);
 	
     }).fail(function (jqXHR, textStatus, error){
