@@ -82,16 +82,18 @@ $(document).ready(function(){
 
 
 function loadSettings(url){
-    $.mobile.loading('show', {
-	text: "Now loading",
-	textVisible: true,
-	textonly: false
-    });
     $.ajax({
 	url: "read.php",
 	type: "post",
 	dataType: "json",
-	data: {url: url}
+	data: {url: url},
+	beforeSend: function(jqXHR, settings) {
+	    $.mobile.loading('show', {
+		text: "Now loading",
+		textVisible: true,
+		textonly: false
+	    });
+	}
     }).done(function(data) {
 	// read groupname
 	if(!checkGroupname(data["groupname"])){
