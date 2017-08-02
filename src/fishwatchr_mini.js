@@ -1252,6 +1252,9 @@ function drawGraph(){
 		type[value] = 1;
 	    }
 	}
+
+	// sort typeNames to maintain the same order any time
+	typeNames.sort();
 	
 	for(var i = 0; i < typeNames.length; i++){
 	    x.push(typeNames[i]);
