@@ -1227,6 +1227,7 @@ function setSlider(){
 
 function drawGraph(){
     var type = {};
+    var typeNames = new Array();
     var x = ['x'];
     var y = ['freq'];
     var xTimes = [];
@@ -1235,6 +1236,14 @@ function drawGraph(){
     var iAttribute = selectedAttribute == 'attribute-speaker' ? 0 : 1;
     
     if(selectedGraph == 'selector-type-graph'|| selectedGraph == ""){
+	// get all typeNames even if not in mergedAnnotationsCurrent
+	for(var i = 0; i < mergedAnnotations.length; i++){
+	    var value = mergedAnnotations[i][iAttribute];
+	    if(!(value in type)){
+		typeNames.push(value);
+	    }
+	}
+
 	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
 	    var value = mergedAnnotationsCurrent[i][iAttribute];
 	    if(value in type){
@@ -1244,9 +1253,13 @@ function drawGraph(){
 	    }
 	}
 	
-	for(var i in type){
-	    x.push(i);
-	    y.push(type[i]);
+	for(var i = 0; i < typeNames.length; i++){
+	    x.push(typeNames[i]);
+	    if(typeNames[i] in type){
+		y.push(type[typeNames[i]]);
+	    } else{
+		y.push(0);
+	    }
 	}
 	arrayColumns[0] = x;
 	arrayColumns[1] = y;
