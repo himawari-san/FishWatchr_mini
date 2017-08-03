@@ -625,7 +625,7 @@ $(document).on('change', '.attribute-selector', function(event) {
 
 $(document).on('change', '.time-style-selector', function(event) {
     selectedTimeStyle = event.target.value;
-    setSlider();
+    changeTimeStyle();
     drawGraph();
 });
 
@@ -1199,31 +1199,69 @@ function generateGraph(){
 	    lastAnnotationTime = new Date(2000, 1, 1, 1, 0, 0).getTime();
 	}
 
-	setSlider();
+	initSlider();
 	drawGraph();
     });
 }
 
-function setSlider(){
-    var offset = 0;
+function initSlider(){
+    var timeMin = 0;
+    var timeMax = 0;
+    
     if(selectedTimeStyle == "elapsed-time-style"){
-	offset = startRecordingTime;
-	$("#time1label").val(time2FormattedTime(firstAnnotationTime-offset).replace(/:..$/, ""));
-	$("#time2label").val(time2FormattedTime(lastAnnotationTime-offset).replace(/:..$/, ""));
+	timeMin = firstAnnotationTime-startRecordingTime;
+	timeMax = lastAnnotationTime-startRecordingTime;
+	$("#time1label").val(time2FormattedTime(timeMin).replace(/:..$/, ""));
+	$("#time2label").val(time2FormattedTime(timeMax).replace(/:..$/, ""));
     } else {
-	$("#time1label").val(date2FormattedDateTime(new Date(firstAnnotationTime)).replace(/^.+ /, "").replace(/:..$/, ""));
-	$("#time2label").val(date2FormattedDateTime(new Date(lastAnnotationTime)).replace(/^.+ /, "").replace(/:..$/, ""));
+	timeMin = firstAnnotationTime;
+	timeMax = lastAnnotationTime;
+	$("#time1label").val(date2FormattedDateTime(new Date(timeMin)).replace(/^.+ /, "").replace(/:..$/, ""));
+	$("#time2label").val(date2FormattedDateTime(new Date(timeMax)).replace(/^.+ /, "").replace(/:..$/, ""));
     }
 	
-    $("#time1").val(firstAnnotationTime - offset);
-    $("#time1").prop("min", firstAnnotationTime - offset);
-    $("#time1").prop("max", lastAnnotationTime - offset);
-    $("#time1").prop("value", firstAnnotationTime - offset);
-    $("#time2").val(lastAnnotationTime - offset);
-    $("#time2").prop("min", firstAnnotationTime - offset);
-    $("#time2").prop("max", lastAnnotationTime - offset);
-    $("#time2").prop("value", lastAnnotationTime - offset);
+    $("#time1").val(timeMin);
+    $("#time1").prop("min", timeMin);
+    $("#time1").prop("max", timeMax);
+    $("#time2").val(timeMax);
+    $("#time2").prop("min", timeMin);
+    $("#time2").prop("max", timeMax);
 }
+
+
+
+function changeTimeStyle(){
+    var currentTime1 = Number($("#time1").val());
+    var currentTime2 = Number($("#time2").val());
+
+    var currentTime = 0;
+    var timeMin = 0;
+    var timeMax = 0;
+    
+    if(selectedTimeStyle == "elapsed-time-style"){
+	currentTime1 = currentTime1-startRecordingTime;
+	currentTime2 = currentTime2-startRecordingTime;
+	timeMin = firstAnnotationTime-startRecordingTime;
+	timeMax = lastAnnotationTime-startRecordingTime;
+	$("#time1label").val(time2FormattedTime(currentTime1).replace(/:..$/, ""));
+	$("#time2label").val(time2FormattedTime(currentTime2).replace(/:..$/, ""));
+    } else {
+	currentTime1 = currentTime1+startRecordingTime;
+	currentTime2 = currentTime2+startRecordingTime;
+	timeMin = firstAnnotationTime;
+	timeMax = lastAnnotationTime;
+	$("#time1label").val(date2FormattedDateTime(new Date(currentTime1)).replace(/^.+ /, "").replace(/:..$/, ""));
+	$("#time2label").val(date2FormattedDateTime(new Date(currentTime2)).replace(/^.+ /, "").replace(/:..$/, ""));
+    }
+	
+    $("#time1").val(currentTime1);
+    $("#time1").prop("min", timeMin);
+    $("#time1").prop("max", timeMax);
+    $("#time2").val(currentTime2);
+    $("#time2").prop("min", timeMin);
+    $("#time2").prop("max", timeMax);
+}
+
 
 function drawGraph(){
     var type = {};
