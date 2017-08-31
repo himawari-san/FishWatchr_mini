@@ -74,6 +74,13 @@ $(document).ready(function(){
 	    $("#popupWarning").popup("open");
 	} else {
 	    urlSettings = $("#urlSettings").val();
+
+	    if(urlSettings.indexOf("http://") != 0 && urlSettings.indexOf("https://") != 0){
+		// this url is a candidate
+		urlSettings = "http://" + location.host + 
+		    location.pathname.replace(/\/[^\/]+$/, "/res/") + urlSettings + ".json";
+	    }
+
 	    loadSettings(urlSettings);
 	}
     });
@@ -158,7 +165,16 @@ $(document).on('pagecreate', '#home', function(event, ui){
     configUrlOption = location.search;
 
     if(location.search.match(/\?config=(.+)/)){
+	// ToDo: multiple options
+	// config= option must be at the end of the url
 	var configUrl = RegExp.$1;
+
+	if(configUrl.indexOf("http://") != 0 && configUrl.indexOf("https://") != 0){
+	    // this url is a candidate
+	    configUrl = "http://" + location.host + 
+		location.pathname.replace(/\/[^\/]+$/, "/res/") + configUrl + ".json";
+	}
+
 	loadSettings(configUrl);
 	console.log("config url:" + configUrl);
     }
