@@ -371,7 +371,7 @@ $(document).on('pagecontainerbeforehide', function(event, ui){
 	username = $("#username").val();
 	
 	// get groupname
-	groupname = $("#groupname").val();
+	groupname = $("#groupname").val().replace(/\$$/, "");
 
 	// get vauels of speakers and labels
 	for(var i = 1; i <= nBoxes; i++){
@@ -465,7 +465,7 @@ $(document).on('tap', '.btn-annotation', function(event) {
 $(document).on('tap', '#btn-save-settings', function(event) {
     var trueGroupname = $("#groupname").val();
     if(trueGroupname.match(/\$$/)){
-	trueGroupname = trueGroupname.replace(/.$/, "");
+	trueGroupname = trueGroupname.replace(/\$$/, "");
 	
 	if(!checkGroupname(trueGroupname)){
 	    $("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
@@ -538,7 +538,7 @@ $(document).on('tap', '#btn-get-basetime', function(event) {
 
     var trueGroupname = $("#groupname").val();
     if(trueGroupname.match(/\$$/)){
-	trueGroupname = trueGroupname.replace(/.$/, "");
+	trueGroupname = trueGroupname.replace(/\$$/, "");
 	
 	if(!checkGroupname(trueGroupname)){
 	    $("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
@@ -570,7 +570,7 @@ $(document).on('tap', '#btn-get-basetime', function(event) {
 // draw charts
 $(document).on('tap', '#btn-show-graph', function(event) {
     thresholdOutlier = $("#threshold-outlier").val();
-    groupname = $("#groupname").val();
+    groupname = $("#groupname").val().replace(/\$$/, "");
 
     if(thresholdOutlier == ""){
 	thresholdOutlier = Number.MAX_VALUE;
@@ -579,7 +579,7 @@ $(document).on('tap', '#btn-show-graph', function(event) {
 	$("#popupWarning").popup("open");
 	$("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
 	return false;
-    } else if(!checkGroupname($("#groupname").val())){
+    } else if(!checkGroupname(groupname)){
 	$("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
 	$("#popupWarning").popup("open");
 	$("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
@@ -664,7 +664,7 @@ function saveToServer(event){
     savename = savename.replace(":", "").replace("/", "_").replace(" ", "_");
 
     // get groupname
-    groupname = $("#groupname").val();
+    groupname = $("#groupname").val().replace(/\$$/, "");
     if(groupname != "" && groupname.match(/^[A-Za-z0-9_]+$/) == null){
 	$("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
 	$("#popupWarning").popup("open");
@@ -725,7 +725,7 @@ function store(savename, groupname, fileType, dataBody){
 
 $(document).on('tap', '#btn-get-archive', function(event) {
     // get groupname
-    groupname = $("#groupname").val();
+    groupname = $("#groupname").val().replace(/\$$/, "");
 
     if(groupname == ""){
 	$("#popupWarning-message").text("グループ名を指定してください。");
