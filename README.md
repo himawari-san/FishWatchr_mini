@@ -1,5 +1,6 @@
 # FishWatchr Mini
-FishWatchr Mini is an educational observation support system for mobile devices. Students can observe the other students' exercise like presentations and discussions by using the system through Web browsers on their own mobile phones. The observation results of all students are amassed in a Web server, and can be browsed in charts or tables. Moreover, FishWatchr can import the data synchronizing with the video file where the exercise was recorded. 
+FishWatchr Mini is an educational observation support tool for mobile devices. Students can observe educational activities such as presentation exercises by using the tool through Web browsers on their own mobile phones. The observation results of all students are merged on a FishWatchr Mini server, and can be displayed in histogram/table format.
+ Moreover, The annotation data can be exported to FishWatchr, which is a video annotation system, synchronizing with the video data of the activity.
 
 # Requirements
 * HTML5 + JavaScript (client)
