@@ -7,6 +7,7 @@ FishWatchr Mini is an educational observation support tool for mobile devices. S
 * PHP (server)
 * [JQuery Mobile (ver.1.4.5 or later)](https://jquerymobile.com/)
 * [C3.js (ver.0.4.14 or later)](http://c3js.org/)
+* [shortcut.js](http://www.openjs.com/scripts/events/keyboard_shortcuts/)
 
 
 # Demo and User Manual

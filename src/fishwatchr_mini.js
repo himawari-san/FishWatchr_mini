@@ -1,5 +1,6 @@
 var now = "";
 var nBoxes = 8;
+var shortcutKeys = ["q", "w", "e", "r", "t", "y", "u", "i", "o"]; // nBox <= 9
 var buttonAreaRatio1 = "300px";
 var buttonAreaRatio2 = "450px";
 var buttonAreaRatioChange = 5; // if <=5 ratio1, otherwise ratio2 
@@ -309,6 +310,18 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	// set button names
 	var ca = 1;
 	var cb = 1;
+
+	removeShortcutAll();
+
+	var shortcutCallback = (function (target, num) {
+	    return function () {
+		if(!$("#" + target + num).prop("disabled")){
+		    $("#" + target + num).trigger('tap');
+		}
+	    };
+	});
+	
+
 	for(var i = 1; i <= nBoxes; i++){
 	    var pn = "speaker" + i;
 	    var v = annotatedSpeakers[pn];
@@ -325,6 +338,8 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 		if(annotationMode == "mode_label"){
 		    $("#" + newID).prop("disabled", true);
 		}
+			shortcut.add(shortcutKeys[ca-1],
+				     shortcutCallback("bt_speaker", ca));
 		ca++;
 	    } 
 
@@ -342,6 +357,7 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 		if(annotationMode == "mode_speaker"){
 		    $("#" + newID).prop("disabled", true);
 		}
+		shortcut.add(cb + "", shortcutCallback("bt_label", cb));
 		cb++;
 	    } 
 	}
@@ -819,6 +835,13 @@ function updateAnnotationButtons(){
 	    }
 	    cb++;
 	} 
+    }
+}
+
+
+function removeShortcutAll(){
+    for(var sc in shortcut.all_shortcuts){
+	shortcut.remove(sc);
     }
 }
 
