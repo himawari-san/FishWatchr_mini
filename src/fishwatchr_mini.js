@@ -270,6 +270,8 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	console.log("timer cleared:" + timerID);
     }
 
+    removeShortcutAll();
+    
     // observation page
     if(ui.toPage.is('#observation')){
 	// start new timer
@@ -310,8 +312,6 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	// set button names
 	var ca = 1;
 	var cb = 1;
-
-	removeShortcutAll();
 
 	var shortcutCallback = (function (target, num) {
 	    return function () {
