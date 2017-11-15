@@ -215,6 +215,7 @@ $(document).on('pagecontainershow', function(event, ui){
 	$("#" + selectedTimeStyle + "-home").trigger("click"); // tricky code. no click, no refresh.
 	$("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio("refresh");
     } else if(ui.toPage.is('#graph')){
+	histgramInterval = $("#slider-1").val();
 	$("#slider-1").on("slidestop", function(e){
 	    histgramInterval = $(this).val();
 	    drawGraph();
