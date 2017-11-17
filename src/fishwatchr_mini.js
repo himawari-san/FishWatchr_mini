@@ -17,9 +17,10 @@ var buttonHeightRatio = ["97%", "47%", "30.5%", "22.2%", "17.2%", "14.5%", "12.2
 var fseparator = "\t";
 var fn_speaker = 0;
 var fn_label = 1;
-var fn_etime = 2;
-var fn_ctime = 3;
+var fn_etime = 2; // elapsed time (string)
+var fn_ctime = 3; // date & time (string)
 var fn_username = 4;
+var fn_ptime = 5; // Date.parsed ctime (number)
 
 var tempAnnotationSpeaker = "";
 var tempAnnotationLabel = "";
@@ -1140,7 +1141,7 @@ function updateMergedAnnotationsCurrent(begin, end){
 
     var j = 0;
     for(var i = 0; i < mergedAnnotations.length; i++){
-	var time = mergedAnnotations[i][5];
+	var time = mergedAnnotations[i][fn_ptime];
 	if(time < begin || time > end) continue;
 	mergedAnnotationsCurrent[j++] = mergedAnnotations[i];
     }
@@ -1180,13 +1181,13 @@ function generateGraph(){
 	for(var i = 0; i < arrayAnnotations.length; i++){
 	    if(arrayAnnotations[i] == "") continue;
 	    var arrayFields = arrayAnnotations[i].split("\t");
-	    arrayFields.push(Date.parse(arrayFields[3].replace(/-/g, "/")));
+	    arrayFields.push(Date.parse(arrayFields[fn_ctime].replace(/-/g, "/")));
 	    mergedAnnotations[i] = arrayFields;
 	}
 	
 	// sort by date
 	mergedAnnotations.sort(function(a, b){
-	    if(a[5] < b[5]){
+	    if(a[fn_ptime] < b[fn_ptime]){
 		return -1;
 	    } else {
 		return 1;
@@ -1195,7 +1196,7 @@ function generateGraph(){
 
 	// startRecordingTime is the time of the first record, if no time information record
 	if(startRecordingTime == 0 && mergedAnnotations.length > 0){
-	    startRecordingTime = mergedAnnotations[0][5];
+	    startRecordingTime = mergedAnnotations[0][fn_ptime];
 	}
 
 	// median
@@ -1203,24 +1204,24 @@ function generateGraph(){
 	if(len == 0){
 	    timeMedian = 0;
 	} else if(len % 2 == 0){
-	    timeMedian = (mergedAnnotations[len/2][5] + mergedAnnotations[len/2 + 1][5]) / 2;
+	    timeMedian = (mergedAnnotations[len/2][fn_ptime] + mergedAnnotations[len/2 + 1][fn_ptime]) / 2;
 	} else {
-	    timeMedian = mergedAnnotations[(len+1)/2][5];
+	    timeMedian = mergedAnnotations[(len+1)/2][fn_ptime];
 	}
 	
 	var iStart = 0;
 	var iEnd = len;
 	for(var i = 0; i < mergedAnnotations.length; i++){
 	    // outliers
-	    if(prevTime != -1 && mergedAnnotations[i][5] - prevTime > thresholdOutlier){
-		if(timeMedian > mergedAnnotations[i][5]){
+	    if(prevTime != -1 && mergedAnnotations[i][fn_ptime] - prevTime > thresholdOutlier){
+		if(timeMedian > mergedAnnotations[i][fn_ptime]){
 		    iStart = i;
 		} else {
 		    iEnd = i;
 		    break;
 		}
 	    }
-	    prevTime = mergedAnnotations[i][5];
+	    prevTime = mergedAnnotations[i][fn_ptime];
 	}
 
 	var tempArray = [];
@@ -1237,8 +1238,8 @@ function generateGraph(){
 	}
 	
 	if(mergedAnnotations.length != 0){
-	    firstAnnotationTime = mergedAnnotationsCurrent[0][5];
-	    lastAnnotationTime = mergedAnnotationsCurrent[mergedAnnotationsCurrent.length-1][5];
+	    firstAnnotationTime = mergedAnnotationsCurrent[0][fn_ptime];
+	    lastAnnotationTime = mergedAnnotationsCurrent[mergedAnnotationsCurrent.length-1][fn_ptime];
 	} else {
 	    // dummy time
 	    firstAnnotationTime = new Date(2000, 1, 1, 0, 0, 0).getTime();
@@ -1317,7 +1318,7 @@ function drawGraph(){
     var xTimes = [];
     var arrayColumns = [];
     var flagLegend = true;
-    var iAttribute = selectedAttribute == 'attribute-speaker' ? 0 : 1;
+    var iAttribute = selectedAttribute == 'attribute-speaker' ? fn_speaker : fn_label;
     
     if(selectedGraph == 'selector-type-graph'|| selectedGraph == ""){
 	// change ui
@@ -1370,7 +1371,7 @@ function drawGraph(){
 	var prevTime = 0;
 	
 	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
-	    var time = Math.floor(mergedAnnotationsCurrent[i][5]/histgramInterval/1000);
+	    var time = Math.floor(mergedAnnotationsCurrent[i][fn_ptime]/histgramInterval/1000);
 	    var category = mergedAnnotationsCurrent[i][iAttribute];
 
 	    // insert axises whose frequency is 0
