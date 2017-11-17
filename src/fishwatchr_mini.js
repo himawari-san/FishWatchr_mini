@@ -45,6 +45,7 @@ var histgramInterval = 60; // sec
 var selectedGraph = 'selector-type-graph'; // default graph
 var selectedAttribute = 'attribute-label';
 var selectedTimeStyle = 'real-time-style';
+var selectedObserver = 'all';
 
 var thresholdOutlier = 1800;
 
@@ -662,6 +663,11 @@ $(document).on('change', '.time-style-selector', function(event) {
     drawGraph();
 });
 
+$(document).on('change', '#select-observer', function(event) {
+    var selectedOption = $(this).find('option:selected');
+    selectedObserver = selectedOption.val(); 
+    drawGraph();
+});
 
 
 function saveToServer(event){
