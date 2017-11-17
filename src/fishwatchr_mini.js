@@ -1330,7 +1330,7 @@ function drawGraph(){
 	// get all typeNames even if not in mergedAnnotationsCurrent
 	for(var i = 0; i < mergedAnnotations.length; i++){
 	    var value = mergedAnnotations[i][iAttribute];
-	    if(!(value in type)){
+	    if(!typeNames.includes(value)){
 		typeNames.push(value);
 	    }
 	}
