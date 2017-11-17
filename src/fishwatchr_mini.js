@@ -1314,6 +1314,12 @@ function drawGraph(){
     var iAttribute = selectedAttribute == 'attribute-speaker' ? 0 : 1;
     
     if(selectedGraph == 'selector-type-graph'|| selectedGraph == ""){
+	// change ui
+	$("#range-slider").hide();
+	$("#timedisplay-type-selector").hide();
+	$("#label-timeRangeSlider").show();
+	$("#observer-selector").show();
+	    
 	// get all typeNames even if not in mergedAnnotationsCurrent
 	for(var i = 0; i < mergedAnnotations.length; i++){
 	    var value = mergedAnnotations[i][iAttribute];
@@ -1346,6 +1352,12 @@ function drawGraph(){
 	arrayColumns[1] = y;
 	flagLegend = false;
     } else {
+	// change ui
+	$("#range-slider").show();
+	$("#label-timeRangeSlider").hide();
+	$("#timedisplay-type-selector").show();
+	$("#observer-selector").hide();
+
 	var temp = {};
 	var categoryFreqs = {};
 	var categories = {};

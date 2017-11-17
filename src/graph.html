@@ -27,11 +27,14 @@
 	<div id="graph_body"></div>
 
 	<!-- scale slider -->
-	<label for="slider-1">区間幅(sec)／表示範囲</label>
-	<input type="range" name="slider-1" id="slider-1" value="60" min="15" max="300" step="5" readonly="true" />
-
+	<div id="range-slider">
+	  <label for="slider-1">区間幅(sec)／表示範囲</label>
+	  <input type="range" name="slider-1" id="slider-1" value="60" min="15" max="300" step="5" readonly="true" />
+	</div>
+	
 	<!-- range slider -->
 	<!-- this div is based on http://jsfiddle.net/ezanker/fu26u/204/ -->
+	<div id="label-timeRangeSlider">表示範囲</div>
         <div class="timeRangeSlider" style="position:relative">
           <div id="theTimeRange" class="time-slider" data-role="rangeslider" style="position:relative;">
             <label for="time1" style="display:none">Time Range:</label>
@@ -56,13 +59,23 @@
               </fieldset>
 	    </div>
 	    <div class="ui-block-b">
-	      <fieldset data-role="controlgroup" data-type="horizontal">
+	      <fieldset id="timedisplay-type-selector" data-role="controlgroup" data-type="horizontal">
 		<legend>時間表示：</legend>
 		<input class="time-style-selector" id="real-time-style" name="time-style" type="radio" value="real-time-style" />
 		<label for="real-time-style">　時刻　</label>
 		<input class="time-style-selector" id="elapsed-time-style" name="time-style" type="radio" value="elapsed-time-style" />
 		<label for="elapsed-time-style">経過時間</label>
 	      </fieldset>
+
+	      <div id="observer-selector">
+		<label for="select-observer" class="select">観察者：</label>
+		<select name="select-observer" id="select-observer">
+		  <option value="all">全観察者（合計）</option>
+		  <option value="user-only">本人</option>
+		  <option value="user-comparison">本人（比較）</option>
+		  <option value="all-comparison">全観察者（比較）</option>
+		</select>
+	      </div>
 	    </div>
 	  </div>
 	</div>
