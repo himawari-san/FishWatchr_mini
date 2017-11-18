@@ -857,14 +857,14 @@ function removeShortcutAll(){
 function updateSavenameList(){
     $("#savename-list").empty();
     for(i = annotationStorage.length-1; i >= 0; i--){
-	var username = annotationStorage[i].username == "" ?
+	var newUsername = annotationStorage[i].username == "" ?
 	    "noname" :
 	    annotationStorage[i].username;
 
 	$("#savename-list").append(
 	    "<li>" +
 		"<a href=\"#\" class=\"ui-btn ui-btn-inline savename-button\" id=\"savename_" + i + "\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"dialog\">" +
-		username + "/" +
+		newUsername + "/" +
 		date2FormattedDateTime(annotationStorage[i].starttime).replace(/-/g, "") +
 		"</a>" +
 		"</li>");
@@ -1313,12 +1313,13 @@ function changeTimeStyle(){
 function drawGraph(){
     var type = {};
     var typeNames = new Array();
-    var x = ['x'];
-    var y = ['freq'];
+    var observerTypes = [];
     var xTimes = [];
     var arrayColumns = [];
     var flagLegend = true;
+    var chartType = "";
     var iAttribute = selectedAttribute == 'attribute-speaker' ? fn_speaker : fn_label;
+    var observerType = $("#select-observer").find('option:selected').val();
     
     if(selectedGraph == 'selector-type-graph'|| selectedGraph == ""){
 	// change ui
@@ -1335,29 +1336,108 @@ function drawGraph(){
 	    }
 	}
 
+	// initialize type
+	for(var i = 0; i < typeNames.length; i++){
+	    type[typeNames[i]] = new Array();
+	    
+	    switch(observerType){
+	    case "all":
+		type[typeNames[i]]['all'] = 0;
+		break;
+	    case "user-only":
+		type[typeNames[i]]['user'] = 0;
+		break;
+	    case "user-comparison":
+		type[typeNames[i]]['user'] = 0;
+		type[typeNames[i]]['others'] = 0;
+		break;
+	    case "all-comparison":
+		for(var j = 0; j < mergedAnnotations.length; j++){
+		    var dataUsername = mergedAnnotations[j][fn_username];
+		    type[typeNames[i]][dataUsername] = 0;
+		}
+	    }
+	}
+	
+	// count frequency
 	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
 	    var value = mergedAnnotationsCurrent[i][iAttribute];
-	    if(value in type){
-		type[value]++;
-	    } else {
-		type[value] = 1;
+	    var dataUsername = mergedAnnotations[i][fn_username];
+
+	    switch(observerType){
+	    case "all":
+		type[value]['all']++;
+		break;
+	    case "user-only":
+		if(dataUsername == username){
+		    type[value]['user']++;
+		}
+		break;
+	    case "user-comparison":
+		if(dataUsername == username){
+		    type[value]['user']++;
+		} else {
+		    type[value]['others']++;
+		}
+		break;
+	    case "all-comparison":
+		type[value][dataUsername]++;
 	    }
 	}
 
+	// get oberverTypes
+	switch(observerType){
+	case "all":
+	    observerTypes.push("all");
+	    break;
+	case "user-only":
+	    observerTypes.push("user");
+	    break;
+	case "user-comparison":
+	    observerTypes.push("user");
+	    observerTypes.push("others");
+
+	    // calc average
+	    var tmpUsernames = {};
+	    for(var i = 0; i < mergedAnnotations.length; i++){
+		tmpUsernames[mergedAnnotations[i][fn_username]]++;
+	    }
+	    var nUsers = Object.keys(tmpUsernames).length;
+	    for(var i = 0; i < typeNames.length; i++){
+		type[typeNames[i]]["others"] = (type[typeNames[i]]["others"] / nUsers).toFixed(2);
+	    }
+	    break;
+	case "all-comparison":
+	    for(var i = 0; i < mergedAnnotations.length; i++){
+		var dataUsername = mergedAnnotations[i][fn_username];
+		observerTypes.push(dataUsername);
+	    }
+	    observerTypes.sort();
+	}
+	
 	// sort typeNames to maintain the same order any time
 	typeNames.sort();
 	
+	// prepare row names of arrayColumns
+	arrayColumns[0] = new Array();
+	arrayColumns[0].push('x');
+	for(var i = 0; i < observerTypes.length; i++){
+	    arrayColumns[i+1] = new Array();
+	    arrayColumns[i+1].push(observerTypes[i]);
+	}
+
+	// construct arrayColumns
 	for(var i = 0; i < typeNames.length; i++){
-	    x.push(typeNames[i]);
-	    if(typeNames[i] in type){
-		y.push(type[typeNames[i]]);
-	    } else{
-		y.push(0);
+	    // x
+	    arrayColumns[0].push(typeNames[i]);
+
+	    // observers
+	    for(var j = 0; j < observerTypes.length; j++){
+		arrayColumns[j+1].push(type[typeNames[i]][observerTypes[j]]);
 	    }
 	}
-	arrayColumns[0] = x;
-	arrayColumns[1] = y;
 	flagLegend = false;
+	chartType = "bar";
     } else {
 	// change ui
 	$("#range-slider").show();
@@ -1365,6 +1445,8 @@ function drawGraph(){
 	$("#timedisplay-type-selector").show();
 	$("#observer-selector").hide();
 
+	var x = ['x'];
+	var y = ['freq'];
 	var temp = {};
 	var categoryFreqs = {};
 	var categories = {};
@@ -1433,6 +1515,8 @@ function drawGraph(){
 	for(var category in categories){
 	    arrayColumns.push(categoryFreqs[category]);
 	}
+
+	chartType = "";
     }
     
     var chart = c3.generate({
@@ -1440,6 +1524,7 @@ function drawGraph(){
 	data: {
 	    x: 'x',
 	    columns: arrayColumns,
+	    type: chartType,
 	    types: {
 		freq: 'bar'
 	    }
