@@ -19,14 +19,14 @@
       <div data-role="main" class="ui-content" >
 	<div data-role="navbar">
 	  <ul>
-	    <li><a id="selector-type-graph" class="graph-selector ui-btn-active" href="#">属性別</a></li>
+	    <li><a id="selector-summary-graph" class="graph-selector ui-btn-active" href="#">属性別</a></li>
 	    <li><a id="selector-timeline-graph" class="graph-selector" href="#">時間</a></li>
 	  </ul>
 	</div>
 	<!-- graph -->
 	<div id="graph_body"></div>
 
-	<!-- scale slider -->
+	<!-- scale slider in summary-graph only -->
 	<div id="range-slider">
 	  <label for="slider-1">区間幅(sec)／表示範囲</label>
 	  <input type="range" name="slider-1" id="slider-1" value="60" min="15" max="300" step="5" readonly="true" />
@@ -34,7 +34,7 @@
 	
 	<!-- range slider -->
 	<!-- this div is based on http://jsfiddle.net/ezanker/fu26u/204/ -->
-	<div id="label-timeRangeSlider">表示範囲</div>
+	<div id="label-timeRangeSlider">表示範囲</div>  <!-- summary-graph only -->
         <div class="timeRangeSlider" style="position:relative">
           <div id="theTimeRange" class="time-slider" data-role="rangeslider" style="position:relative;">
             <label for="time1" style="display:none">Time Range:</label>
@@ -59,6 +59,7 @@
               </fieldset>
 	    </div>
 	    <div class="ui-block-b">
+	      <!-- timeline-graph only -->
 	      <fieldset id="timedisplay-type-selector" data-role="controlgroup" data-type="horizontal">
 		<legend>時間表示：</legend>
 		<input class="time-style-selector" id="real-time-style" name="time-style" type="radio" value="real-time-style" />
@@ -67,6 +68,7 @@
 		<label for="elapsed-time-style">経過時間</label>
 	      </fieldset>
 
+	      <!-- summary-graph only -->
 	      <div id="observer-selector">
 		<label for="select-observer" class="select">観察者：</label>
 		<select name="select-observer" id="select-observer">

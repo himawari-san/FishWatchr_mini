@@ -43,7 +43,7 @@ var lastAnnotationTime = 0;
 
 var histgramInterval = 60; // sec
 
-var selectedGraph = 'selector-type-graph'; // default graph
+var selectedGraph = 'selector-summary-graph'; // default graph
 var selectedAttribute = 'attribute-label';
 var selectedTimeStyle = 'real-time-style';
 var selectedObserver = 'all';
@@ -1321,7 +1321,7 @@ function drawGraph(){
     var iAttribute = selectedAttribute == 'attribute-speaker' ? fn_speaker : fn_label;
     var observerType = $("#select-observer").find('option:selected').val();
     
-    if(selectedGraph == 'selector-type-graph'|| selectedGraph == ""){
+    if(selectedGraph == 'selector-summary-graph'|| selectedGraph == ""){
 	// change ui
 	$("#range-slider").hide();
 	$("#timedisplay-type-selector").hide();
@@ -1555,7 +1555,7 @@ function drawGraph(){
 			return arrayColumns[0][x+1].replace(/(..)(..)(..)/,"$1:$2:$3") 
 			    + " (" + xTimes[x].replace(/(..)(..)(..)/,"$1:$2:$3") + ")";
 		    } else {
-			// selector-type-graph
+			// selector-summary-graph
 			return arrayColumns[0][x+1];
 		    }
 		}
