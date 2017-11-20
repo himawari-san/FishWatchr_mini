@@ -652,9 +652,12 @@ $(document).on('tap', '.graph-selector', function(event) {
     drawGraph();
 });
 
-
 $(document).on('change', '.attribute-selector', function(event) {
     selectedAttribute = event.target.id;
+    // change the value of attribute-selector-summary
+    $("#select-attribute")
+	.val(selectedAttribute)
+	.selectmenu('refresh');
     drawGraph();
 });
 
@@ -667,6 +670,28 @@ $(document).on('change', '.time-style-selector', function(event) {
 $(document).on('change', '#select-observer', function(event) {
     var selectedOption = $(this).find('option:selected');
     selectedObserver = selectedOption.val(); 
+    drawGraph();
+});
+
+$(document).on('change', '#attribute-selector-summary', function(event) {
+    var selectedOption = $(this).find('option:selected');
+    selectedAttribute = selectedOption.val();
+    // change the value of attribute-selector-timeline
+    if(selectedAttribute == "attribute-label"){
+	$("#attribute-observation-target")
+	    .prop("checked", false)
+	    .checkboxradio("refresh");
+	$("#attribute-label")
+	    .prop("checked", true)
+	    .checkboxradio("refresh");
+    } else {
+	$("#attribute-observation-target")
+	    .prop("checked", true)
+	    .checkboxradio("refresh");
+	$("#attribute-label")
+	    .prop("checked", false)
+	    .checkboxradio("refresh");
+    }
     drawGraph();
 });
 
@@ -1318,7 +1343,7 @@ function drawGraph(){
     var arrayColumns = [];
     var flagLegend = true;
     var chartType = "";
-    var iAttribute = selectedAttribute == 'attribute-speaker' ? fn_speaker : fn_label;
+    var iAttribute = selectedAttribute == 'attribute-label' ?  fn_label : fn_speaker;
     var observerType = $("#select-observer").find('option:selected').val();
     
     if(selectedGraph == 'selector-summary-graph'|| selectedGraph == ""){
@@ -1327,7 +1352,9 @@ function drawGraph(){
 	$("#timedisplay-type-selector").hide();
 	$("#label-timeRangeSlider").show();
 	$("#observer-selector").show();
-	    
+	$("#attribute-selector-summary").show();
+	$("#attribute-selector-timeline").hide();
+
 	// get all typeNames even if not in mergedAnnotationsCurrent
 	for(var i = 0; i < mergedAnnotations.length; i++){
 	    var value = mergedAnnotations[i][iAttribute];
@@ -1444,6 +1471,8 @@ function drawGraph(){
 	$("#label-timeRangeSlider").hide();
 	$("#timedisplay-type-selector").show();
 	$("#observer-selector").hide();
+	$("#attribute-selector-summary").hide();
+	$("#attribute-selector-timeline").show();
 
 	var x = ['x'];
 	var y = ['freq'];

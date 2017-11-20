@@ -50,12 +50,23 @@
 	<div class="ui-grid-solo ui-mini">
 	  <div class="ui-grid-a">
 	    <div class="ui-block-a">
-              <fieldset data-role="controlgroup" data-type="horizontal">
+	      <!-- summary-graph only -->
+	      <div id="attribute-selector-summary">
+		<label for="select-attribute" class="select">属性：</label>
+		<select name="select-attribute" id="select-attribute">
+		  <option value="attribute-label">ラベル</option>
+		  <option value="attribute-observation-target">話者</option>
+		  <option value="attribute-eval-average">評価（平均）</option>
+		</select>
+	      </div>
+
+	      <!-- timeline-graph only -->
+              <fieldset id="attribute-selector-timeline" data-role="controlgroup" data-type="horizontal">
 		<legend>属性：</legend>
 		<input class="attribute-selector" id="attribute-label" name="attribute" type="radio" value="label" />
 		<label for="attribute-label">ラベル</label>
-		<input class="attribute-selector" id="attribute-speaker" name="attribute" type="radio" value="speaker" />
-		<label for="attribute-speaker">話者</label>
+		<input class="attribute-selector" id="attribute-observation-target" name="attribute" type="radio" value="speaker" />
+		<label for="attribute-observation-target">話者</label>
               </fieldset>
 	    </div>
 	    <div class="ui-block-b">
