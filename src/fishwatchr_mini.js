@@ -371,13 +371,13 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	$("#selector2-observation-mode").val(annotationMode).selectmenu("refresh");
 
 	// update the url of the top page 
-	$("#link_to_top").prop("href", "m.html" + configUrlOption);
+	$("#link_to_top").prop("href", "index.html" + configUrlOption);
     } else if(ui.toPage.is('#home')){
 	timerID = setInterval(displayTime, timerInterval, "#current_time_home");
 	console.log("new timer:" + timerID);
 	annotationResults = [];
     } else if(ui.toPage.is('#graph')){
-	$("#link_to_top_graph").prop("href", "m.html" + configUrlOption);
+	$("#link_to_top_graph").prop("href", "index.html" + configUrlOption);
     }
 });
 
