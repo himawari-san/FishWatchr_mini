@@ -1431,7 +1431,7 @@ function drawGraph(){
 	    }
 	    var nUsers = Object.keys(tmpUsernames).length;
 	    for(var i = 0; i < typeNames.length; i++){
-		type[typeNames[i]]["others"] = (type[typeNames[i]]["others"] / nUsers).toFixed(2);
+		type[typeNames[i]]["others"] = (type[typeNames[i]]["others"] / (nUsers-1)).toFixed(2);
 	    }
 	    break;
 	case "all-comparison":
