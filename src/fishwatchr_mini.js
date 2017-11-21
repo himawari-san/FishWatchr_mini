@@ -1337,6 +1337,7 @@ function changeTimeStyle(){
 
 function drawGraph(){
     var type = {};
+    var nType = {};
     var typeNames = new Array();
     var observerTypes = [];
     var xTimes = [];
@@ -1366,6 +1367,7 @@ function drawGraph(){
 	// initialize type
 	for(var i = 0; i < typeNames.length; i++){
 	    type[typeNames[i]] = new Array();
+	    nType[typeNames[i]] = new Array();
 	    
 	    switch(observerType){
 	    case "all":
@@ -1390,25 +1392,26 @@ function drawGraph(){
 	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
 	    var value = mergedAnnotationsCurrent[i][iAttribute];
 	    var dataUsername = mergedAnnotations[i][fn_username];
-
+	    var label = mergedAnnotationsCurrent[i][fn_label];
+	    
 	    switch(observerType){
 	    case "all":
-		type[value]['all']++;
+		accumulate(type, value, 'all', label, nType);
 		break;
 	    case "user-only":
 		if(dataUsername == username){
-		    type[value]['user']++;
+		    accumulate(type, value, 'user', label, nType);
 		}
 		break;
 	    case "user-comparison":
 		if(dataUsername == username){
-		    type[value]['user']++;
+		    accumulate(type, value, 'user', label, nType);
 		} else {
-		    type[value]['others']++;
+		    accumulate(type, value, 'others', label, nType);
 		}
 		break;
 	    case "all-comparison":
-		type[value][dataUsername]++;
+		accumulate(type, value, dataUsername, label, nType);
 	    }
 	}
 
@@ -1460,7 +1463,11 @@ function drawGraph(){
 
 	    // observers
 	    for(var j = 0; j < observerTypes.length; j++){
-		arrayColumns[j+1].push(type[typeNames[i]][observerTypes[j]]);
+		if(selectedAttribute == "attribute-eval-average"){
+		    arrayColumns[j+1].push(type[typeNames[i]][observerTypes[j]] / nType[typeNames[i]][observerTypes[j]]);
+		} else {
+		    arrayColumns[j+1].push(type[typeNames[i]][observerTypes[j]]);
+		}
 	    }
 	}
 	flagLegend = false;
@@ -1612,4 +1619,24 @@ function drawGraph(){
 	    enabled: false
 	}
     });
+}
+
+
+function accumulate(array, p1, p2, val, nArray){
+    if(selectedAttribute == "attribute-eval-average"){
+	// abolish invalid data
+	if(isNaN(val)){
+	    return;
+	}
+
+	array[p1][p2] += Number(val);
+
+	if(p1 in nArray && p2 in nArray[p1]){
+	    nArray[p1][p2]++;
+	} else {
+	    nArray[p1][p2] = 1;
+	}
+    } else {
+	array[p1][p2]++;
+    }
 }
