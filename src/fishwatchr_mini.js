@@ -376,6 +376,8 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	timerID = setInterval(displayTime, timerInterval, "#current_time_home");
 	console.log("new timer:" + timerID);
 	annotationResults = [];
+	selectedAttribute = "attribute-label";
+	selectedGraph = "selector-summary-graph";
     } else if(ui.toPage.is('#graph')){
 	$("#link_to_top_graph").prop("href", "index.html" + configUrlOption);
     }
