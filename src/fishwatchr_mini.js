@@ -1466,7 +1466,7 @@ function drawGraph(){
 	    // observers
 	    for(var j = 0; j < observerTypes.length; j++){
 		if(selectedAttribute == "attribute-eval-average"){
-		    arrayColumns[j+1].push(type[typeNames[i]][observerTypes[j]] / nType[typeNames[i]][observerTypes[j]]);
+		    arrayColumns[j+1].push((type[typeNames[i]][observerTypes[j]] / nType[typeNames[i]][observerTypes[j]]).toFixed(2));
 		} else {
 		    arrayColumns[j+1].push(type[typeNames[i]][observerTypes[j]]);
 		}
