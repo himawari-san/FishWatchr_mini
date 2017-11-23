@@ -462,12 +462,16 @@ $(document).on('tap', '.btn-annotation', function(event) {
 	if(buttonID.indexOf("label") == -1) {
 	    tempAnnotationSpeaker = buttonText;
 	    return;
+	} else if(tempAnnotationSpeaker == "" || tempAnnotationSpeaker == "-"){
+	    return;
 	} else {
 	    tempAnnotationLabel = buttonText;
 	}
     } else if(annotationMode == "mode_label_speaker"){
 	if(buttonID.indexOf("speaker") == -1) {
 	    tempAnnotationLabel = buttonText;
+	    return;
+	} else if(tempAnnotationLabel == "" || tempAnnotationLabel == "-"){
 	    return;
 	} else {
 	    tempAnnotationSpeaker = buttonText;
