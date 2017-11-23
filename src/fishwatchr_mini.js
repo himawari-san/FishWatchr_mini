@@ -1348,6 +1348,7 @@ function drawGraph(){
     var chartType = "";
     var iAttribute = selectedAttribute == 'attribute-label' ?  fn_label : fn_speaker;
     var observerType = $("#select-observer").find('option:selected').val();
+    var maxEvaluationGrade = undefined;
     
     if(selectedGraph == 'selector-summary-graph'|| selectedGraph == ""){
 	// change ui
@@ -1358,11 +1359,19 @@ function drawGraph(){
 	$("#attribute-selector-summary").show();
 	$("#attribute-selector-timeline").hide();
 
-	// get all typeNames even if not in mergedAnnotationsCurrent
+	// initialize typeNames and maxEvaluationGrade
 	for(var i = 0; i < mergedAnnotations.length; i++){
 	    var value = mergedAnnotations[i][iAttribute];
 	    if(!typeNames.includes(value)){
 		typeNames.push(value);
+	    }
+
+	    if(selectedAttribute == "attribute-eval-average"){
+		var evaluationGrade = mergedAnnotations[i][fn_label];
+		if(maxEvaluationGrade == undefined
+		   ||  maxEvaluationGrade < evaluationGrade){
+		    maxEvaluationGrade = Number(evaluationGrade);
+		}
 	    }
 	}
 
@@ -1570,6 +1579,9 @@ function drawGraph(){
 	axis: {
 	    x: {
 		type: 'category',
+	    },
+	    y: {
+		max: maxEvaluationGrade,
 	    }
 	},
 	padding: {
