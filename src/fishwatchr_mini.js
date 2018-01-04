@@ -111,7 +111,7 @@ function loadSettings(url){
 	    $("#popupWarning").popup("open");
 	    return;
 	} else {
-	    groupname = data["groupname"];
+	    groupname = data["groupname"].replace(/^ +/, "").replace(/ +$/, "");
 	    $("#groupname").prop("value", groupname);
 	}
 	
@@ -389,9 +389,12 @@ $(document).on('pagecontainerbeforehide', function(event, ui){
 
     if(ui.prevPage.is('#home')){
 	// get username
-	username = $("#username").val();
+	username = $("#username").val().replace(/^ +/, "").replace(/ +$/, "");
+	$("#username").prop("value", username);
 	
 	// get groupname
+	groupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
+	$("#groupname").prop("value", groupname);
 	groupname = $("#groupname").val().replace(/\$$/, "");
 
 	// get vauels of speakers and labels
@@ -427,7 +430,9 @@ $(document).on('tap', '#btn-start', function(event) {
     startTime = new Date();
 
     // get username
-    username = $("#username").val();
+    username = $("#username").val().replace(/^ +/, "").replace(/ +$/, "");
+    $("#username").prop("value", username);
+    
     if(username == ""){
 	$("#popupWarning-message").text("ユーザ名を指定してください。");
 	$("#popupWarning").popup("open");
@@ -488,7 +493,9 @@ $(document).on('tap', '.btn-annotation', function(event) {
 
 // save settings
 $(document).on('tap', '#btn-save-settings', function(event) {
-    var trueGroupname = $("#groupname").val();
+    var trueGroupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
+    $("#groupname").prop("value", trueGroupname);
+
     if(trueGroupname.match(/\$$/)){
 	trueGroupname = trueGroupname.replace(/\$$/, "");
 	
@@ -561,7 +568,9 @@ $(document).on('tap', '#btn-get-basetime', function(event) {
     var newname = timeFilePrefix;
     var dummyResults = [];
 
-    var trueGroupname = $("#groupname").val();
+    var trueGroupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
+    $("#groupname").prop("value", trueGroupname);
+    
     if(trueGroupname.match(/\$$/)){
 	trueGroupname = trueGroupname.replace(/\$$/, "");
 	
@@ -595,6 +604,8 @@ $(document).on('tap', '#btn-get-basetime', function(event) {
 // draw charts
 $(document).on('tap', '#btn-show-graph', function(event) {
     thresholdOutlier = $("#threshold-outlier").val();
+    groupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
+    $("#groupname").prop("value", groupname);
     groupname = $("#groupname").val().replace(/\$$/, "");
 
     if(thresholdOutlier == ""){
@@ -719,7 +730,10 @@ function saveToServer(event){
     savename = savename.replace(":", "").replace("/", "_").replace(" ", "_");
 
     // get groupname
+    groupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
+    $("#groupname").prop("value", groupname);
     groupname = $("#groupname").val().replace(/\$$/, "");
+    
     if(groupname != "" && groupname.match(/^[A-Za-z0-9_]+$/) == null){
 	$("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
 	$("#popupWarning").popup("open");
@@ -780,6 +794,8 @@ function store(savename, groupname, fileType, dataBody){
 
 $(document).on('tap', '#btn-get-archive', function(event) {
     // get groupname
+    groupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
+    $("#groupname").prop("value", groupname);
     groupname = $("#groupname").val().replace(/\$$/, "");
 
     if(groupname == ""){
