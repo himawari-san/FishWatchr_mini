@@ -486,6 +486,10 @@ $(document).on('tap', '.btn-annotation', function(event) {
     annotation = tempAnnotationSpeaker + fseparator + tempAnnotationLabel + fseparator + elapsedTime + fseparator + currentTime + fseparator + username;
     annotationResults.push(annotation);
     displayResults();
+    // blink the button
+    $("#" + buttonID).fadeOut(100, function(){
+	$(this).fadeIn(100);
+    });
     tempAnnotationSpeaker = "-";
     tempAnnotationLabel = "-";
 });
