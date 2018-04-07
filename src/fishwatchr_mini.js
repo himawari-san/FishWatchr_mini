@@ -1365,6 +1365,7 @@ function drawGraph(){
     var type = {};
     var nType = {};
     var typeNames = new Array();
+    var typeNames2 = new Array();
     var observerTypes = [];
     var xTimes = [];
     var arrayColumns = [];
@@ -1383,11 +1384,22 @@ function drawGraph(){
 	$("#attribute-selector-summary").show();
 	$("#attribute-selector-timeline").hide();
 
+	var iAttribute2;
+	if(selectedAttribute == 'attribute-label'){
+	    iAttribute2 = fn_speaker;
+	} else {
+	    iAttribute2 = fn_label;
+	}
+
 	// initialize typeNames and maxEvaluationGrade
 	for(var i = 0; i < mergedAnnotations.length; i++){
 	    var value = mergedAnnotations[i][iAttribute];
 	    if(!typeNames.includes(value)){
 		typeNames.push(value);
+	    }
+	    var value2 = mergedAnnotations[i][iAttribute2];
+	    if(!typeNames2.includes(value2)){
+		typeNames2.push(value2);
 	    }
 
 	    if(selectedAttribute == "attribute-eval-average"){
@@ -1399,6 +1411,10 @@ function drawGraph(){
 	    }
 	}
 
+	// sort typeNames to maintain the same order any time
+	typeNames.sort();
+	typeNames2.sort();
+
 	// initialize type
 	for(var i = 0; i < typeNames.length; i++){
 	    type[typeNames[i]] = new Array();
@@ -1406,10 +1422,10 @@ function drawGraph(){
 	    
 	    switch(observerType){
 	    case "all":
-		type[typeNames[i]]['all'] = 0;
-		break;
 	    case "user-only":
-		type[typeNames[i]]['user'] = 0;
+		for(var j = 0; j < typeNames2.length; j++){
+		    type[typeNames[i]][typeNames2[j]] = 0;
+		}
 		break;
 	    case "user-comparison":
 		type[typeNames[i]]['user'] = 0;
@@ -1422,20 +1438,21 @@ function drawGraph(){
 		}
 	    }
 	}
-	
+
 	// count frequency
 	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
 	    var value = mergedAnnotationsCurrent[i][iAttribute];
+	    var value2 = mergedAnnotationsCurrent[i][iAttribute2];
 	    var dataUsername = mergedAnnotations[i][fn_username];
 	    var label = mergedAnnotationsCurrent[i][fn_label];
 	    
 	    switch(observerType){
 	    case "all":
-		accumulate(type, value, 'all', label, nType);
+		accumulate(type, value, value2, label, nType);
 		break;
 	    case "user-only":
 		if(dataUsername == username){
-		    accumulate(type, value, 'user', label, nType);
+		    accumulate(type, value, value2, label, nType);
 		}
 		break;
 	    case "user-comparison":
@@ -1480,15 +1497,19 @@ function drawGraph(){
 	    observerTypes.sort();
 	}
 	
-	// sort typeNames to maintain the same order any time
-	typeNames.sort();
-	
 	// prepare row names of arrayColumns
 	arrayColumns[0] = new Array();
 	arrayColumns[0].push('x');
-	for(var i = 0; i < observerTypes.length; i++){
-	    arrayColumns[i+1] = new Array();
-	    arrayColumns[i+1].push(observerTypes[i]);
+	if(observerType == "all" || observerType == "user-only"){
+	    for(var i = 0; i < typeNames2.length; i++){
+		arrayColumns[i+1] = new Array();
+		arrayColumns[i+1].push(typeNames2[i]);
+	    }
+	} else {
+	    for(var i = 0; i < observerTypes.length; i++){
+		arrayColumns[i+1] = new Array();
+		arrayColumns[i+1].push(observerTypes[i]);
+	    }
 	}
 
 	// construct arrayColumns
@@ -1497,11 +1518,17 @@ function drawGraph(){
 	    arrayColumns[0].push(typeNames[i]);
 
 	    // observers
-	    for(var j = 0; j < observerTypes.length; j++){
-		if(selectedAttribute == "attribute-eval-average"){
-		    arrayColumns[j+1].push((type[typeNames[i]][observerTypes[j]] / nType[typeNames[i]][observerTypes[j]]).toFixed(2));
-		} else {
-		    arrayColumns[j+1].push(type[typeNames[i]][observerTypes[j]]);
+	    if(observerType == "all" || observerType == "user-only"){
+		for(var j = 0; j < typeNames2.length; j++){
+		    arrayColumns[j+1].push(type[typeNames[i]][typeNames2[j]]);
+		}
+	    } else {
+		for(var j = 0; j < observerTypes.length; j++){
+		    if(selectedAttribute == "attribute-eval-average"){
+			arrayColumns[j+1].push((type[typeNames[i]][observerTypes[j]] / nType[typeNames[i]][observerTypes[j]]).toFixed(2));
+		    } else {
+			arrayColumns[j+1].push(type[typeNames[i]][observerTypes[j]]);
+		    }
 		}
 	    }
 	}
@@ -1598,7 +1625,9 @@ function drawGraph(){
 	    type: chartType,
 	    types: {
 		freq: 'bar'
-	    }
+	    },
+	    groups: [typeNames2],
+	    order: null
 	},
 	axis: {
 	    x: {
