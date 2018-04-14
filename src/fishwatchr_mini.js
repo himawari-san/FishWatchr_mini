@@ -380,6 +380,7 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	selectedGraph = "selector-summary-graph";
     } else if(ui.toPage.is('#graph')){
 	$("#link_to_top_graph").prop("href", "m.html" + configUrlOption);
+	$("#graph_body").disableSelection();
     }
 });
 
