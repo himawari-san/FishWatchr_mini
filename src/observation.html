@@ -9,6 +9,9 @@
     <script src="jquery.min.js"></script>
     <script src="jquery.mobile.min.js"></script>
     <script src="shortcut.js"></script>
+    <script src="jquery.i18n.js"></script>
+    <script src="jquery.i18n.messagestore.js"></script>
+    <script src="jquery.i18n.fallbacks.js"></script>
     <script src="fishwatchr_mini.js"></script>
   </head>
   <body>
@@ -26,10 +29,10 @@
 	  </div>
 	  <div class="ui-body">
 	    <select id="selector2-observation-mode" data-mini="true">
-              <option value="mode_speaker">観察モード：対象</option>
-              <option value="mode_label">観察モード：ラベル</option>
-              <option value="mode_speaker_label">観察モード：対象⇒ラベル</option>
-              <option value="mode_label_speaker">観察モード：ラベル⇒対象</option>
+              <option value="mode_speaker" data-i18n="fwm-m-tab-buttons-mode-target">観察モード：対象</option>
+              <option value="mode_label" data-i18n="fwm-m-tab-buttons-mode-label">観察モード：ラベル</option>
+              <option value="mode_speaker_label" data-i18n="fwm-m-tab-buttons-mode-target_label">観察モード：対象⇒ラベル</option>
+              <option value="mode_label_speaker" data-i18n="fwm-m-tab-buttons-mode-label_target">観察モード：ラベル⇒対象</option>
 	    </select>
 	  </div>
 	</fieldset>
@@ -39,17 +42,17 @@
 	<div class="box_result ui-body-c ui-corner-all ui-mini">
 	  <ul data-role="listview" data-split-icon="delete" data-split-theme="a" data-inset="true">
 	    <li>
-	      <a href="#" ><span id="disp1">（直近のアノテーション - なし）</span></a>
+	      <a href="#" ><span id="disp1" data-i18n="fwm-no-annotation-data">（直近のアノテーション - なし）</span></a>
 	      <a href="#"  class="disp-button-delete ui-button" id="disp-button1">test</a>
 	    </li>
 	    <li>
-	      <a href="#" ><span id="disp2">（直近のアノテーション - なし）</span></a>
+	      <a href="#" ><span id="disp2" data-i18n="fwm-no-annotation-data">（直近のアノテーション - なし）</span></a>
 	      <a href="#"  class="disp-button-delete ui-button" id="disp-button2">test</a>
 	    </li>
 	  </ul>
 	</div>
 	<div class="box_button ui-body">
-	  <a id="link_to_top" data-role="button" data-corners="true" href="m.html" data-icon="star">終了</a>
+	  <a id="link_to_top" data-role="button" data-corners="true" href="m.html" data-icon="star" data-i18n="fwm-observation-button-finish" >終了</a>
 	</div>
       </div>
       <div data-role="footer">

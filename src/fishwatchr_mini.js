@@ -73,7 +73,7 @@ $(document).ready(function(){
 	    return;
 	}
 	if($("#urlSettings").val() == ""){
-	    $("#popupWarning-message").text("URLを指定してください。");
+	    $("#popupWarning-message").text($.i18n("fwm-message-specify-url"));
 	    $("#popupWarning").popup("open");
 	} else {
 	    urlSettings = $("#urlSettings").val();
@@ -107,7 +107,7 @@ function loadSettings(url){
     }).done(function(data) {
 	// read groupname
 	if(!checkGroupname(data["groupname"])){
-	    $("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+	    $("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
 	    $("#popupWarning").popup("open");
 	    return;
 	} else {
@@ -154,7 +154,7 @@ function loadSettings(url){
 	$("#threshold-outlier").prop("value", thresholdOutlier);
 	
     }).fail(function (jqXHR, textStatus, error){
-	$("#popupWarning-message").text("設定の読み込みに失敗しました。\n"+ textStatus + ", " + error);
+	$("#popupWarning-message").text($.i18n("") + "\n"+ textStatus + ", " + error);
 	$("#popupWarning").popup("open");
 	console.log("fail!!");
     }).always(function(){
@@ -265,6 +265,45 @@ $(document).on('pagecontainershow', function(event, ui){
 	$("#" + selectedTimeStyle).prop("checked", true).checkboxradio("refresh");
     }
 });
+
+$(document).on('pagebeforecreate', function(event, ui){
+    $.i18n( {
+	locale: 'ja'
+    } );
+
+    $.i18n().load( {
+	ja: 'i18n/ja.json',
+	en: 'i18n/en.json',
+    }).done( function() {
+        $('#home').i18n();
+        $('#observation').i18n();
+        $('#graph').i18n();
+
+	$("#groupname").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
+	$("#username").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
+	$("#username").prop("placeholder", $.i18n("fwm-m-label-placeholder"));
+	$("#label1").val($.i18n("fwm-m-button-label") + "1");
+	$("#label2").val($.i18n("fwm-m-button-label") + "2");
+	$("#speaker1").val($.i18n("fwm-m-button-target") + "1");
+	$("#speaker2").val($.i18n("fwm-m-button-target") + "2");
+	for(i = 1; i <= 8; i++){
+	    $("#label" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
+	    $("#speaker" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
+	    $("#label" + i).prop("placeholder", $.i18n("fwm-m-button-label"));
+	    $("#speaker" + i).prop("placeholder", $.i18n("fwm-m-button-target"));
+	}
+	// refresh selector
+	$("#selector1-observation-mode").selectmenu('refresh');
+	$("#selector2-observation-mode").selectmenu('refresh');
+	$("#selector-data-handling").selectmenu('refresh');
+	$("#select-attribute").selectmenu('refresh');
+	$("#select-observer").selectmenu('refresh');
+    } ).fail(function (jqXHR, textStatus, error){
+	console.log('fail1!');
+    });
+});
+
+
 
 // pagecontainerbeforeshow
 $(document).on('pagecontainerbeforeshow', function(event, ui){
@@ -435,13 +474,13 @@ $(document).on('tap', '#btn-start', function(event) {
     $("#username").prop("value", username);
     
     if(username == ""){
-	$("#popupWarning-message").text("ユーザ名を指定してください。");
+	$("#popupWarning-message").text($.i18n("fwm-message-username-error"));
 	$("#popupWarning").popup("open");
 	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	return false;
 //    } else if(username.match(/[\s!-\/:-@\[-\^`\{-~]/)){
     } else if(username.match(/^[A-Za-z0-9_]+$/) == null){
-	$("#popupWarning-message").text("ユーザ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+	$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
 	$("#popupWarning").popup("open");
 	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	return false;
@@ -505,12 +544,12 @@ $(document).on('tap', '#btn-save-settings', function(event) {
 	trueGroupname = trueGroupname.replace(/\$$/, "");
 	
 	if(!checkGroupname(trueGroupname)){
-	    $("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+	    $("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
 	    $("#popupWarning").popup("open");
 	    return false;
 	}
     } else {
-	$("#popupWarning-message").text("この機能は，管理者のみが実行できます。");
+	$("#popupWarning-message").text($.i18n("fwm-message-permission-error"));
 	$("#popupWarning").popup("open");
 	return false;
     }
@@ -549,16 +588,22 @@ $(document).on('tap', '#btn-save-settings', function(event) {
 	var error = response.error;
 
 	if(error == "already_exists") {
-	    $("#popup-title").text("エラー");
-	    $("#popup-message-body").html("<p>このグループの設定はすでに<a href=\"" + url + "\"  target=\"_blank\">登録</a>されています。別のグループ名を付けてください。</p>");
+	    $("#popup-title").text($.i18n("fwm-m-title-error"));
+	    $("#popup-message-body").html("<p>" + $.i18n("fwm-message-group-already-exist-error") + "</p>");
 	    $("#popup-message").popup("open");
 	} else if(error == "fail_to_copy" || error == "fail_to_save") {
-	    $("#popup-title").text("エラー");
-	    $("#popup-message-body").html("<p>サーバ側でエラー" + error + "が発生しました。</p>");
+	    $("#popup-title").text($.i18n("fwm-m-title-error"));
+	    $("#popup-message-body").html("<p>"
+		  + $.i18n("fwm-message-server-error")
+		  + "<br />"
+		  + error + "</p>");
 	    $("#popup-message").popup("open");
 	} else {
-	    $("#popup-title").text("保存完了");
-	    $("#popup-message-body").html("<p>設定ファイルは，<a href=\"" + url + "\"  target=\"_blank\">サーバ上</a>に保存されました。</p>");
+	    $("#popup-title").text($.i18n("fwm-js-title-save-complete"));
+	    $("#popup-message-body").html("<p>"
+		  + $.i18n("fwm-message-config-save-complete")
+		  + " (<a href=\"" + url + "\" target=\"_blank\">URL</a>)"
+		  + "</p>");
 	    $("#popup-message").popup("open");
 	}
     }).fail(function (jqXHR, textStatus, error){
@@ -580,7 +625,7 @@ $(document).on('tap', '#btn-get-basetime', function(event) {
 	trueGroupname = trueGroupname.replace(/\$$/, "");
 	
 	if(!checkGroupname(trueGroupname)){
-	    $("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+	    $("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
 	    $("#popupWarning").popup("open");
 	    return false;
 	} else {
@@ -588,7 +633,7 @@ $(document).on('tap', '#btn-get-basetime', function(event) {
 	    cBaseTime++;
 	}
     } else {
-	$("#popupWarning-message").text("この機能は，管理者のみが実行できます。");
+	$("#popupWarning-message").text($.i18n("fwm-message-permission-error"));
 	$("#popupWarning").popup("open");
 	return false;
     }
@@ -616,12 +661,12 @@ $(document).on('tap', '#btn-show-graph', function(event) {
     if(thresholdOutlier == ""){
 	thresholdOutlier = Number.MAX_VALUE;
     } else if(isNaN(thresholdOutlier) || thresholdOutlier < 0){
-	$("#popupWarning-message").text("０より大きい値を指定してください。");
+	$("#popupWarning-message").text($.i18n("fwm-message-invalid-threshold-error"));
 	$("#popupWarning").popup("open");
 	$("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
 	return false;
     } else if(!checkGroupname(groupname)){
-	$("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+	$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
 	$("#popupWarning").popup("open");
 	$("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
 	return false;
@@ -740,7 +785,7 @@ function saveToServer(event){
     groupname = $("#groupname").val().replace(/\$$/, "");
     
     if(groupname != "" && groupname.match(/^[A-Za-z0-9_]+$/) == null){
-	$("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+	$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
 	$("#popupWarning").popup("open");
 	return false;
     }
@@ -804,11 +849,11 @@ $(document).on('tap', '#btn-get-archive', function(event) {
     groupname = $("#groupname").val().replace(/\$$/, "");
 
     if(groupname == ""){
-	$("#popupWarning-message").text("グループ名を指定してください。");
+	$("#popupWarning-message").text("fwm-message-no-groupname-error");
 	$("#popupWarning").popup("open");
 	return false;
     } else if(groupname.match(/^[A-Za-z0-9_]+$/) == null){
-	$("#popupWarning-message").text("グループ名は，数字・アルファベット・アンダーバーのみで構成してください。");
+	$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
 	$("#popupWarning").popup("open");
 	return false;
     }
@@ -1054,7 +1099,7 @@ function displayResults(){
 
     for(var i = 1; i <= nDisp; i++){
 	if(p < 0){
-	    $("#disp" + i).text("（直近のアノテーション - なし）");
+	    $("#disp" + i).text($.i18n("fwm-no-annotation-data"));
 	} else {
 	    $("#disp" + i).text(annotationResults[p--]);
 	}

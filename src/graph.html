@@ -10,6 +10,9 @@
     <script src="jquery.min.js"></script>
     <script src="jquery.mobile.min.js"></script>
     <script src="d3.min.js" charset="utf-8"></script>
+    <script src="jquery.i18n.js"></script>
+    <script src="jquery.i18n.messagestore.js"></script>
+    <script src="jquery.i18n.fallbacks.js"></script>
     <script src="fishwatchr_mini.js"></script>
     <script src="c3.min.js"></script>
     <link href="c3.min.css" rel="stylesheet" />
@@ -19,8 +22,8 @@
       <div data-role="main" class="ui-content" >
 	<div data-role="navbar">
 	  <ul>
-	    <li><a id="selector-summary-graph" class="graph-selector ui-btn-active" href="#">属性別</a></li>
-	    <li><a id="selector-timeline-graph" class="graph-selector" href="#">時間</a></li>
+	    <li><a id="selector-summary-graph" class="graph-selector ui-btn-active" href="#" data-i18n="fwm-m-graph-tab-style-attribute">属性別</a></li>
+	    <li><a id="selector-timeline-graph" class="graph-selector" href="#" data-i18n="fwm-m-graph-tab-style-time">時間</a></li>
 	  </ul>
 	</div>
 	<!-- graph -->
@@ -28,13 +31,13 @@
 
 	<!-- scale slider in summary-graph only -->
 	<div id="range-slider">
-	  <label for="slider-1">区間幅(sec)／表示範囲</label>
+	  <label for="slider-1" data-i18n="fwm-m-graph-interval-range">区間幅(sec)／表示範囲</label>
 	  <input type="range" name="slider-1" id="slider-1" value="60" min="15" max="300" step="5" readonly="true" />
 	</div>
 	
 	<!-- range slider -->
 	<!-- this div is based on http://jsfiddle.net/ezanker/fu26u/204/ -->
-	<div id="label-timeRangeSlider">表示範囲</div>  <!-- summary-graph only -->
+	<div id="label-timeRangeSlider" data-i18n="fwm-m-graph-time-range">表示範囲</div>  <!-- summary-graph only -->
         <div class="timeRangeSlider" style="position:relative">
           <div id="theTimeRange" class="time-slider" data-role="rangeslider" style="position:relative;">
             <label for="time1" style="display:none">Time Range:</label>
@@ -52,41 +55,41 @@
 	    <div class="ui-block-a">
 	      <!-- summary-graph only -->
 	      <div id="attribute-selector-summary">
-		<label for="select-attribute" class="select">属性：</label>
+		<label for="select-attribute" class="select" data-i18n="fwm-m-graph-attributes">属性：</label>
 		<select name="select-attribute" id="select-attribute">
-		  <option value="attribute-label">ラベル</option>
-		  <option value="attribute-observation-target">対象</option>
-		  <option value="attribute-eval-average">評価（平均）</option>
+		  <option value="attribute-label" data-i18n="fwm-m-graph-attribute-label">ラベル</option>
+		  <option value="attribute-observation-target" data-i18n="fwm-m-graph-attribute-target">対象</option>
+		  <option value="attribute-eval-average" data-i18n="fwm-m-graph-attribute-evaluation">評価（平均）</option>
 		</select>
 	      </div>
 
 	      <!-- timeline-graph only -->
               <fieldset id="attribute-selector-timeline" data-role="controlgroup" data-type="horizontal">
-		<legend>属性：</legend>
+		<legend data-i18n="fwm-m-graph-attributes">属性：</legend>
 		<input class="attribute-selector" id="attribute-label" name="attribute" type="radio" value="label" />
-		<label for="attribute-label">ラベル</label>
+		<label for="attribute-label" data-i18n="fwm-m-graph-attribute-label">ラベル</label>
 		<input class="attribute-selector" id="attribute-observation-target" name="attribute" type="radio" value="speaker" />
-		<label for="attribute-observation-target">対象</label>
+		<label for="attribute-observation-target" data-i18n="fwm-m-graph-attribute-target">対象</label>
               </fieldset>
 	    </div>
 	    <div class="ui-block-b">
 	      <!-- timeline-graph only -->
 	      <fieldset id="timedisplay-type-selector" data-role="controlgroup" data-type="horizontal">
-		<legend>時間表示：</legend>
+		<legend data-i18n="fwm-m-tab-chart-time-style">時間表示：</legend>
 		<input class="time-style-selector" id="real-time-style" name="time-style" type="radio" value="real-time-style" />
-		<label for="real-time-style">　時刻　</label>
+		<label for="real-time-style" data-i18n="fwm-button-time-style-clock">　時刻　</label>
 		<input class="time-style-selector" id="elapsed-time-style" name="time-style" type="radio" value="elapsed-time-style" />
-		<label for="elapsed-time-style">経過時間</label>
+		<label for="elapsed-time-style" data-i18n="fwm-button-time-style-elapsed">経過時間</label>
 	      </fieldset>
 
 	      <!-- summary-graph only -->
 	      <div id="observer-selector">
-		<label for="select-observer" class="select">観察者：</label>
+		<label for="select-observer" class="select" data-i18n="fwm-graph-observers">観察者：</label>
 		<select name="select-observer" id="select-observer">
-		  <option value="all">全観察者（合計）</option>
-		  <option value="user-only">本人</option>
-		  <option value="user-comparison">本人／全観察者</option>
-		  <option value="all-comparison">全観察者（比較）</option>
+		  <option value="all" data-i18n="fwm-graph-observers-all-sum">全観察者（合計）</option>
+		  <option value="user-only" data-i18n="fwm-graph-observers-self">本人</option>
+		  <option value="user-comparison" data-i18n="fwm-graph-observers-self-others">本人／他の観察者</option>
+		  <option value="all-comparison" data-i18n="fwm-graph-observers-every-observer">全観察者（比較）</option>
 		</select>
 	      </div>
 	    </div>
@@ -94,7 +97,7 @@
 	</div>
 	
 	<div class="box_button ui-body">
-	  <a id="link_to_top_graph" data-role="button" data-corners="true" href="m.html" data-icon="star">戻る</a>
+	  <a id="link_to_top_graph" data-role="button" data-corners="true" href="m.html" data-icon="star" data-i18n="fwm-graph-button-back">戻る</a>
 	</div>
       </div>
       <div data-role="footer">

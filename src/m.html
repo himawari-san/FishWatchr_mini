@@ -11,7 +11,17 @@
     <script src="jquery.min.js"></script>
     <script src="jquery.mobile.min.js"></script>
     <script src="d3.min.js" charset="utf-8"></script>
+    <script src="c3.min.js"></script>
     <script src="shortcut.js"></script>
+    <script src="jquery.i18n.js"></script>
+    <script src="jquery.i18n.messagestore.js"></script>
+    <script src="jquery.i18n.fallbacks.js"></script>
+<!--
+    <script src="jquery.i18n.emitter.js"></script>
+    <script src="jquery.i18n.language.js"></script>
+    <script src="jquery.i18n.emitter.bidi.js"></script>
+    <script src="jquery.i18n.parser.js"></script>
+-->
     <script src="fishwatchr_mini.js"></script>
     <script src="c3.min.js"></script>
     <link href="c3.min.css" rel="stylesheet" />
@@ -24,23 +34,23 @@
       </div>
       <div data-role="main" class="ui-content">
 	<div class="time">
-	  現在時刻：<span id="current_time_home">Processing ...</span>
+	  <span data-i18n="fwm-m-time">現在時刻： </span><span id="current_time_home"><span data-i18n="fwm-m-processing">Processing ...</span></span>
 	</div>
 	<div style="padding-top:10px; padding-bottom:10px">
-	  <a data-role="button" id="btn-start" href="observation.html" data-icon="star">観察開始！</a>
+	  <a data-role="button" id="btn-start" href="observation.html" data-icon="star" data-i18n="fwm-m-start-observation">観察開始！</a>
 	</div>
 	<div data-role="tabs" id="tabs" data-mini="true" class="ui-body-a">
 	  <div data-role="navbar">
 	    <ul>
-	      <li><a id="username-tab" href="#username-panel" data-ajax="false">ユーザ名</a></li>
-	      <li><a id="annotation-tab" href="#annotation-panel" data-ajax="false">ボタン</a></li>
-	      <li><a id="chart-tab" href="#chart-panel" data-ajax="false">グラフ</a></li>
-	      <li><a id="data-tab" href="#data-panel" data-ajax="false">データ</a></li>
+	      <li><a id="username-tab" href="#username-panel" data-ajax="false" data-i18n="fwm-m-tab-user">ユーザ名</a></li>
+	      <li><a id="annotation-tab" href="#annotation-panel" data-ajax="false" data-i18n="fwm-m-tab-button">ボタン</a></li>
+	      <li><a id="chart-tab" href="#chart-panel" data-ajax="false" data-i18n="fwm-m-tab-chart">グラフ</a></li>
+	      <li><a id="data-tab" href="#data-panel" data-ajax="false" data-i18n="fwm-m-tab-data">データ</a></li>
 	    </ul>
 	  </div>
 	  <div id="username-panel" class="ui-body ui-content ui-mini">
 	    <div class="ui-field-contain">
-	      <label for="username">ユーザ名：</label>
+	      <label for="username" data-i18n="fwm-m-tab-user-username">ユーザ名：</label>
 	      <input id="username" name="username" type="text"
 		     data-clear-btn="true" data-clear-btn-text="クリア"
 		     placeholder="Your username"
@@ -48,26 +58,26 @@
 	    </div>
 	    <div class="ui-body ui-body-a">
 	      <div class="ui-field-contain">
-		<label for="groupname">グループ名：</label>
+		<label for="groupname" data-i18n="fwm-m-tab-user-groupname">グループ名：</label>
 		<input id="groupname" name="groupname" type="text"
 		       data-clear-btn="true" data-clear-btn-text="クリア"
 		       placeholder=""
 		       value="" />
 	      </div>
 	      <div class="ui-field-contain">
-		<label for="option-file">設定ファイル：</label>
-		<a href="#popup-set-url" id="btn-load-settings" data-rel="popup" data-history="false" class="ui-btn uis-shadow ui-corner-all ui-btn-inline ui-icon-gear ui-btn-icon-left" data-position-to="window">(未入力)</a>
-		<a id="btn-save-settings" class="ui-input-btn  ui-btn-inline ui-btn ui-icon-edit ui-btn-icon-right ui-corner-all" href="#">保存</a>
+		<label for="option-file" data-i18n="fwm-m-tab-user-configfile">設定ファイル：</label>
+		<a href="#popup-set-url" id="btn-load-settings" data-rel="popup" data-history="false" class="ui-btn uis-shadow ui-corner-all ui-btn-inline ui-icon-gear ui-btn-icon-left" data-position-to="window" data-i18n="fwm-m-tab-user-empty-value">(未入力)</a>
+		<a id="btn-save-settings" class="ui-input-btn  ui-btn-inline ui-btn ui-icon-edit ui-btn-icon-right ui-corner-all" href="#" data-i18n="fwm-m-tab-user-save-button">保存</a>
 	      </div>
 	    </div>
 	  </div>
 	  <div id="annotation-panel" class="ui-body-d ui-content">
 	    <div class="ui-field-contain">
 	      <select id="selector1-observation-mode" name="selector1-observation-mode" data-mini="true">
-		<option value="mode_speaker">観察モード：対象</option>
-		<option value="mode_label">観察モード：ラベル</option>
-		<option value="mode_speaker_label">観察モード：対象⇒ラベル</option>
-		<option value="mode_label_speaker">観察モード：ラベル⇒対象</option>
+		<option value="mode_speaker" data-i18n="fwm-m-tab-buttons-mode-target">観察モード：対象</option>
+		<option value="mode_label" data-i18n="fwm-m-tab-buttons-mode-label">観察モード：ラベル</option>
+		<option value="mode_speaker_label" data-i18n="fwm-m-tab-buttons-mode-target_label">観察モード：対象⇒ラベル</option>
+		<option value="mode_label_speaker" data-i18n="fwm-m-tab-buttons-mode-label_target">観察モード：ラベル⇒対象</option>
 	      </select>
 	    </div>
 	    <div class="ui-grid-a">
@@ -194,19 +204,19 @@
 	  </div>
 
 	  <div id="chart-panel" class="ui-body ui-content ui-corner-all ui-mini">
-	    <a data-role="button" id="btn-show-graph" href="graph.html">グラフ表示</a>
+	    <a data-role="button" id="btn-show-graph" href="graph.html" data-i18n="fwm-m-tab-chart-execute">グラフ表示</a>
 	    <div class="ui-body ui-body-a">
 	      <div class="ui-field-contain">
-		<label for="threshold-outlier" title="アノテーション間がこの値を超える場合，外れ値検出の基準となります。">外れ値検出(sec)：</label>
+		<label for="threshold-outlier" data-i18n="fwm-m-tab-chart-outlier">外れ値検出(sec)：</label>
 		<input type="text" name="threshold-outlier" id="threshold-outlier" value="1800" placeholder="(sec)" />
 	      </div>
 	      <div class="ui-field-contain">
 		<fieldset data-role="controlgroup" data-type="horizontal">
-		  <legend>時間表示：</legend>
+		  <legend data-i18n="fwm-m-tab-chart-time-style">時間表示：</legend>
 		  <input class="time-style-selector" id="real-time-style-home" name="time-style-home" type="radio" value="real-time-style" />
-		  <label for="real-time-style-home">　時刻　</label>
+		  <label for="real-time-style-home" data-i18n="fwm-button-time-style-clock">　時刻　</label>
 		  <input class="time-style-selector" id="elapsed-time-style-home" name="time-style-home" type="radio" value="elapsed-time-style" />
-		  <label for="elapsed-time-style-home">経過時間</label>
+		  <label for="elapsed-time-style-home" data-i18n="fwm-button-time-style-elapsed">経過時間</label>
 		</fieldset>
 	      </div>
 	    </div>
@@ -214,33 +224,33 @@
 	  
 	  <div id="data-panel" class="ui-body-d ui-content ui-corner-all ui-mini">
 	    <ul id="savename-list" data-role="listview" data-split-icon="action" data-split-theme="a" data-inset="true">
-	      <li>（保存データ - なし）</li>
+	      <li data-i18n="fwm-no-saved-data">（保存データ - なし）</li>
 	    </ul>
 
 	    <div class="ui-body ui-body-a">
-	      <div class="ui-field-contain ui-hide-label">
-		<label for="selector-data-handling">処理：</label>
+	      <div class="ui-field-contain">
+		<label for="selector-data-handling" data-i18n="fwm-tab-data-processing-type">処理：</label>
 		<select name="selector-data-handling" id="selector-data-handling">
-		  <option value="print-as-tsv">表示(Text)</option>
-		  <option value="print-as-xml">表示(XML)</option>
-		  <option value="save-as-tsv" id="selector-download-tsv">ダウンロード(Text)</option>
-		  <option value="save-as-xml" id="selector-download-xml">ダウンロード(XML)</option>
-		  <option value="save-to-server">サーバ保存</option>
+		  <option value="print-as-tsv" data-i18n="fwm-m-print-in-text-style">表示(Text)</option>
+		  <option value="print-as-xml" data-i18n="fwm-m-print-in-xml-style">表示(XML)</option>
+		  <option value="save-as-tsv" id="selector-download-tsv" data-i18n="fwm-m-download-in-text-style">ダウンロード(Text)</option>
+		  <option value="save-as-xml" id="selector-download-xml" data-i18n="fwm-m-download-in-xml-style">ダウンロード(XML)</option>
+		  <option value="save-to-server" data-i18n="fwm-m-save-to-server">サーバ保存</option>
 		</select>
 	      </div>
 	      <div class="ui-field-contain">
-		<label for="flip-auto-save">オートセーブ：</label>
+		<label for="flip-auto-save" data-i18n="fwm-m-tab-data-autosave">オートセーブ：</label>
 		<select name="flip-auto-save" id="flip-auto-save" data-role="flipswitch">
-		  <option id="flip-auto-save-off" value="off" selected="">Off</option>
-		  <option id="flip-auto-save-on" value="on">On</option>
+		  <option id="flip-auto-save-off" value="off" selected="" data-i18n="fwm-m-tab-data-autosave-off">Off</option>
+		  <option id="flip-auto-save-on" value="on" data-i18n="fwm-m-tab-data-autosave-on">On</option>
 		</select>
 	      </div>
 	      <div class="ui-grid-a">
 		<div class="ui-block-a">
-		  <a id="btn-get-archive" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-right ui-corner-all" href="#">グループ結果</a>
+		  <a id="btn-get-archive" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-right ui-corner-all" href="#" data-i18n="fwm-m-tab-data-group-results">グループ結果</a>
 		</div>
 		<div class="ui-block-b">
-		  <a id="btn-get-basetime" class="ui-input-btn ui-btn ui-icon-edit ui-btn-icon-right ui-corner-all" href="#">時間記録</a>
+		  <a id="btn-get-basetime" class="ui-input-btn ui-btn ui-icon-edit ui-btn-icon-right ui-corner-all" href="#" data-i18n="fwm-m-tab-data-record-time">時間記録</a>
 		</div>
 	      </div>
 	    </div>
@@ -249,8 +259,8 @@
 	
 	<div data-role="popup" id="popupWarning" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;">
 	  <div data-role="header">
-	    <h3>エラー</h3>
-	    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+	    <h3 data-i18n="fwm-m-title-error">エラー</h3>
+	    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" data-i18n="fwm-m-button-close">閉じる</a>
 	  </div>
 	  <div role="main" class="ui-content">
 	    <p id="popupWarning-message"></p>
@@ -259,43 +269,43 @@
 
 	<div data-role="popup" id="popupURL" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;">
 	  <div data-role="header">
-	    <h3>結果データ</h3>
-	    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+	    <h3 data-i18n="fwm-m-title-result-data">結果データ</h3>
+	    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" data-i18n="fwm-m-button-close">閉じる</a>
 	  </div>
 	  <div role="main" class="ui-content">
-	    <p>観察結果は，FishWatchr mini のサイトに保存されました。次のリンク（<a href="#" id="resultDataURLText" target="_blank">Text形式</a>，<a href="#" id="resultDataURLXML" target="_blank">XML形式</a>）からダウンロードしてください。このリンクは，約180日有効です。</p>
+	    <p><span data-i18n="fwm-m-message-save-to-server1">観察結果は，FishWatchr mini のサイトに保存されました。次のリンクからダウンロードして下さい。リンクの有効期限は，約180日です。</span> (<a href="#" id="resultDataURLText" target="_blank" data-i18n="fwm-m-message-save-to-server2">Text形式</a>, <a href="#" id="resultDataURLXML" target="_blank" data-i18n="fwm-m-message-save-to-server3">XML形式</a>)</p>
 	  </div>
 	</div>
 
 	<div data-role="popup" id="popupGetZipURL" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;">
 	  <div data-role="header">
-	    <h3>グループ結果データ</h3>
+	    <h3 data-i18n="fwm-m-title-group-data">グループ結果データ</h3>
 	    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
 	  </div>
 	  <div role="main" class="ui-content">
-	    <p>指定されたグループの結果を <a href="#" id="resultDataURLZIP" target="_blank">FishWatchr mini のサイト</a>からダウンロードします。このリンクは，約180日有効です。</p>
+	    <p><span data-i18n="fwm-m-message-group-data1">指定されたグループの結果をFishWatchr Miniのサイトからダウンロードします。このリンクは，約180日有効です。</span> (<a href="#" id="resultDataURLZIP" target="_blank" data-i18n="fwm-m-message-group-data2">zip形式</a>)</p>
 	  </div>
 	</div>
 	
 	<div data-role="popup" id="popup-print-annatations" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;" class="ui-mini">
 	  <div data-role="header" data-theme="a">
-	    <h1>観察結果の表示</h1>
+	    <h1 data-i18n="fwm-m-title-observation-data">観察結果の表示</h1>
 	  </div>
 	  <div role="main" class="ui-content">
 	    <div id="print-annatations" class="ui-body">
 	    </div>
-            <a href="#" class="ui-btn ui-shadow" data-rel="back">閉じる</a>
+            <a href="#" class="ui-btn ui-shadow" data-rel="back" data-i18n="fwm-m-button-close">閉じる</a>
 	  </div>
 	</div>
 	<div data-role="popup" id="popup-set-url" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;" class="ui-mini">
 	  <div data-role="header" data-theme="a">
-	    <h1>設定ファイル用URL</h1>
+	    <h1 data-i18n="fwm-m-title-config-url">設定ファイル用URL</h1>
 	  </div>
 	  <div role="main" class="ui-content">
-	    <p>設定ファイルのURLを入力してください</p>
+	    <p data-i18n="fwm-m-message-config-url">設定ファイルのURLを入力してください</p>
 	    <input id="urlSettings" type="url" value="" data-clear-btn="true" data-clear-btn-text="クリア" />
-            <a href="#" id="popup-set-url-ok" class="ui-btn ui-shadow ui-btn-inline" data-rel="back">　設　定　</a>
-            <a href="#" id="popup-set-url-cancel" class="ui-btn ui-shadow ui-btn-inline" data-rel="back">キャンセル</a>
+            <a href="#" id="popup-set-url-ok" class="ui-btn ui-shadow ui-btn-inline" data-rel="back" data-i18n="fwm-m-config-ok">　設　定　</a>
+            <a href="#" id="popup-set-url-cancel" class="ui-btn ui-shadow ui-btn-inline" data-rel="back" data-i18n="fwm-m-config-cancel">キャンセル</a>
 	  </div>
 	</div>
 	<div data-role="popup" id="popup-message" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;" class="ui-mini">
@@ -305,7 +315,7 @@
 	  <div role="main" class="ui-content">
 	    <div id="popup-message-body" class="ui-body">
 	    </div>
-            <a href="#" class="ui-btn ui-shadow" data-rel="back">閉じる</a>
+            <a href="#" class="ui-btn ui-shadow" data-rel="back" data-i18n="fwm-m-button-close">閉じる</a>
 	  </div>
 	</div>
       </div>
