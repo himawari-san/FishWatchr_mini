@@ -63,6 +63,9 @@ var cBaseTime = 0;
 var startRecordingTime = 0;
 var timeFilePrefix = "_sys_basetime";
 
+var uiLanguage = 'ja';
+var flagi18nLoaded = false;
+
 $(document).ready(function(){
     $(window).on("beforeunload", function(event){
 	return "unload this page?";
@@ -163,23 +166,43 @@ function loadSettings(url){
 }
 
 
-$(document).on('pagecreate', '#home', function(event, ui){
-    // get an url option for 
-    configUrlOption = location.search;
-
-    if(location.search.match(/\?config=(.+)/)){
-	// ToDo: multiple options
-	// config= option must be at the end of the url
-	var configUrl = RegExp.$1;
-
-	if(configUrl.indexOf("http://") != 0 && configUrl.indexOf("https://") != 0){
-	    // this url is a candidate
-	    configUrl = "http://" + location.host + 
-		location.pathname.replace(/\/[^\/]+$/, "/res/") + configUrl + ".json";
+$(document).on('pagecreate', function(event){
+    if(event.target.id == 'home'){
+	// get an url option for 
+	configUrlOption = location.search;
+	
+	if(location.search.match(/\?config=(.+)/)){
+	    // ToDo: multiple options
+	    // config= option must be at the end of the url
+	    var configUrl = RegExp.$1;
+	    
+	    if(configUrl.indexOf("http://") != 0 && configUrl.indexOf("https://") != 0){
+		// this url is a candidate
+		configUrl = "http://" + location.host + 
+		    location.pathname.replace(/\/[^\/]+$/, "/res/") + configUrl + ".json";
+	    }
+	    
+	    loadSettings(configUrl);
+	    console.log("config url:" + configUrl);
 	}
-
-	loadSettings(configUrl);
-	console.log("config url:" + configUrl);
+    }
+    
+    if(flagi18nLoaded){
+	changeLang();
+    } else {
+	$.i18n( {
+	    locale: uiLanguage
+	} );
+	
+	$.i18n().load( {
+	    ja: 'i18n/ja.json',
+	    en: 'i18n/en.json',
+	}).done( function() {
+	    flagi18nLoaded = true;
+	    changeLang();
+	} ).fail(function (jqXHR, textStatus, error){
+	    console.log('fail1!');
+	});
     }
 });
 
@@ -266,46 +289,35 @@ $(document).on('pagecontainershow', function(event, ui){
     }
 });
 
-$(document).on('pagebeforecreate', function(event, ui){
-    $.i18n( {
-	locale: 'ja'
-    } );
-
-    $.i18n().load( {
-	ja: 'i18n/ja.json',
-	en: 'i18n/en.json',
-    }).done( function() {
-	changeLang();
-    } ).fail(function (jqXHR, textStatus, error){
-	console.log('fail1!');
-    });
-});
-
 
 function changeLang(){
-        $('#home').i18n();
-        $('#observation').i18n();
-        $('#graph').i18n();
-
-	$("#groupname").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
-	$("#username").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
-	$("#username").prop("placeholder", $.i18n("fwm-m-label-placeholder"));
-	$("#label1").val($.i18n("fwm-m-button-label") + "1");
-	$("#label2").val($.i18n("fwm-m-button-label") + "2");
-	$("#speaker1").val($.i18n("fwm-m-button-target") + "1");
-	$("#speaker2").val($.i18n("fwm-m-button-target") + "2");
-	for(i = 1; i <= 8; i++){
-	    $("#label" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
-	    $("#speaker" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
-	    $("#label" + i).prop("placeholder", $.i18n("fwm-m-button-label"));
-	    $("#speaker" + i).prop("placeholder", $.i18n("fwm-m-button-target"));
-	}
-	// refresh selector
-	$("#selector1-observation-mode").selectmenu('refresh');
-	$("#selector2-observation-mode").selectmenu('refresh');
-	$("#selector-data-handling").selectmenu('refresh');
-	$("#select-attribute").selectmenu('refresh');
-	$("#select-observer").selectmenu('refresh');
+    $.i18n( {
+	locale: uiLanguage
+    } );
+    
+    $('#home').i18n();
+    $('#observation').i18n();
+    $('#graph').i18n();
+    
+    $("#groupname").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
+    $("#username").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
+    $("#username").prop("placeholder", $.i18n("fwm-m-label-placeholder"));
+    $("#label1").val($.i18n("fwm-m-button-label") + "1");
+    $("#label2").val($.i18n("fwm-m-button-label") + "2");
+    $("#speaker1").val($.i18n("fwm-m-button-target") + "1");
+    $("#speaker2").val($.i18n("fwm-m-button-target") + "2");
+    for(i = 1; i <= 8; i++){
+	$("#label" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
+	$("#speaker" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
+	$("#label" + i).prop("placeholder", $.i18n("fwm-m-button-label"));
+	$("#speaker" + i).prop("placeholder", $.i18n("fwm-m-button-target"));
+    }
+    // refresh selector
+    $("#selector1-observation-mode").selectmenu('refresh');
+    $("#selector2-observation-mode").selectmenu('refresh');
+    $("#selector-data-handling").selectmenu('refresh');
+    $("#select-attribute").selectmenu('refresh');
+    $("#select-observer").selectmenu('refresh');
 }
 
 
@@ -719,11 +731,8 @@ $(document).on('tap', '.savename-button', function(event) {
 
 
 $(document).on('tap', '.fw-lang-item', function(event) {
-    var selectedLang = event.target.id.replace(/^lang-item-/, "");
+    uiLanguage = event.target.id.replace(/^lang-item-/, "");
 
-    $.i18n( {
-	locale: selectedLang
-    } );
     $("#popupLangMenu").popup("close");
     $("#lang-selector-button").text($("#" + event.target.id).text());
     changeLang();
