@@ -81,5 +81,7 @@
     "fwm-js-title-save-complete": "Save Complete",
     "fwm-message-config-save-complete": "The configuration file has been saved on the server.",
     "fwm-message-invalid-threshold-error": "The threshold must be more than zero.",
-    "fwm-message-no-groupname-error": "Please set a group name."
+    "fwm-message-no-groupname-error": "Please set a group name.",
+    "fwm-nav-option-manual": "Manual",
+    "fwm-nav-option-jst": "JST (NICT)"
 }

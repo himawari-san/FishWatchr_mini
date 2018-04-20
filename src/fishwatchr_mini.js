@@ -729,6 +729,11 @@ $(document).on('tap', '.fw-lang-item', function(event) {
     changeLang();
 });
 
+$(document).on('tap', '.fw-option-item', function(event) {
+    $("#popupInfoMenu").popup("close");
+});
+
+
 
 $(document).on('tap', '.graph-selector', function(event) {
     selectedGraph = event.target.id;

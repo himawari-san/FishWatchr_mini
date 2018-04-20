@@ -38,7 +38,13 @@
             <li><a class="ui-btn fw-lang-item" id="lang-item-en">English</a></li>
           </ul>
 	</div>
-	<a href="http://www2.ninjal.ac.jp/lrc/index.php?%B4%D1%BB%A1%BB%D9%B1%E7%A5%C4%A1%BC%A5%EB%20FishWatchr%2FMini" target="_blank" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all ui-btn-icon-right ui-icon-info ui-btn-icon-notext"></a>
+	<a href="#popupInfoMenu" data-rel="popup" data-transition="slideup" class="ui-btn ui-btn-inline ui-icon-bars ui-btn-icon-right ui-btn-icon-notext"></a>
+	<div data-role="popup" id="popupInfoMenu" data-theme="a">
+          <ul data-role="listview" data-inset="true" style="min-width:200px;">
+            <li data-icon="action"><a class="fw-option-item" href="http://www2.ninjal.ac.jp/lrc/index.php?%B4%D1%BB%A1%BB%D9%B1%E7%A5%C4%A1%BC%A5%EB%20FishWatchr%2FMini" target="_blank" data-i18n="fwm-nav-option-manual">マニュアル</a></li>
+            <li data-icon="action"><a class="fw-option-item" href="https://www.nict.go.jp/JST/JST5.html" target="_blank" data-i18n="fwm-nav-option-jst">日本標準時(NICT)</a></li>
+          </ul>
+	</div>
       </div>
       <div data-role="main" class="ui-content">
 	<div class="time">
