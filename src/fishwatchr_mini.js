@@ -302,10 +302,6 @@ function changeLang(){
     $("#groupname").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
     $("#username").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
     $("#username").prop("placeholder", $.i18n("fwm-m-label-placeholder"));
-    $("#label1").val($.i18n("fwm-m-button-label") + "1");
-    $("#label2").val($.i18n("fwm-m-button-label") + "2");
-    $("#speaker1").val($.i18n("fwm-m-button-target") + "1");
-    $("#speaker2").val($.i18n("fwm-m-button-target") + "2");
     for(i = 1; i <= 8; i++){
 	$("#label" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
 	$("#speaker" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
