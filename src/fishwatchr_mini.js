@@ -275,6 +275,14 @@ $(document).on('pagebeforecreate', function(event, ui){
 	ja: 'i18n/ja.json',
 	en: 'i18n/en.json',
     }).done( function() {
+	changeLang();
+    } ).fail(function (jqXHR, textStatus, error){
+	console.log('fail1!');
+    });
+});
+
+
+function changeLang(){
         $('#home').i18n();
         $('#observation').i18n();
         $('#graph').i18n();
@@ -298,11 +306,7 @@ $(document).on('pagebeforecreate', function(event, ui){
 	$("#selector-data-handling").selectmenu('refresh');
 	$("#select-attribute").selectmenu('refresh');
 	$("#select-observer").selectmenu('refresh');
-    } ).fail(function (jqXHR, textStatus, error){
-	console.log('fail1!');
-    });
-});
-
+}
 
 
 // pagecontainerbeforeshow
@@ -711,6 +715,18 @@ $(document).on('tap', '.disp-button-delete', function(event) {
 
 $(document).on('tap', '.savename-button', function(event) {
     saveToServer(event);
+});
+
+
+$(document).on('tap', '.fw-lang-item', function(event) {
+    var selectedLang = event.target.id.replace(/^lang-item-/, "");
+
+    $.i18n( {
+	locale: selectedLang
+    } );
+    $("#popupLangMenu").popup("close");
+    $("#lang-selector-button").text($("#" + event.target.id).text());
+    changeLang();
 });
 
 

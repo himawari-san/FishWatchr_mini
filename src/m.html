@@ -30,6 +30,14 @@
     <div id="home" data-role="page">
       <div data-role="header">
 	<h1>FishWatchr Mini</h1>
+	<a href="#popupLangMenu" data-rel="popup" data-transition="slideup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-lang ui-btn-icon-left ui-btn-a ui-mini" style="font-weight:normal;" id="lang-selector-button">Japanese</a>
+	<div data-role="popup" id="popupLangMenu" data-theme="a">
+          <ul data-role="listview" data-inset="true" style="min-width:200px;">
+            <li data-role="list-divider">Choose Your Language</li>
+            <li><a class="ui-btn fw-lang-item" id="lang-item-ja">Japanese</a></li>
+            <li><a class="ui-btn fw-lang-item" id="lang-item-en">English</a></li>
+          </ul>
+	</div>
 	<a href="http://www2.ninjal.ac.jp/lrc/index.php?%B4%D1%BB%A1%BB%D9%B1%E7%A5%C4%A1%BC%A5%EB%20FishWatchr%2FMini" target="_blank" class="ui-btn-right ui-btn ui-btn-inline ui-corner-all ui-btn-icon-right ui-icon-info ui-btn-icon-notext"></a>
       </div>
       <div data-role="main" class="ui-content">

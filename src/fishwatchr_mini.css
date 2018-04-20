@@ -19,3 +19,14 @@
     right: 0;
     left: auto;
 }
+
+.ui-icon-lang:after {
+    /* http://icooon-mono.com/14332-地球アイコン9 */
+    background-image: url("images/lang.svg");
+}
+
+/* Fallback */
+.ui-nosvg .ui-icon-lang:after {
+    /* http://icooon-mono.com/14332-地球アイコン9 */
+    background-image: url("images/lang.png");
+}
