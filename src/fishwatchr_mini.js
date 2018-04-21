@@ -477,6 +477,10 @@ $(document).on('pagecontainerbeforehide', function(event, ui){
 });
 
 
+// disable to scroll by touching an annotation button
+$(document).on('touchmove', '.button-panel', false);
+
+
 // push startbutton
 $(document).on('tap', '#btn-start', function(event) {
     startTime = new Date();
