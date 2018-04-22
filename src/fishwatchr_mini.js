@@ -302,6 +302,9 @@ function changeLang(){
     $("#groupname").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
     $("#username").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
     $("#username").prop("placeholder", $.i18n("fwm-m-label-placeholder"));
+    if($("#btn-load-settings").text().indexOf('http') != 0){
+	$("#btn-load-settings").text($.i18n("fwm-m-tab-user-empty-value"));
+    }
     for(i = 1; i <= 8; i++){
 	$("#label" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
 	$("#speaker" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
