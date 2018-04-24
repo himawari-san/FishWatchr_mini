@@ -185,6 +185,10 @@ $(document).on('pagecreate', function(event){
 	    loadSettings(configUrl);
 	    console.log("config url:" + configUrl);
 	}
+    } else if(event.target.id == 'observation'){
+	// disable to scroll by touching an annotation button
+	// attention: bind this listener after this page has been created (ios)
+	$('.button-panel').on('touchmove', false);
     }
     
     if(flagi18nLoaded){
@@ -478,10 +482,6 @@ $(document).on('pagecontainerbeforehide', function(event, ui){
 	}
     }
 });
-
-
-// disable to scroll by touching an annotation button
-$(document).on('touchmove', '.button-panel', false);
 
 
 // push startbutton
