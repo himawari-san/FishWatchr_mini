@@ -75,6 +75,7 @@
     "fwm-message-groupname-error": "グループ名は，数字・アルファベット・アンダーバーのみで構成してください。",
     "fwm-message-config-read-error": "設定の読み込みに失敗しました。",
     "fwm-message-username-error": "ユーザ名を指定してください。",
+    "fwm-message-invalid-username-error": "ユーザ名は，数字・アルファベット・アンダーバーのみで構成してください。",
     "fwm-message-permission-error": "この機能は，管理者のみが実行できます。",
     "fwm-message-group-already-exist-error": "このグループの設定はすでに登録されています。別のグループ名を付けてください。",
     "fwm-message-server-error": "サーバ側でエラーが発生しました。",

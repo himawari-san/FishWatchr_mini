@@ -499,7 +499,7 @@ $(document).on('tap', '#btn-start', function(event) {
 	return false;
 //    } else if(username.match(/[\s!-\/:-@\[-\^`\{-~]/)){
     } else if(username.match(/^[A-Za-z0-9_]+$/) == null){
-	$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
+	$("#popupWarning-message").text($.i18n("fwm-message-invalid-username-error"));
 	$("#popupWarning").popup("open");
 	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	return false;
