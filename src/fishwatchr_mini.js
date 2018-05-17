@@ -247,47 +247,6 @@ $(document).on('pagecontainershow', function(event, ui){
 	$("#" + selectedTimeStyle + "-home").trigger("click"); // tricky code. no click, no refresh.
 	$("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio("refresh");
     } else if(ui.toPage.is('#graph')){
-	histgramInterval = $("#slider-1").val();
-	$("#slider-1").on("slidestop", function(e){
-	    histgramInterval = $(this).val();
-	    drawGraph();
-	});
-
-	// The following change event handlers are based on http://jsfiddle.net/ezanker/fu26u/204/
-	$("#time1").on("change", function(){
-	    var time = selectedTimeStyle == "elapsed-time-style"
-		? time2FormattedTime(Number($(this).val())).replace(/:..$/, "")
-		: date2FormattedDateTime(new Date(Number($(this).val()))).replace(/^.+ /, "").replace(/:..$/, "");
-            $(this).closest(".timeRangeSlider").find(".timeLabel").val(time);
-            $(this).closest(".timeRangeSlider").find(".ui-slider-handle").eq(0).prop("title", time);
-	});
-	$("#time1").on("slidestop", function(e){
-	    $("#time1").trigger("change"); // update title
-	    var offset = selectedTimeStyle == "elapsed-time-style"
-		? startRecordingTime : 0;
-	    updateMergedAnnotationsCurrent(
-		Number($("#time1").val()) + offset,
-		Number($("#time2").val()) + offset);
-	    drawGraph();
-	});
-	
-	$("#time2").on("change", function(){
-	    var time = selectedTimeStyle == "elapsed-time-style"
-		? time2FormattedTime(Number($(this).val())).replace(/:..$/, "")
-		: date2FormattedDateTime(new Date(Number($(this).val()))).replace(/^.+ /, "").replace(/:..$/, "");
-            $(this).closest(".timeRangeSlider").find(".timeLabel2").val(time);
-            $(this).closest(".timeRangeSlider").find(".ui-slider-handle").eq(1).prop("title", time);
-	});
-	$("#time2").on("slidestop", function(e){
-	    $("#time2").trigger("change"); // update title
-	    var offset = selectedTimeStyle == "elapsed-time-style"
-		? startRecordingTime : 0;
-	    updateMergedAnnotationsCurrent(
-		Number($("#time1").val()) + offset,
-		Number($("#time2").val()) + offset);
-	    drawGraph();
-	});
-
 	generateGraph();
 
 	$("#" + selectedGraph).trigger("click");
@@ -442,6 +401,55 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
     } else if(ui.toPage.is('#graph')){
 	$("#link_to_top_graph").prop("href", "m.html" + configUrlOption);
 	$("#graph_body").disableSelection();
+
+	histgramInterval = $("#slider-1").val();
+	$("#slider-1").on("slidestop", function(e){
+	    histgramInterval = $(this).val();
+	    drawGraph();
+	});
+
+	// The following change event handlers are based on http://jsfiddle.net/ezanker/fu26u/204/
+	$("#time1").on("change", function(){
+	    var time = selectedTimeStyle == "elapsed-time-style"
+		? time2FormattedTime(Number($(this).val())).replace(/:..$/, "")
+		: date2FormattedDateTime(new Date(Number($(this).val()))).replace(/^.+ /, "").replace(/:..$/, "");
+            $(this).closest(".timeRangeSlider").find(".timeLabel").val(time);
+            $(this).closest(".timeRangeSlider").find(".ui-slider-handle").eq(0).prop("title", time);
+	});
+	$("#time1").on("slidestop", function(e){
+	    $("#time1").trigger("change"); // update title
+	    var offset = selectedTimeStyle == "elapsed-time-style"
+		? startRecordingTime : 0;
+	    updateMergedAnnotationsCurrent(
+		Number($("#time1").val()) + offset,
+		Number($("#time2").val()) + offset);
+	    drawGraph();
+	});
+	
+	$("#time2").on("change", function(){
+	    var time = selectedTimeStyle == "elapsed-time-style"
+		? time2FormattedTime(Number($(this).val())).replace(/:..$/, "")
+		: date2FormattedDateTime(new Date(Number($(this).val()))).replace(/^.+ /, "").replace(/:..$/, "");
+            $(this).closest(".timeRangeSlider").find(".timeLabel2").val(time);
+            $(this).closest(".timeRangeSlider").find(".ui-slider-handle").eq(1).prop("title", time);
+	});
+	$("#time2").on("slidestop", function(e){
+	    $("#time2").trigger("change"); // update title
+	    var offset = selectedTimeStyle == "elapsed-time-style"
+		? startRecordingTime : 0;
+	    updateMergedAnnotationsCurrent(
+		Number($("#time1").val()) + offset,
+		Number($("#time2").val()) + offset);
+	    drawGraph();
+	});
+
+	// draw an empty chart to avoid UI collapse
+	var chart = c3.generate({
+	    bindto: '#graph_body',
+	    data: {
+		columns: []
+	    }
+	});
     }
 });
 
