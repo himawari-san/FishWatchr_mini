@@ -106,6 +106,7 @@ function loadSettings(url){
 		textVisible: true,
 		textonly: false
 	    });
+	    lockScreen("lock");
 	}
     }).done(function(data) {
 	// read groupname
@@ -157,11 +158,13 @@ function loadSettings(url){
 	$("#threshold-outlier").prop("value", thresholdOutlier);
 	
     }).fail(function (jqXHR, textStatus, error){
+	unLockScreen("lock");
 	$("#popupWarning-message").text($.i18n("") + "\n"+ textStatus + ", " + error);
 	$("#popupWarning").popup("open");
 	console.log("fail!!");
     }).always(function(){
 	$.mobile.loading("hide");
+	unLockScreen("lock");
     });
 }
 
@@ -939,6 +942,29 @@ function sanitizeJ(str){
 	replace(/"/g, "”");
 }
 
+
+function lockScreen(id){
+    // based on http://hensa40.cutegirl.jp/archives/1165
+    var cover = $('<div />');
+    cover.prop('id', id);
+    cover.css("z-index", "9999")
+	.css("position", "absolute")
+	.css("top", "0")
+	.css("left", "0")
+	.css("right", "0")
+	.css("bottom", "0")
+	.css("background-color", "gray")
+	.css("opacity", "0.7");
+
+    $('body').append(cover);
+}
+
+
+function unLockScreen(id){
+    if($('#' + id).size() != 0){
+	$('#' + id).remove();
+    }
+}
 
 
 function updateAnnotationButtons(){
