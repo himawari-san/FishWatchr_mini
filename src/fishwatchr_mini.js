@@ -455,9 +455,7 @@ $(document).on('pagecontainerbeforehide', function(event, ui){
 	$("#username").prop("value", username);
 	
 	// get groupname
-	groupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
-	$("#groupname").prop("value", groupname);
-	groupname = $("#groupname").val().replace(/\$$/, "");
+	getGroupName();
 
 	// get vauels of speakers and labels
 	for(var i = 1; i <= nBoxes; i++){
@@ -676,9 +674,7 @@ $(document).on('tap', '#btn-get-basetime', function(event) {
 // draw charts
 $(document).on('tap', '#btn-show-graph', function(event) {
     thresholdOutlier = $("#threshold-outlier").val();
-    groupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
-    $("#groupname").prop("value", groupname);
-    groupname = $("#groupname").val().replace(/\$$/, "");
+    getGroupName();
 
     if(thresholdOutlier == ""){
 	thresholdOutlier = Number.MAX_VALUE;
@@ -964,6 +960,13 @@ function unLockScreen(id){
     if($('#' + id).size() != 0){
 	$('#' + id).remove();
     }
+}
+
+
+function getGroupName(){
+    groupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
+    $("#groupname").prop("value", groupname);
+    groupname = $("#groupname").val().replace(/\$$/, "");
 }
 
 
