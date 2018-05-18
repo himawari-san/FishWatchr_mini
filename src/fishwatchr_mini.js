@@ -163,7 +163,7 @@ function loadSettings(url){
 	
     }).fail(function (jqXHR, textStatus, error){
 	unLockScreen("lock");
-	$("#popupWarning-message").text($.i18n("") + "\n"+ textStatus + ", " + error);
+	$("#popupWarning-message").text($.i18n("fwm-message-config-read-error") + "\n"+ textStatus + ", " + error);
 	$("#popupWarning").popup("open");
 	console.log("fail!!");
     }).always(function(){
