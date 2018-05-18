@@ -68,6 +68,8 @@ var timeFilePrefix = "_sys_basetime";
 var uiLanguage = 'ja';
 var flagi18nLoaded = false;
 
+var flagScrollOnObservationScreen = false;
+
 $(document).ready(function(){
     $(window).on("beforeunload", function(event){
 	return "unload this page?";
@@ -193,7 +195,10 @@ $(document).on('pagecreate', function(event){
     } else if(event.target.id == 'observation'){
 	// disable to scroll by touching an annotation button
 	// attention: bind this listener after this page has been created (ios)
-	$('.button-panel').on('touchmove', false);
+	$('.button-panel').on('touchmove', function(event){
+	    flagScrollOnObservationScreen = true;
+	    return false;
+	});
     }
     
     if(flagi18nLoaded){
@@ -526,7 +531,13 @@ $(document).on('tap', '#btn-start', function(event) {
 
 
 // push annotation_button
-$(document).on('tap', '.btn-annotation', function(event) {
+$(document).on('vmouseup', '.btn-annotation', function(event) {
+    // cancel the event when the observation screen is scrolled
+    if(flagScrollOnObservationScreen != 0){
+	flagScrollOnObservationScreen = false;
+     	return false;
+    }
+
     var now = new Date();
     var currentTime = date2FormattedDateTime(now, 1);
     var elapsedTime = time2FormattedTime(now.getTime() - startTime.getTime(), 1);
