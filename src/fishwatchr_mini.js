@@ -402,7 +402,6 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	selectedGraph = "selector-summary-graph";
     } else if(ui.toPage.is('#graph')){
 	$("#link_to_top_graph").prop("href", "m.html" + configUrlOption);
-	$("#graph_body").disableSelection();
 
 	histgramInterval = $("#slider-1").val();
 	$("#slider-1").on("slidestop", function(e){

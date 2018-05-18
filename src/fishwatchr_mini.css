@@ -45,3 +45,8 @@
     background-image: url("images/chart.png");
     background-size: 60% 60%;
 }
+
+.disableSelection {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
