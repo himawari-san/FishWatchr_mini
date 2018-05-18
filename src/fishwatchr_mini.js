@@ -6,6 +6,8 @@ var buttonAreaRatio2 = "450px";
 var buttonAreaRatioChange = 5; // if <=5 ratio1, otherwise ratio2 
 var annotatedSpeakers = {};
 var annotatedLabels = {};
+var speakerList = [];
+var labelList = [];
 var annotationResults = [];
 var pResults = -1;
 var nDisp = 2;
@@ -466,12 +468,20 @@ $(document).on('pagecontainerbeforehide', function(event, ui){
 	getGroupName();
 
 	// get vauels of speakers and labels
+	speakerList = [];
+	labelList = [];
 	for(var i = 1; i <= nBoxes; i++){
 	    var pn = "speaker" + i;
 	    annotatedSpeakers[pn] = sanitizeJ($("#" + pn).val());
-	    
+	    if(annotatedSpeakers[pn] != ""){
+		speakerList.push(annotatedSpeakers[pn]);
+	    }
+
 	    pn = "label" + i;
 	    annotatedLabels[pn] = sanitizeJ($("#" + pn).val());
+	    if(annotatedLabels[pn] != ""){
+		labelList.push(annotatedLabels[pn]);
+	    }
 	}
 
 	// get annotation mode
@@ -1501,10 +1511,16 @@ function drawGraph(){
 	$("#attribute-selector-timeline").hide();
 
 	var iAttribute2;
+	var buttonList;
+	var buttonList2;
 	if(selectedAttribute == 'attribute-label'){
 	    iAttribute2 = fn_speaker;
+	    buttonList = labelList;
+	    buttonList2 = speakerList;
 	} else {
 	    iAttribute2 = fn_label;
+	    buttonList = speakerList;
+	    buttonList2 = labelList;
 	}
 
 	// initialize typeNames and maxEvaluationGrade
@@ -1527,9 +1543,21 @@ function drawGraph(){
 	    }
 	}
 
-	// sort typeNames to maintain the same order any time
-	typeNames.sort();
-	typeNames2.sort();
+	// sort typeName and typeName2 with button-order
+	typeNames.sort(function(a, b){
+	    if(buttonList.indexOf(a) == -1 && buttonList.indexOf(b) == -1){
+		return a < b ? -1 : 1;
+	    } else {
+		return buttonList.indexOf(a) - buttonList.indexOf(b);
+	    }
+	});
+	typeNames2.sort(function(a, b){
+	    if(buttonList2.indexOf(a) == -1 && buttonList2.indexOf(b) == -1){
+		return a < b ? -1 : 1;
+	    } else {
+		return buttonList2.indexOf(a) - buttonList2.indexOf(b);
+	    }
+	});
 
 	// initialize type
 	for(var i = 0; i < typeNames.length; i++){
