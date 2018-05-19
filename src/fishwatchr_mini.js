@@ -70,7 +70,11 @@ var flagi18nLoaded = false;
 
 var flagScrollOnObservationScreen = false;
 
+
+
 $(document).ready(function(){
+    console.log("hey: " + $.vmouse.moveDistanceThreshold);
+//    $.vmouse.moveDistanceThreshold = 300;
     $(window).on("beforeunload", function(event){
 	return "unload this page?";
     });
@@ -195,9 +199,20 @@ $(document).on('pagecreate', function(event){
     } else if(event.target.id == 'observation'){
 	// disable to scroll by touching an annotation button
 	// attention: bind this listener after this page has been created (ios)
-	$('.button-panel').on('touchmove', function(event){
+	$('.button-panel').on('vmousemove', function(event){
 	    flagScrollOnObservationScreen = true;
-	    return false;
+//	    $("#popupWarning-message").text("test");
+//	    $("#popupWarning").popup("open");
+//	    alert(event);
+//	    $("#scrollWarning").popup("option", "transition", "pop");
+	    $("#scrollWarning").popup("option", "history", false);
+	    $("#scrollWarning").popup("option", "positionTo", "#panel-b");
+//	    $("#scrollWarning").popup("open");
+//	    $("#scrollWarning").on('tap', function(event) {
+//		$(this).popup("close");
+//	    });
+
+	    return true;
 	});
     }
     
@@ -530,19 +545,60 @@ $(document).on('tap', '#btn-start', function(event) {
 });
 
 
+var startX, startY;
+
+$(document).on('touchstart', '.btn-annotation', function(event) {
+    startY = getTouchY(event);
+    event.preventDafault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    return false;
+});
+
+// based on https://blog.mobiscroll.com/working-with-touch-events/
+function getTouchY(e) {
+    return /touch/.test(e.type) ? (e.originalEvent || e).changedTouches[0]['clientY'] : e['clientY'];
+}
+
 // push annotation_button
-$(document).on('vmouseup', '.btn-annotation', function(event) {
+$(document).on('touchend', '.btn-annotation', function(event) {
+    var buttonID = event.target.id;
+
     // cancel the event when the observation screen is scrolled
-    if(flagScrollOnObservationScreen != 0){
+    if(Math.abs(getTouchY(event) - startY) > 25){
 	flagScrollOnObservationScreen = false;
-     	return false;
+//	$(document).activeElement.blur();
+//	$("#itemm").trigger("click");
+//	$("#itemm").focus();
+//	$("#aa").focus();
+//	$(this).blur();
+	$("#" + buttonID).blur();
+//	$("#" + buttonID).removeClass("focus");
+//	$("#" + buttonID).prop("disabled", true);
+//	$("#" + buttonID).prop("disabled", false);
+//	$("#" + buttonID).css("outline","none");
+//	$("#" + buttonID).removeClass("ui-focus");
+//	$("#" + buttonID).removeClass("ui-select");
+//	$("#" + buttonID).removeClass("touched");
+//	$("#" + buttonID).css( "-webkit-tap-highlight-color", "rgba(0, 0, 0, 0)" )
+//	$("#" + buttonID).button();
+//	$("#" + buttonID).button("refresh");
+//	$("#" + buttonID).button("disable");
+//	$("#" + buttonID).removeClass("ui-btn-down-f");
+//	$("#" + buttonID).removeClass("ui-btn-hover-f");
+//	$(".ui-btn-active").removeClass("ui-btn-active");
+//	alert("cancel:" + Math.abs(getTouchY(event) - startY));
+	event.preventDafault();
+	event.stopPropagation();
+	event.stopImmediatePropagation();
+	return false;
     }
+    alert("push:" + Math.abs(getTouchY(event) - startY));
 
     var now = new Date();
     var currentTime = date2FormattedDateTime(now, 1);
     var elapsedTime = time2FormattedTime(now.getTime() - startTime.getTime(), 1);
     var annotation = "";
-    var buttonID = event.target.id;
     var buttonText = event.target.innerHTML;
     
     if(annotationMode == "mode_speaker"){

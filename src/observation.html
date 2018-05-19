@@ -40,9 +40,9 @@
 
 	<!-- latest annotations -->
 	<div class="box_result ui-body-c ui-corner-all ui-mini">
-	  <ul data-role="listview" data-split-icon="delete" data-split-theme="a" data-inset="true">
+	  <ul id="aa" data-role="listview" data-split-icon="delete" data-split-theme="a" data-inset="true">
 	    <li>
-	      <a href="#" ><span id="disp1" data-i18n="fwm-no-annotation-data">（直近のアノテーション - なし）</span></a>
+	      <a id="itemm" href="#" ><span id="disp1" data-i18n="fwm-no-annotation-data">（直近のアノテーション - なし）</span></a>
 	      <a href="#"  class="disp-button-delete ui-button" id="disp-button1">test</a>
 	    </li>
 	    <li>
@@ -54,6 +54,19 @@
 	<div class="box_button ui-body">
 	  <a id="link_to_top" data-role="button" data-corners="true" href="m.html" data-icon="star" data-i18n="fwm-observation-button-finish" >終了</a>
 	</div>
+	<div data-role="popup" id="scrollWarning">
+	  <p>アノテーション用のボタンの上ではスクロールはできません。ボタンの下か，画面の両脇でスクロールさせて下さい。</p>
+	</div>
+	<!--
+	<div data-role="popup" id="scrollWarning" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;">
+	  <div data-role="header">
+	    <h3 data-i18n="fwm-m-title-error">エラー</h3>
+	  </div>
+	  <div role="main" class="ui-content">
+	    <p id="popupWarning-message1">あああああエラー</p>
+	  </div>
+	</div>
+	-->
       </div>
       <div data-role="footer">
 	<h3>Copyright 2016-2018 Masaya YAMAGUCHI</h3>
