@@ -109,11 +109,15 @@ function loadSettings(url){
 	dataType: "json",
 	data: {url: url},
 	beforeSend: function(jqXHR, settings) {
-	    $.mobile.loading('show', {
-		text: "Now loading",
-		textVisible: true,
-		textonly: false
-	    });
+	    // https://stackoverflow.com/questions/16276753/jquery-mobile-1-3-1-mobile-loading-not-working/16277865
+	    var interval = setInterval(function(){
+		$.mobile.loading('show', {
+		    text: "Now loading",
+		    textVisible: true,
+		    textonly: false
+		});
+		clearInterval(interval);
+	    }, 1);
 	    lockScreen("lock");
 	}
     }).done(function(data) {
@@ -171,7 +175,10 @@ function loadSettings(url){
 	$("#popupWarning").popup("open");
 	console.log("fail!!");
     }).always(function(){
-	$.mobile.loading("hide");
+	var interval = setInterval(function(){
+	    $.mobile.loading("hide");
+	    clearInterval(interval);
+	}, 1);
 	unLockScreen("lock");
     });
 }
