@@ -519,15 +519,21 @@ $(document).on('tap', '#btn-start', function(event) {
     // get username
     username = $("#username").val().replace(/^ +/, "").replace(/ +$/, "");
     $("#username").prop("value", username);
+
+    getGroupName();
     
     if(username == ""){
 	$("#popupWarning-message").text($.i18n("fwm-message-username-error"));
 	$("#popupWarning").popup("open");
 	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	return false;
-//    } else if(username.match(/[\s!-\/:-@\[-\^`\{-~]/)){
     } else if(username.match(/^[A-Za-z0-9_]+$/) == null){
 	$("#popupWarning-message").text($.i18n("fwm-message-invalid-username-error"));
+	$("#popupWarning").popup("open");
+	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
+	return false;
+    } else if(!checkGroupname(groupname)){
+	$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
 	$("#popupWarning").popup("open");
 	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	return false;
