@@ -532,7 +532,7 @@ $(document).on('tap', '#btn-start', function(event) {
 	$("#popupWarning").popup("open");
 	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	return false;
-    } else if(!checkGroupname(groupname)){
+    } else if(!checkGroupname(groupname) && groupname != ""){
 	$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
 	$("#popupWarning").popup("open");
 	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
