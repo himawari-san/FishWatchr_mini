@@ -806,7 +806,7 @@ $(document).on('tap', '.fw-lang-item', function(event) {
 });
 
 $(document).on('tap', '.fw-option-item', function(event) {
-    $("#popupInfoMenu").popup("close");
+    $("#popupToolMenu").popup("close");
 });
 
 
