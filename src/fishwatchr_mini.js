@@ -610,6 +610,12 @@ $(document).on('touchend, vmouseup', '.btn-annotation', function(event) {
 
 // save settings
 $(document).on('tap', '#btn-save-settings', function(event) {
+    //aaa
+    saveSettings();
+});
+
+
+function saveSettings(){
     var trueGroupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
     $("#groupname").prop("value", trueGroupname);
 
@@ -682,11 +688,16 @@ $(document).on('tap', '#btn-save-settings', function(event) {
     }).fail(function (jqXHR, textStatus, error){
 	console.log("store xml data, " + textStatus + ", " + error);
     });
-});
+}    
 
 
 // recording the current time
 $(document).on('tap', '#btn-get-basetime', function(event) {
+    saveCurrentTime();
+});
+
+
+function saveCurrentTime(){
     var newStartTime = new Date();
     var newname = timeFilePrefix;
     var dummyResults = [];
@@ -721,7 +732,8 @@ $(document).on('tap', '#btn-get-basetime', function(event) {
     } else {
 	console.log("no auto-save");
     }
-});
+};
+
 
 
 // draw charts
