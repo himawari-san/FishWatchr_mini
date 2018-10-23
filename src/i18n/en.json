@@ -84,5 +84,8 @@
     "fwm-message-invalid-threshold-error": "The threshold must be more than zero.",
     "fwm-message-no-groupname-error": "Please set a group name.",
     "fwm-nav-option-manual": "Manual",
-    "fwm-nav-option-jst": "JST (NICT)"
+    "fwm-nav-option-jst": "JST (NICT)",
+    "fwm-nav-option-admin": "Admin",
+    "fwm-nav-option-save-settings": "Save Settings",
+    "fwm-nav-option-record-current-time": "Record Current Time"
 }

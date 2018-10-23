@@ -84,5 +84,8 @@
     "fwm-message-invalid-threshold-error": "０より大きい値を指定してください。",
     "fwm-message-no-groupname-error": "グループ名を指定してください。",
     "fwm-nav-option-manual": "マニュアル",
-    "fwm-nav-option-jst": "日本標準時(NICT)"
+    "fwm-nav-option-jst": "日本標準時(NICT)",
+    "fwm-nav-option-admin": "管理",
+    "fwm-nav-option-save-settings": "設定保存",
+    "fwm-nav-option-record-current-time": "時間記録"
 }
