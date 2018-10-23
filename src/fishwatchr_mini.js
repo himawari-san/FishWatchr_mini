@@ -620,13 +620,6 @@ $(document).on('popupafterclose', '#popupToolMenu', function(event) {
 });
 
 
-// save settings
-$(document).on('tap', '#btn-save-settings', function(event) {
-    //aaa
-    saveSettings();
-});
-
-
 function saveSettings(){
     var trueGroupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
     $("#groupname").prop("value", trueGroupname);
@@ -701,12 +694,6 @@ function saveSettings(){
 	console.log("store xml data, " + textStatus + ", " + error);
     });
 }    
-
-
-// recording the current time
-$(document).on('tap', '#btn-get-basetime', function(event) {
-    saveCurrentTime();
-});
 
 
 function saveCurrentTime(){
