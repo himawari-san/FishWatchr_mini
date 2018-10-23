@@ -68,6 +68,8 @@ var timeFilePrefix = "_sys_basetime";
 var uiLanguage = 'ja';
 var flagi18nLoaded = false;
 
+var toolMenuItemID = "";
+
 var startTouchY; // for touchend event
 var startTouchTime; // for touchend event
 var moveDistanceThreshold = 25; // px
@@ -608,6 +610,16 @@ $(document).on('touchend, vmouseup', '.btn-annotation', function(event) {
 });
 
 
+$(document).on('popupafterclose', '#popupToolMenu', function(event) {
+    if(toolMenuItemID == "toolMenuItemSaveSettings"){
+	saveSettings();
+    } else if(toolMenuItemID == "toolMenuItemRecordCurretTime"){
+	saveCurrentTime();
+    }
+    toolMenuItemID = ""; // clear
+});
+
+
 // save settings
 $(document).on('tap', '#btn-save-settings', function(event) {
     //aaa
@@ -806,6 +818,7 @@ $(document).on('tap', '.fw-lang-item', function(event) {
 });
 
 $(document).on('tap', '.fw-option-item', function(event) {
+    toolMenuItemID = event.target.id; // for popupafterclose
     $("#popupToolMenu").popup("close");
 });
 
