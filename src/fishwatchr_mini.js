@@ -295,7 +295,6 @@ function changeLang(){
     // refresh selector
     $("#selector1-observation-mode").selectmenu('refresh');
     $("#selector2-observation-mode").selectmenu('refresh');
-    $("#selector-data-handling").selectmenu('refresh');
     $("#select-attribute").selectmenu('refresh');
     $("#select-observer").selectmenu('refresh');
 }
@@ -765,12 +764,6 @@ $(document).on("change", "#selector2-observation-mode", function () {
 });
 
 
-$(document).on("change", "#selector-data-handling", function (event) {
-    console.log("update buttons!!");
-    updateSavenameButtons();
-});
-
-
 $(document).on('tap', '.disp-button-delete', function(event) {
     var deletedTargetID = event.target.id;
     var iEnd = annotationResults.length - 1;
@@ -1117,41 +1110,7 @@ function updateSavenameList(){
 		"</a>" +
 		"</li>");
     }
-    updateSavenameButtons();
     $("#savename-list").listview("refresh");
-}
-
-
-function updateSavenameButtons(){
-    dataHandlingMode = $("#selector-data-handling").val();
-
-    $(".savename-button").each(function() {
-	switch(dataHandlingMode){
-	case "print-as-tsv":
-	    $(this).prop("href", "#popup-print-annatations");
-	    $(this).removeAttr("download");
-	    break;
-	case "print-as-xml":
-	    $(this).prop("href", "#popup-print-annatations");
-	    $(this).removeAttr("download");
-	    break;
-	case "save-as-tsv":
-	    iAnnotationStorage = this.id.match(/\d+$/)[0];
-	    var blobTxt = getAnnotationsAsBlob ("text/plain");
-	    $(this).prop("download", "fw_mini_" + username + ".txt");
-	    $(this).prop("href", URL.createObjectURL(blobTxt));
-	    break;
-	case "save-as-xml":
-	    iAnnotationStorage = this.id.match(/\d+$/)[0];
-	    var blobXML = getAnnotationsAsBlob ("text/xml");
-	    $(this).prop("download", "fw_mini_" + username +  ".xml");
-	    $(this).prop("href", URL.createObjectURL(blobXML));
-	    break;
-	case "save-to-server":
-	    $(this).prop("href", "#");
-	    $(this).removeAttr("download");
-	}
-    });
 }
 
 

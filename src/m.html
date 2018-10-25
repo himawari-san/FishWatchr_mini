@@ -241,31 +241,22 @@
 	  </div>
 	  
 	  <div id="data-panel" class="ui-body-d ui-content ui-corner-all ui-mini">
-	    <ul id="savename-list" data-role="listview" data-split-icon="action" data-split-theme="a" data-inset="true">
-	      <li data-i18n="fwm-no-saved-data">（保存データ - なし）</li>
-	    </ul>
+	    <div class="ui-field-contain">
+	      <a id="btn-get-archive" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-right ui-corner-all" href="#" data-i18n="fwm-m-tab-data-group-results">グループ結果のダウンロード</a>
+	    </div>
+	    <div class="ui-field-contain">
+	      <label for="flip-auto-save" data-i18n="fwm-m-tab-data-autosave">オートセーブ：</label>
+	      <select name="flip-auto-save" id="flip-auto-save" data-role="flipswitch">
+		<option id="flip-auto-save-off" value="off" selected="" data-i18n="fwm-m-tab-data-autosave-off">Off</option>
+		<option id="flip-auto-save-on" value="on" data-i18n="fwm-m-tab-data-autosave-on">On</option>
+	      </select>
+	    </div>
 
-	    <div class="ui-body ui-body-a">
-	      <div class="ui-field-contain">
-		<label for="selector-data-handling" data-i18n="fwm-tab-data-processing-type">処理：</label>
-		<select name="selector-data-handling" id="selector-data-handling">
-		  <option value="print-as-tsv" data-i18n="fwm-m-print-in-text-style">表示(Text)</option>
-		  <option value="print-as-xml" data-i18n="fwm-m-print-in-xml-style">表示(XML)</option>
-		  <option value="save-as-tsv" id="selector-download-tsv" data-i18n="fwm-m-download-in-text-style">ダウンロード(Text)</option>
-		  <option value="save-as-xml" id="selector-download-xml" data-i18n="fwm-m-download-in-xml-style">ダウンロード(XML)</option>
-		  <option value="save-to-server" data-i18n="fwm-m-save-to-server">サーバ保存</option>
-		</select>
-	      </div>
-	      <div class="ui-field-contain">
-		<label for="flip-auto-save" data-i18n="fwm-m-tab-data-autosave">オートセーブ：</label>
-		<select name="flip-auto-save" id="flip-auto-save" data-role="flipswitch">
-		  <option id="flip-auto-save-off" value="off" selected="" data-i18n="fwm-m-tab-data-autosave-off">Off</option>
-		  <option id="flip-auto-save-on" value="on" data-i18n="fwm-m-tab-data-autosave-on">On</option>
-		</select>
-	      </div>
-	      <div class="ui-field-contain">
-		<a id="btn-get-archive" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-right ui-corner-all" href="#" data-i18n="fwm-m-tab-data-group-results">グループ結果</a>
-	      </div>
+	    <div class="ui-field-contain">
+	      <label for="savename-list" data-i18n="fwm-m-tab-data-dataset-list">記録されたデータセットリスト：</label>
+	      <ul id="savename-list" data-role="listview" data-split-icon="action" data-split-theme="a" data-inset="true">
+		<li data-i18n="fwm-no-saved-data">（保存データ - なし）</li>
+	      </ul>
 	    </div>
 	  </div>
 	</div>
