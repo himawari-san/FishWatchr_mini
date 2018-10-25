@@ -786,7 +786,6 @@ $(document).on('tap', '.disp-button-delete', function(event) {
 
 
 $(document).on('tap', '.savename-button', function(event) {
-    //aaa
     iAnnotationStorage = event.target.id.match(/\d+$/)[0];
 
     // txt
@@ -810,7 +809,6 @@ $(document).on('tap', '.process-selection-item', function(event) {
 
 
 $(document).on('popupafterclose', '#popup-select-process', function(event) {
-    //aaa
     if(selectedProcessID == "save-as-tsv" || selectedProcessID == "save-as-xml"){
     } else if(selectedProcessID == "print-as-tsv"){
 	$("#print-annatations").empty();
@@ -895,10 +893,6 @@ function saveToServer(event){
     if(event == null){
 	// when auto-save
 	iAnnotationStorage = annotationStorage.length-1;
-    } else {
-	// index of selected annotation set
-	// iAnnotationStorage has been already set
-	// get dataHandlingMode from the menu
     }
     
     // get savename
