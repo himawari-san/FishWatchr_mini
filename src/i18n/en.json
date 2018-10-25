@@ -30,6 +30,8 @@
     "fwm-button-time-style-elapsed": "Elapsed",
     "fwm-no-saved-data": "(No Saved Data)",
     "fwm-tab-data-processing-type": "Processing Method:",
+    "fwm-m-title-select-process": "Process Selection",
+    "fwm-m-message-select-process": "Select a process for the data set.",
     "fwm-m-print-in-text-style": "print (Text)",
     "fwm-m-print-in-xml-style": "print (XML)",
     "fwm-m-download-in-text-style": "download (Text)",

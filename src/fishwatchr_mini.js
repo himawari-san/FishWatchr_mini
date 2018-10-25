@@ -37,6 +37,7 @@ var cRead = 0;
 var annotationStorage = [];
 
 var iAnnotationStorage = -1; 
+var selectedProcessID = "";
 
 var mergedAnnotations = [];
 var mergedAnnotationsCurrent = [];
@@ -792,7 +793,44 @@ $(document).on('tap', '.disp-button-delete', function(event) {
 
 
 $(document).on('tap', '.savename-button', function(event) {
-    saveToServer(event);
+    //aaa
+    iAnnotationStorage = event.target.id.match(/\d+$/)[0];
+
+    // txt
+    var blobTxt = getAnnotationsAsBlob ("text/plain");
+    $("#save-as-tsv").prop("download", "fw_mini_" + username + ".txt");
+    $("#save-as-tsv").prop("href", URL.createObjectURL(blobTxt));
+
+    // xml
+    var blobXML = getAnnotationsAsBlob ("text/xml");
+    $("#save-as-xml").prop("download", "fw_mini_" + username +  ".xml");
+    $("#save-as-xml").prop("href", URL.createObjectURL(blobXML));
+
+    $("#popup-select-process").popup("open");
+});
+
+
+$(document).on('tap', '.process-selection-item', function(event) {
+    selectedProcessID = event.target.id;
+    $("#popup-select-process").popup("close");
+});
+
+
+$(document).on('popupafterclose', '#popup-select-process', function(event) {
+    //aaa
+    if(selectedProcessID == "save-as-tsv" || selectedProcessID == "save-as-xml"){
+    } else if(selectedProcessID == "print-as-tsv"){
+	$("#print-annatations").empty();
+	$("#print-annatations").append(sanitize(getAnnotationsAsText()).replace(/\n/g, "<br />\n"));
+	$("#popup-print-annatations").popup("open");
+    } else if(selectedProcessID == "print-as-xml"){
+	$("#print-annatations").empty();
+	$("#print-annatations").append(sanitize(getAnnotationsAsXML()).replace(/\n/g, "<br />\n"));
+	$("#popup-print-annatations").popup("open");
+    } else if(selectedProcessID != ""){
+	saveToServer(selectedProcessID);
+    }
+    selectedProcessID = ""; // clear
 });
 
 
@@ -864,12 +902,10 @@ function saveToServer(event){
     if(event == null){
 	// when auto-save
 	iAnnotationStorage = annotationStorage.length-1;
-	dataHandlingMode = "save-to-server";
     } else {
 	// index of selected annotation set
-	iAnnotationStorage = event.target.id.match(/\d+$/)[0];
+	// iAnnotationStorage has been already set
 	// get dataHandlingMode from the menu
-	dataHandlingMode = $("#selector-data-handling").val();
     }
     
     // get savename
@@ -887,37 +923,25 @@ function saveToServer(event){
 	return false;
     }
 
-    switch(dataHandlingMode){
-    case "print-as-tsv":
-	$("#print-annatations").empty();
-	$("#print-annatations").append(sanitize(getAnnotationsAsText()).replace(/\n/g, "<br />\n"));
-	break;
-    case "print-as-xml":
-	$("#print-annatations").empty();
-	$("#print-annatations").append(sanitize(getAnnotationsAsXML()).replace(/\n/g, "<br />\n"));
-	break;
-    case "save-to-server":
-	var resultURLText = "#";
-	var resultURLXML = "#";
-	store(savename, groupname, "txt", getAnnotationsAsText())
-	    .done(function (response){
-		resultURLText = response.result_url;
-	    })
-	    .fail(function (jqXHR, textStatus){
-		console.log("store text data," + textStatus);
-	    });
-	store(savename, groupname, "xml", getAnnotationsAsXML())
-	    .done(function (response){
-		resultURLXML = response.result_url;
-		$("#resultDataURLText").prop("href", resultURLText);
-		$("#resultDataURLXML").prop("href", resultURLXML);
-		$("#popupURL").popup("open");
-	    })
-	    .fail(function (jqXHR, textStatus){
-		console.log("store xml data," + textStatus);
-	    });
-	break;
-    }
+    var resultURLText = "#";
+    var resultURLXML = "#";
+    store(savename, groupname, "txt", getAnnotationsAsText())
+	.done(function (response){
+	    resultURLText = response.result_url;
+	})
+	.fail(function (jqXHR, textStatus){
+	    console.log("store text data," + textStatus);
+	});
+    store(savename, groupname, "xml", getAnnotationsAsXML())
+	.done(function (response){
+	    resultURLXML = response.result_url;
+	    $("#resultDataURLText").prop("href", resultURLText);
+	    $("#resultDataURLXML").prop("href", resultURLXML);
+	    $("#popupURL").popup("open");
+	})
+	.fail(function (jqXHR, textStatus){
+	    console.log("store xml data," + textStatus);
+	});
 }
 
 

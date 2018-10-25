@@ -30,6 +30,8 @@
     "fwm-button-time-style-elapsed": "経過時間",
     "fwm-no-saved-data": "（保存データ - なし）",
     "fwm-tab-data-processing-type": "処理：",
+    "fwm-m-title-select-process": "処理の選択",
+    "fwm-m-message-select-process": "処理方法を選択して下さい。",
     "fwm-m-print-in-text-style": "表示(Text)",
     "fwm-m-print-in-xml-style": "表示(XML)",
     "fwm-m-download-in-text-style": "ダウンロード(Text)",
