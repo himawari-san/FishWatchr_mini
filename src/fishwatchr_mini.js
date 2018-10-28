@@ -252,11 +252,11 @@ $(document).on('pagecontainershow', function(event, ui){
 	}
 
 	if(osname == "iOS"){
-	    $('#selector-download-tsv').prop("disabled", true);
-	    $('#selector-download-xml').prop("disabled", true);
+	    $('#save-as-tsv').addClass("ui-state-disabled");
+	    $('#save-as-xml').addClass("ui-state-disabled");
 	} else {
-	    $('#selector-download-tsv').prop("disabled", false);
-	    $('#selector-download-xml').prop("disabled", false);
+	    $('#save-as-tsv').removeClass("ui-state-disabled");
+	    $('#save-as-xml').removeClass("ui-state-disabled");
 	}
 
 	$("#" + selectedTimeStyle + "-home").trigger("click"); // tricky code. no click, no refresh.
