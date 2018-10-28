@@ -614,9 +614,31 @@ $(document).on('popupafterclose', '#popupToolMenu', function(event) {
     if(toolMenuItemID == "toolMenuItemSaveSettings"){
 	saveSettings();
     } else if(toolMenuItemID == "toolMenuItemRecordCurretTime"){
-	saveCurrentTime();
+	$("#popup-record-time").popup("open");
     }
     toolMenuItemID = ""; // clear
+});
+
+
+$(document).on('tap', '.record-time-button', function(event) {
+    if(event.target.id == "record-time-button-id-cancel"){
+	return;
+    }
+
+    var selectedID = $('[name="radio-choice-time-info"]:checked').attr('id');
+    if(selectedID == "radio-choice-time-info-current"){
+	saveCurrentTime(new Date());
+    } else if(selectedID == "radio-choice-time-info-manual") {
+	if($("#textinput-time").val().match(/^(\d\d\d\d)-(\d\d)-(\d\d)\s+(\d\d):(\d\d):(\d\d)/)){
+	    saveCurrentTime(new Date(RegExp.$1, RegExp.$2, RegExp.$3,
+				     RegExp.$4, RegExp.$5, RegExp.$6));
+	} else {
+	    $("#popupWarning-message").html($.i18n("fwm-m-record-time-warning")
+					    + " <br />"
+					    + $.i18n("fwm-m-record-time-example"));
+	    $("#popupWarning").popup("open");
+	}
+    }
 });
 
 
@@ -696,8 +718,8 @@ function saveSettings(){
 }    
 
 
-function saveCurrentTime(){
-    var newStartTime = new Date();
+function saveCurrentTime(time){
+    var newStartTime = time;
     var newname = timeFilePrefix;
     var dummyResults = [];
 

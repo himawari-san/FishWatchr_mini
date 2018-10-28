@@ -88,5 +88,12 @@
     "fwm-nav-option-jst": "日本標準時(NICT)",
     "fwm-nav-option-admin": "管理",
     "fwm-nav-option-save-settings": "設定保存",
-    "fwm-nav-option-record-current-time": "時間記録"
+    "fwm-nav-option-record-time": "時間記録",
+    "fwm-m-title-record-time": "時刻情報の記録",
+    "fwm-m-record-time-input-current-time": "現在時刻入力",
+    "fwm-m-record-time-input-manual-time": "手動時刻入力",
+    "fwm-m-record-time-example": "例： 2018-10-11 12:11:30",
+    "fwm-m-record-time-warning": "時刻の形式が正しくありません。",
+    "fwm-m-popup-record-time-ok": "OK",
+    "fwm-m-popup-record-time-cancel": "Cancel"
 }

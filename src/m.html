@@ -48,7 +48,7 @@
 	      <h3><span data-i18n="fwm-nav-option-admin">管理</span></h3>
 	      <ul data-role="listview" data-inset="false" style="min-width:200px;">
 		<li data-icon="action"><a id="toolMenuItemSaveSettings" class="fw-option-item" href="#" data-i18n="fwm-nav-option-save-settings">設定保存</a></li>
-		<li data-icon="action"><a id="toolMenuItemRecordCurretTime" class="fw-option-item" href="#" data-i18n="fwm-nav-option-record-current-time">時間記録</a></li>
+		<li data-icon="action"><a id="toolMenuItemRecordCurretTime" class="fw-option-item" href="#" data-i18n="fwm-nav-option-record-time">時間記録</a></li>
               </ul>
 	    </div>
 	  </div>
@@ -333,6 +333,30 @@
 	  </div>
 	</div>
 
+	<div data-role="popup" id="popup-record-time" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="min-width:280px; max-width:400px;" class="ui-mini" data-history="false">
+	  <div data-role="header" data-theme="a">
+	    <h1 data-i18n="fwm-m-title-record-time">時刻情報の記録</h1>
+	  </div>
+	  <div role="main" class="ui-content">
+	    <div class="ui-field-contain">
+	      <label>
+		<input name="radio-choice-time-info" id="radio-choice-time-info-current" value="on" checked="checked" type="radio" /><span data-i18n="fwm-m-record-time-input-current-time">現在時刻入力</span>
+	      </label>
+	      <label>
+		<input name="radio-choice-time-info" id="radio-choice-time-info-manual" value="off" type="radio" /><span data-i18n="fwm-m-record-time-input-manual-time">手動時刻入力</span>
+	      </label>
+	      <div class="ui-content">
+		<p data-i18n="fwm-m-record-time-example">例： 2018-10-11 12:11:30.111</p>
+		<input name="textinput-time" id="textinput-time" value="" type="text" />
+	      </div>
+	    </div>
+	    <div class="ui-content">
+              <a href="#" class="ui-btn ui-shadow ui-btn-inline record-time-button" id="record-time-button-id-ok" data-rel="back" data-i18n="fwm-m-popup-record-time-ok">OK</a>
+              <a href="#" class="ui-btn ui-shadow ui-btn-inline record-time-button" data-rel="back" id="record-time-button-id-cancel" data-i18n="fwm-m-popup-record-time-cancel">Cancel</a>
+	    </div>
+	  </div>
+	</div>
+	
 	<div data-role="popup" id="popup-message" data-overlay-theme="b" data-theme="a" data-dismissible="true" style="max-width:400px;" class="ui-mini">
 	  <div data-role="header" data-theme="a">
 	    <h1 id="popup-title"></h1>

@@ -88,5 +88,12 @@
     "fwm-nav-option-jst": "JST (NICT)",
     "fwm-nav-option-admin": "Admin",
     "fwm-nav-option-save-settings": "Save Settings",
-    "fwm-nav-option-record-current-time": "Record Current Time"
+    "fwm-nav-option-record-time": "Record Time",
+    "fwm-m-title-record-time": "Record Time",
+    "fwm-m-record-time-input-current-time": "Current Time",
+    "fwm-m-record-time-input-manual-time": "Manual Input",
+    "fwm-m-record-time-example": "e.g. 2018-10-11 12:11:30",
+    "fwm-m-record-time-warning": "The format of the time is invalid.",
+    "fwm-m-popup-record-time-ok": "OK",
+    "fwm-m-popup-record-time-cancel": "Cancel"
 }
