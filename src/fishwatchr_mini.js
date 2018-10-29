@@ -621,11 +621,16 @@ $(document).on('popupafterclose', '#popupToolMenu', function(event) {
 
 
 $(document).on('tap', '.record-time-button', function(event) {
+    selectedID = "";
+    
     if(event.target.id == "record-time-button-id-cancel"){
 	return;
     }
+});
 
-    var selectedID = $('[name="radio-choice-time-info"]:checked').attr('id');
+
+$(document).on('popupafterclose', '#popup-record-time', function(event) {
+    selectedID = $('[name="radio-choice-time-info"]:checked').attr('id');
     if(selectedID == "radio-choice-time-info-current"){
 	saveCurrentTime(new Date());
     } else if(selectedID == "radio-choice-time-info-manual") {
