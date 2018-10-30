@@ -753,10 +753,18 @@ function saveCurrentTime(time){
     updateSavenameList();
 
     if($("#flip-auto-save-on").prop("selected")){
+	// auto-save
 	saveToServer();
-	console.log("auto-save");
     } else {
-	console.log("no auto-save");
+	// show messsage
+	$("#popup-title").text($.i18n("fwm-title-save-time-info"));
+	$("#popup-message-body").html("<p>" +
+				      $.i18n("fwm-message-save-time-info") +
+				      "<br />" +
+				      newname + "/" +
+				      date2FormattedDateTime(newStartTime).replace(/-/g, "") +
+				      "</p>");
+	$("#popup-message").popup("open");
     }
 };
 

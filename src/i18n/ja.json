@@ -84,6 +84,8 @@
     "fwm-message-config-save-complete": "設定ファイルはサーバ上に保存されました。",
     "fwm-message-invalid-threshold-error": "０より大きい値を指定してください。",
     "fwm-message-no-groupname-error": "グループ名を指定してください。",
+    "fwm-title-save-time-info": "時刻情報の保存",
+    "fwm-message-save-time-info": "あなたのデバイス内に保存されました。",
     "fwm-nav-option-manual": "マニュアル",
     "fwm-nav-option-jst": "日本標準時(NICT)",
     "fwm-nav-option-admin": "管理",

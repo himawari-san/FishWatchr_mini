@@ -84,6 +84,8 @@
     "fwm-message-config-save-complete": "The configuration file has been saved on the server.",
     "fwm-message-invalid-threshold-error": "The threshold must be more than zero.",
     "fwm-message-no-groupname-error": "Please set a group name.",
+    "fwm-title-save-time-info": "Save Time Info",
+    "fwm-message-save-time-info": "The time info has been saved in your device.",
     "fwm-nav-option-manual": "Manual",
     "fwm-nav-option-jst": "JST (NICT)",
     "fwm-nav-option-admin": "Admin",
