@@ -20,7 +20,14 @@ $time_file_prefix = $_POST['timefile'];
 
 $annotations = "";
 
-$timefiles = glob($data_dir . $time_file_prefix . "_0_*" . $groupname . ".xml");
+// get the last time file
+$timefiles = glob($data_dir . $time_file_prefix . "_*" . $groupname . ".xml");
+usort($timefiles, function($a, $b){
+    // ascending order
+    return filemtime($a) > filemtime($b);
+});
+
+// output time info
 if(count($timefiles) != 0){
     $temp = file_get_contents($timefiles[0]);
     if(preg_match('/ original_start_time="(.+?)"/', $temp, $matches)){
