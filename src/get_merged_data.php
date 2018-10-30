@@ -24,7 +24,7 @@ $annotations = "";
 $timefiles = glob($data_dir . $time_file_prefix . "_*" . $groupname . ".xml");
 usort($timefiles, function($a, $b){
     // ascending order
-    return filemtime($a) > filemtime($b);
+    return filemtime($a) < filemtime($b);
 });
 
 // output time info
