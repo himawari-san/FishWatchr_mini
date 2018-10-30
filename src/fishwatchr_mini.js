@@ -825,12 +825,18 @@ $(document).on('tap', '.savename-button', function(event) {
     $("#save-as-xml").prop("download", "fw_mini_" + username +  ".xml");
     $("#save-as-xml").prop("href", URL.createObjectURL(blobXML));
 
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    
     $("#popup-select-process").popup("open");
 });
 
 
 $(document).on('tap', '.process-selection-item', function(event) {
     selectedProcessID = event.target.id;
+
+    event.stopImmediatePropagation();
+
     $("#popup-select-process").popup("close");
 });
 
