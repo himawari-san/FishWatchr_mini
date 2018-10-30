@@ -837,7 +837,15 @@ $(document).on('tap', '.process-selection-item', function(event) {
 
     event.stopImmediatePropagation();
 
-    $("#popup-select-process").popup("close");
+    if(selectedProcessID == "save-as-tsv" || selectedProcessID == "save-as-xml"){
+	// wait to close popups until starting to download data
+	// for firefox on android
+	setTimeout(function(){
+	    $("#popup-select-process").popup("close");
+	}, 1000);
+    } else {
+	$("#popup-select-process").popup("close");
+    }
 });
 
 
