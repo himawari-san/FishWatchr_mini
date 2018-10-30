@@ -20,7 +20,7 @@
     "fwm-m-tab-buttons-mode-target": "Observation Mode: Target",
     "fwm-m-tab-buttons-mode-label": "Observation Mode: Label",
     "fwm-m-tab-buttons-mode-target_label": "Observation Mode: Target > Label",
-    "fwm-m-tab-buttons-mode-label_target": "Observation Mode: Label > Target",
+    "fwm-m-tab-buttons-mode-label_target": "Observation Mode: Target < Label",
     "fwm-m-button-label": "label",
     "fwm-m-button-target": "target",
     "fwm-m-tab-chart-execute": "DISPLAY CHARTS",
