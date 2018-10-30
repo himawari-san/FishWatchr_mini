@@ -635,7 +635,7 @@ $(document).on('popupafterclose', '#popup-record-time', function(event) {
 	saveCurrentTime(new Date());
     } else if(selectedID == "radio-choice-time-info-manual") {
 	if($("#textinput-time").val().match(/^(\d\d\d\d)-(\d\d)-(\d\d)\s+(\d\d):(\d\d):(\d\d)/)){
-	    saveCurrentTime(new Date(RegExp.$1, RegExp.$2, RegExp.$3,
+	    saveCurrentTime(new Date(RegExp.$1, RegExp.$2 - 1, RegExp.$3,
 				     RegExp.$4, RegExp.$5, RegExp.$6));
 	} else {
 	    $("#popupWarning-message").html($.i18n("fwm-m-record-time-warning")
