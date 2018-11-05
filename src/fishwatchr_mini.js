@@ -70,6 +70,7 @@ var uiLanguage = 'ja';
 var flagi18nLoaded = false;
 
 var toolMenuItemID = "";
+var resultDialogRecordTime = "";
 
 var startTouchY; // for touchend event
 var startTouchTime; // for touchend event
@@ -621,16 +622,23 @@ $(document).on('popupafterclose', '#popupToolMenu', function(event) {
 
 
 $(document).on('tap', '.record-time-button', function(event) {
-    selectedID = "";
+    resultDialogRecordTime = "";
     
     if(event.target.id == "record-time-button-id-cancel"){
-	return;
+	resultDialogRecordTime = "cancel";
     }
+
+    $("#popup-record-time").popup("close");
 });
 
 
 $(document).on('popupafterclose', '#popup-record-time', function(event) {
-    selectedID = $('[name="radio-choice-time-info"]:checked').attr('id');
+    if(resultDialogRecordTime == "cancel"){
+	return;
+    }
+
+    var selectedID = $('[name="radio-choice-time-info"]:checked').attr('id');
+
     if(selectedID == "radio-choice-time-info-current"){
 	saveCurrentTime(new Date());
     } else if(selectedID == "radio-choice-time-info-manual") {
