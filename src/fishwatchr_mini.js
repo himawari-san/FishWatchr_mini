@@ -616,6 +616,26 @@ $(document).on('popupafterclose', '#popupToolMenu', function(event) {
 	saveSettings();
     } else if(toolMenuItemID == "toolMenuItemRecordCurretTime"){
 	$("#popup-record-time").popup("open");
+    } else if(toolMenuItemID == "toolMenuItemShowQrCode"){
+	getGroupName();
+	if(checkGroupname(groupname)){
+	    var groupURL = location.protocol + "//" 
+		+ location.host 
+		+ location.pathname.replace(/\.html.+/, ".html")
+		+ "?config=" + groupname;
+	    $("#qrcode-group-settings-url").html("");
+	    $("#qrcode-group-settings-url").qrcode(groupURL);
+	    $("#url-group-settings").prop("href", groupURL);
+	    $("#url-group-settings").text(groupname);
+	    $("#popup-show-qrcode").popup("open");
+	} else {
+	    if(groupname != ""){
+		$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
+	    } else {
+		$("#popupWarning-message").text($.i18n("fwm-message-no-groupname-error"));
+	    }
+	    $("#popupWarning").popup("open");
+	}
     }
     toolMenuItemID = ""; // clear
 });

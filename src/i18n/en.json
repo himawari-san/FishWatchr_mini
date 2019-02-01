@@ -92,6 +92,8 @@
     "fwm-nav-option-save-settings": "Save Settings",
     "fwm-nav-option-record-time": "Record Time",
     "fwm-nav-option-show-qrcode": "Show QR Code",
+    "fwm-m-title-show-qrcode": "QR Code",
+    "fwm-m-label-show-qrcode": "Group name:",
     "fwm-m-title-record-time": "Record Time",
     "fwm-m-record-time-input-current-time": "Current Time",
     "fwm-m-record-time-input-manual-time": "Manual Input",

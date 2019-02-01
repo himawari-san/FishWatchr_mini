@@ -15,6 +15,7 @@
     <script src="jquery.i18n.js"></script>
     <script src="jquery.i18n.messagestore.js"></script>
     <script src="jquery.i18n.fallbacks.js"></script>
+    <script src="jquery.qrcode.min.js"></script>
 <!--
     <script src="jquery.i18n.emitter.js"></script>
     <script src="jquery.i18n.language.js"></script>
@@ -355,6 +356,24 @@
               <a href="#" class="ui-btn ui-shadow ui-btn-inline record-time-button" id="record-time-button-id-ok" data-i18n="fwm-m-popup-record-time-ok">OK</a>
               <a href="#" class="ui-btn ui-shadow ui-btn-inline record-time-button" id="record-time-button-id-cancel" data-i18n="fwm-m-popup-record-time-cancel">Cancel</a>
 	    </div>
+	  </div>
+	</div>
+
+	<div data-role="popup" id="popup-show-qrcode" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px;" class="ui-mini" data-history="false">
+	  <div data-role="header" data-theme="a">
+	    <h1 data-i18n="fwm-m-title-show-qrcode">QRコードの表示</h1>
+	  </div>
+	  <div role="main" class="ui-content">
+	    <div class="ui-content">
+	      <div id="qrcode-group-settings-url" />
+	    </div>
+	    <div class="ui-content">
+	      <p style="text-align:center;">
+		<span data-i18n="fwm-m-label-show-qrcode">グループ名:</span> <a id="url-group-settings" href="#" />
+	      </p> 
+              <a href="#" class="ui-btn ui-shadow" data-rel="back" data-i18n="fwm-m-button-close">閉じる</a>
+	    </div>
+	  </div>
 	  </div>
 	</div>
 	
