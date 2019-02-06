@@ -164,8 +164,6 @@ function loadSettings(url){
 	if(data["time-style"] == "elapsed-time-style" || data["time-style"] == "real-time-style"){
 	    selectedTimeStyle = data["time-style"];
 	}
-	$("#" + selectedTimeStyle + "-home").trigger("click"); // tricky code. no click, no refresh.
-	$("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio('refresh');
 
 	// set thresholdOutlier
 	if(Number(data["thresholdOutlier"]) != NaN){
