@@ -247,7 +247,7 @@ $(document).on('pagecontainershow', function(event, ui){
 	    break;
 	    case 1: $('#annotation-tab').trigger('click');
 	    break;
-	    case 2: $('#chart-tab').trigger('click');
+	    case 2: $('#analysis-tab').trigger('click');
 	    break;
 	    case 3: $('#data-tab').trigger('click');
 	}

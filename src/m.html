@@ -68,7 +68,7 @@
 	    <ul>
 	      <li><a id="username-tab" href="#username-panel" data-ajax="false" data-i18n="fwm-m-tab-user">ユーザ名</a></li>
 	      <li><a id="annotation-tab" href="#annotation-panel" data-ajax="false" data-i18n="fwm-m-tab-button">ボタン</a></li>
-	      <li><a id="chart-tab" href="#chart-panel" data-ajax="false" data-i18n="fwm-m-tab-chart">グラフ</a></li>
+	      <li><a id="analysis-tab" href="#analysis-panel" data-ajax="false" data-i18n="fwm-m-tab-analysis">分析</a></li>
 	      <li><a id="data-tab" href="#data-panel" data-ajax="false" data-i18n="fwm-m-tab-data">データ</a></li>
 	    </ul>
 	  </div>
@@ -223,13 +223,18 @@
 	    </div>
 	  </div>
 
-	  <div id="chart-panel" class="ui-body ui-content ui-corner-all">
-	    <a data-role="button" id="btn-show-graph" data-mini="true" href="graph.html" data-icon="chart" data-i18n="fwm-m-tab-chart-execute">グラフ表示</a>
+	  <div id="analysis-panel" class="ui-body ui-content ui-corner-all">
+	    <a data-role="button" id="btn-show-graph" data-mini="true" href="graph.html" data-icon="chart" data-i18n="fwm-m-tab-analysis-display-chart">グラフ表示</a>
+	    <div class="ui-field-contain">
+	      <label for="threshold-outlier" data-i18n="fwm-m-tab-analysis-chart-outlier">外れ値検出(sec)：</label>
+	      <input type="text" name="threshold-outlier" id="threshold-outlier" value="1800" placeholder="(sec)" />
+	    </div>
+	    <a data-role="button" id="btn-watch-video" data-mini="true" href="graph.html" data-icon="video" data-i18n="fwm-m-tab-analysis-watch-video">ビデオ表示</a>
+	    <div class="ui-field-contain">
+	      <label for="video-url" data-i18n="fwm-m-tab-analysis-video-url">ビデオURL：</label>
+	      <input type="text" name="video-url" id="video-url" value="" placeholder="" />
+	    </div>
 	    <div class="ui-body ui-body-a">
-	      <div class="ui-field-contain">
-		<label for="threshold-outlier" data-i18n="fwm-m-tab-chart-outlier">外れ値検出(sec)：</label>
-		<input type="text" name="threshold-outlier" id="threshold-outlier" value="1800" placeholder="(sec)" />
-	      </div>
 	      <div class="ui-field-contain ui-mini">
 		<fieldset data-role="controlgroup" data-type="horizontal">
 		  <legend data-i18n="fwm-m-tab-chart-time-style">時間表示：</legend>
@@ -241,7 +246,7 @@
 	      </div>
 	    </div>
 	  </div>
-	  
+
 	  <div id="data-panel" class="ui-body-d ui-content ui-corner-all ui-mini">
 	    <div class="ui-field-contain">
 	      <a id="btn-get-archive" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-right ui-corner-all" href="#" data-i18n="fwm-m-tab-data-group-results">グループ結果のダウンロード</a>
