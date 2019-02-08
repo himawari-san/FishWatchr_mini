@@ -229,7 +229,7 @@
 	      <label for="threshold-outlier" data-i18n="fwm-m-tab-analysis-chart-outlier">外れ値検出(sec)：</label>
 	      <input type="text" name="threshold-outlier" id="threshold-outlier" value="1800" placeholder="(sec)" />
 	    </div>
-	    <a data-role="button" id="btn-watch-video" data-mini="true" href="graph.html" data-icon="video" data-i18n="fwm-m-tab-analysis-watch-video">ビデオ表示</a>
+	    <a data-role="button" id="btn-watch-video" data-mini="true" href="#" data-icon="video" data-i18n="fwm-m-tab-analysis-watch-video">ビデオ表示</a>
 	    <div class="ui-field-contain">
 	      <label for="video-url" data-i18n="fwm-m-tab-analysis-video-url">ビデオURL：</label>
 	      <input type="text" name="video-url" id="video-url" value="" placeholder="" />
@@ -368,6 +368,15 @@
               <a href="#" class="ui-btn ui-shadow" data-rel="back" data-i18n="fwm-m-button-close">閉じる</a>
 	    </div>
 	  </div>
+	</div>
+
+	<div data-role="popup" id="popup-watch-video" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px" class="ui-mini" data-history="false">
+	  <div data-role="header" data-theme="a">
+	    <h1 data-i18n="fwm-m-title-watch-video">ビデオの表示</h1>
+	  </div>
+	  <div role="main" class="ui-content">
+	    <div id="youtube-player"></div>
+            <a href="#" class="ui-btn ui-shadow" data-rel="back" data-i18n="fwm-m-button-close">閉じる</a>
 	  </div>
 	</div>
 	
