@@ -1266,6 +1266,10 @@ function date2FormattedDateTime(date, flagMsec){
 
 
 function time2FormattedTime(time, flagMsec){
+    if(time < 0){
+	return "00:00:00";
+    }
+
     var hour = Math.floor(time / 3600000);
     time -= hour * 3600000;
     var minutes = Math.floor(time / 60000);
