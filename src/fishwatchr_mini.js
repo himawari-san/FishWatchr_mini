@@ -1034,7 +1034,7 @@ $(document).on('tap', '#btn-get-archive', function(event) {
     groupname = $("#groupname").val().replace(/\$$/, "");
 
     if(groupname == ""){
-	$("#popupWarning-message").text("fwm-message-no-groupname-error");
+	$("#popupWarning-message").text($.i18n("fwm-message-no-groupname-error"));
 	$("#popupWarning").popup("open");
 	return false;
     } else if(groupname.match(/^[A-Za-z0-9_]+$/) == null){
