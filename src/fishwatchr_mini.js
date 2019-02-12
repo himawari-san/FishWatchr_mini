@@ -78,6 +78,7 @@ var moveDistanceThreshold = 25; // px
 var moveDurationThreshold = 500; // msec
 
 var videoPlayer;
+var videoPlayer2;
 
 $(document).ready(function(){
     $(window).on("beforeunload", function(event){
@@ -210,6 +211,26 @@ $(document).on('pagecreate', function(event){
 	    console.log("config url:" + configUrl);
 	}
     } else if(event.target.id == 'observation'){
+    } else if(event.target.id == 'graph'){
+	videoPlayer2 = new YT.Player('youtube-player2', {
+	    height: 'auto',
+	    width: 'auto',
+	    videoId: '',
+	    //	playerVar: 'origin=http://localhost',
+	    events: {
+		'onReady': onYoutubePlayerReady
+	    }
+	});
+
+	$("#popup-watch-video2").on(
+    	    {
+    		popupbeforeposition: function(){
+    		},
+    		popupafterclose: function(){
+		    videoPlayer2.stopVideo();
+    		}
+    	    }
+	);
     }
     
     if(flagi18nLoaded){
@@ -1918,7 +1939,25 @@ function drawGraph(){
 		freq: 'bar'
 	    },
 	    groups: [typeNames2],
-	    order: null
+	    order: null,
+	    onclick: function(d, element){
+		var videoID = $("#video-url").val();
+
+		var elapsedTime;
+
+		if(selectedTimeStyle == "real-time-style"){
+		    elapsedTime = xTimes[d.x];
+		} else {
+		    elapsedTime = x[d.x+1];
+		}
+
+		videoPlayer2.loadVideoById({
+		    videoId: videoID,
+		    startSeconds: elapsedTime
+		});
+		
+		$("#popup-watch-video2").popup("open");
+	    }
 	},
 	axis: {
 	    x: {
