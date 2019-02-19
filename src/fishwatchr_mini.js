@@ -77,8 +77,8 @@ var startTouchTime; // for touchend event
 var moveDistanceThreshold = 25; // px
 var moveDurationThreshold = 500; // msec
 
-var videoPlayer;
-var videoPlayer2;
+var videoPlayer = null;
+var videoPlayer2 = null;;
 
 $(document).ready(function(){
     $(window).on("beforeunload", function(event){
@@ -212,25 +212,7 @@ $(document).on('pagecreate', function(event){
 	}
     } else if(event.target.id == 'observation'){
     } else if(event.target.id == 'graph'){
-	videoPlayer2 = new YT.Player('youtube-player2', {
-	    height: 'auto',
-	    width: 'auto',
-	    videoId: '',
-	    //	playerVar: 'origin=http://localhost',
-	    events: {
-		'onReady': onYoutubePlayerReady
-	    }
-	});
-
-	$("#popup-watch-video2").on(
-    	    {
-    		popupbeforeposition: function(){
-    		},
-    		popupafterclose: function(){
-		    videoPlayer2.stopVideo();
-    		}
-    	    }
-	);
+	initVideoPlayer('youtube-player2', '#popup-watch-video2');
     }
     
     if(flagi18nLoaded){
@@ -1097,11 +1079,7 @@ $(document).on('tap', '#popup-set-url-cancel', function(event) {
 });
 
 $(document).on('tap', '#btn-watch-video', function(event) {
-    var videoID = $("#video-url").val();
-    videoPlayer.loadVideoById({
-        videoId: videoID,
-    });
-
+    initVideoPlayer('youtube-player', '#popup-watch-video');
     $("#popup-watch-video").popup("open");
 });
 
@@ -1113,27 +1091,62 @@ function initYoutubePlayer() {
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 }
 
-function onYouTubeIframeAPIReady() {
-    videoPlayer = new YT.Player('youtube-player', {
+
+function initVideoPlayer(playerName, popupId){
+    var player = getVideoPlayer(playerName);
+
+    $(popupId).on(
+    	{
+    	    popupbeforeposition: function(){
+    	    },
+    	    popupafterclose: function(){
+		player.stopVideo();
+    	    }
+    	}
+    );
+}
+
+
+function getVideoPlayer(playerName){
+    var player = new YT.Player(playerName, {
 	height: 'auto',
 	width: 'auto',
 	videoId: '',
 //	playerVar: 'origin=http://localhost',
 	events: {
-	    'onReady': onYoutubePlayerReady
+	    'onReady': onPlayerReady
 	}
     });
 
-    $("#popup-watch-video").on(
-    	{
-    	    popupbeforeposition: function(){
-    	    },
-    	    popupafterclose: function(){
-		videoPlayer.stopVideo();
-    	    }
-    	}
-    );
+    if(playerName == 'youtube-player'){
+	if(videoPlayer == null){ 
+	    videoPlayer = player;
+	}
+	return videoPlayer;
+    } else {
+	if(videoPlayer2 == null){ 
+	    videoPlayer2 = player;
+	}
+	return videoPlayer2;
+    }
 }
+
+
+function onPlayerReady(event){
+    var player;
+    var code = event.target.getIframe();
+
+    if(code.id == 'youtube-player'){
+	player = videoPlayer;
+    } else {
+	player = videoPlayer2;
+    }
+
+    var videoID = $("#video-url").val();
+    player.cueVideoById({
+	videoId: videoID,
+    });
+} 
 
 function onYoutubePlayerReady(event) {
 };
