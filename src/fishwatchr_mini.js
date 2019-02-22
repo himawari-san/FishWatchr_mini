@@ -1952,25 +1952,7 @@ function drawGraph(){
 		freq: 'bar'
 	    },
 	    groups: [typeNames2],
-	    order: null,
-	    onclick: function(d, element){
-		var videoID = $("#video-url").val();
-
-		var elapsedTime;
-
-		if(selectedTimeStyle == "real-time-style"){
-		    elapsedTime = xTimes[d.x];
-		} else {
-		    elapsedTime = x[d.x+1];
-		}
-
-		videoPlayer2.loadVideoById({
-		    videoId: videoID,
-		    startSeconds: elapsedTime
-		});
-		
-		$("#popup-watch-video2").popup("open");
-	    }
+	    order: null
 	},
 	axis: {
 	    x: {
@@ -2029,6 +2011,40 @@ function drawGraph(){
 	    enabled: false
 	}
     });
+
+    // play video by clicking ticks
+    $(".c3-axis-x .tick")
+	.on('click', function(d){
+	    if(selectedGraph != 'selector-timeline-graph'){
+		return false;
+	    }
+
+	    var label = d3.select(this).text();
+	    $(".c3-axis-x .tick").each(function(i, element){
+		if(d3.select(element).text() == label){
+		    
+		    var videoID = $("#video-url").val();
+		    var elapsedTime;
+
+		    if(selectedTimeStyle == "real-time-style"){
+			elapsedTime = xTimes[i];
+		    } else {
+			elapsedTime = x[i+1];
+		    }
+		    
+		    videoPlayer2.cueVideoById({
+			videoId: videoID,
+			startSeconds: elapsedTime
+		    });
+		
+		    $("#popup-watch-video2").popup("open");
+
+		    // return after matching the first element.
+		    // i don't know why the label is matched twice.
+		    return false;
+		}
+	    });
+	});
 }
 
 
