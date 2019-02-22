@@ -1079,8 +1079,15 @@ $(document).on('tap', '#popup-set-url-cancel', function(event) {
 });
 
 $(document).on('tap', '#btn-watch-video', function(event) {
-    initVideoPlayer('youtube-player', '#popup-watch-video');
-    $("#popup-watch-video").popup("open");
+    var videoID = $("#video-url").val();
+    if(videoID == ""){
+	$("#popup-title").text($.i18n("fwm-m-title-error"));
+	$("#popup-message-body").html("<p>" + $.i18n("fwm-message-no-videoid-error") + "</p>");
+	$("#popup-message").popup("open");
+    } else {
+        initVideoPlayer('youtube-player', '#popup-watch-video');
+	$("#popup-watch-video").popup("open");
+    }
 });
 
 
@@ -1143,14 +1150,14 @@ function onPlayerReady(event){
 
     if(code.id == 'youtube-player'){
 	player = videoPlayer;
+
+	var videoID = $("#video-url").val();
+	videoPlayer.cueVideoById({
+	    videoId: videoID,
+	});
     } else {
 	player = videoPlayer2;
     }
-
-    var videoID = $("#video-url").val();
-    player.cueVideoById({
-	videoId: videoID,
-    });
 } 
 
 function onYoutubePlayerReady(event) {
@@ -2018,38 +2025,38 @@ function drawGraph(){
     });
 
     // play video by clicking ticks
-    $(".c3-axis-x .tick")
-	.on('click', function(d){
-	    if(selectedGraph != 'selector-timeline-graph'){
-		return false;
-	    }
-
-	    var label = d3.select(this).text();
-	    $(".c3-axis-x .tick").each(function(i, element){
-		if(d3.select(element).text() == label){
-		    
-		    var videoID = $("#video-url").val();
-		    var elapsedTime;
-
-		    if(selectedTimeStyle == "real-time-style"){
-			elapsedTime = xTimes[i];
-		    } else {
-			elapsedTime = x[i+1];
-		    }
-		    
-		    videoPlayer2.cueVideoById({
-			videoId: videoID,
-			startSeconds: elapsedTime
-		    });
-		
-		    $("#popup-watch-video2").popup("open");
-
-		    // return after matching the first element.
-		    // i don't know why the label is matched twice.
+    var videoID = $("#video-url").val();
+    if(videoID != ""){
+	$(".c3-axis-x .tick")
+	    .on('click', function(d){
+		if(selectedGraph != 'selector-timeline-graph'){
 		    return false;
 		}
+		
+		var label = d3.select(this).text();
+		$(".c3-axis-x .tick").each(function(i, element){
+		    if(d3.select(element).text() == label){
+			var elapsedTime;
+			if(selectedTimeStyle == "real-time-style"){
+			    elapsedTime = xTimes[i];
+			} else {
+			    elapsedTime = x[i+1];
+			}
+			
+			videoPlayer2.cueVideoById({
+			    videoId: videoID,
+			    startSeconds: elapsedTime
+			});
+			
+			$("#popup-watch-video2").popup("open");
+			
+			// return after matching the first element.
+			// i don't know why the label is matched twice.
+			return false;
+		    }
+		});
 	    });
-	});
+    }
 }
 
 
