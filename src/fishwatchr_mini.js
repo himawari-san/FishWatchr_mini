@@ -1108,6 +1108,21 @@ function initVideoPlayer(playerName, popupId){
 
 
 function getVideoPlayer(playerName){
+    if(playerName == 'youtube-player'){
+	if(videoPlayer == null){ 
+	    videoPlayer = getNewVideoPlayer(playerName);
+	}
+	return videoPlayer;
+    } else {
+	// always getNewVideoPlayer
+	// because youtube player disappears after graph.html page transition
+	videoPlayer2 = getNewVideoPlayer(playerName);
+	return videoPlayer2;
+    }
+}
+
+
+function getNewVideoPlayer(playerName){
     var player = new YT.Player(playerName, {
 	height: 'auto',
 	width: 'auto',
@@ -1118,17 +1133,7 @@ function getVideoPlayer(playerName){
 	}
     });
 
-    if(playerName == 'youtube-player'){
-	if(videoPlayer == null){ 
-	    videoPlayer = player;
-	}
-	return videoPlayer;
-    } else {
-	if(videoPlayer2 == null){ 
-	    videoPlayer2 = player;
-	}
-	return videoPlayer2;
-    }
+    return player;
 }
 
 
