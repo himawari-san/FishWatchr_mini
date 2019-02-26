@@ -1080,6 +1080,10 @@ $(document).on('tap', '#popup-set-url-cancel', function(event) {
 
 $(document).on('tap', '#btn-watch-video', function(event) {
     var videoID = $("#video-url").val();
+
+    // prevent popup windows from closing immediately
+    event.preventDefault();
+    
     if(videoID == ""){
 	$("#popup-title").text($.i18n("fwm-m-title-error"));
 	$("#popup-message-body").html("<p>" + $.i18n("fwm-message-no-videoid-error") + "</p>");
