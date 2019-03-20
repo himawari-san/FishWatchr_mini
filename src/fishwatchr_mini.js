@@ -176,6 +176,7 @@ function loadSettings(groupname){
 	// set videoid
 	if(typeof data["videoid"] === 'undefined'){
 	    hiddenVideoId = "";
+	    $("#video-url").prop("value", "");
 	} else {
 	    hiddenVideoId = data["videoid"];
 	    $("#video-url").prop("value", hiddenVideoIdLabel);
