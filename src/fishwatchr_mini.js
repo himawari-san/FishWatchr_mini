@@ -79,6 +79,9 @@ var moveDurationThreshold = 500; // msec
 
 var videoPlayer = null;
 var videoPlayer2 = null;;
+var hiddenVideoId = "";
+var hiddenVideoIdLabel = "xxxxxxxxxxxxxxxxxxxx";
+var hiddenVideoIdLabelRegExp = "^xxxxxxxxxxxx+$"; // because google's videoid length is 11
 
 $(document).ready(function(){
     $(window).on("beforeunload", function(event){
@@ -93,15 +96,9 @@ $(document).ready(function(){
 	    $("#popupWarning-message").text($.i18n("fwm-message-specify-url"));
 	    $("#popupWarning").popup("open");
 	} else {
-	    urlSettings = $("#urlSettings").val();
+	    var configName = $("#urlSettings").val();
 
-	    if(urlSettings.indexOf("http://") != 0 && urlSettings.indexOf("https://") != 0){
-		// this url is a candidate
-		urlSettings = "http://" + location.host + 
-		    location.pathname.replace(/\/[^\/]+$/, "/res/") + urlSettings + ".json";
-	    }
-
-	    loadSettings(urlSettings);
+	    loadSettings(configName);
 	}
     });
 
@@ -111,12 +108,18 @@ $(document).ready(function(){
 });
 
 
-function loadSettings(url){
+function loadSettings(groupname){
+    if(!checkGroupname(groupname)){
+	$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
+	$("#popupWarning").popup("open");
+	return;
+    }
+    
     $.ajax({
-	url: "read.php",
+	url: "get_config.php",
 	type: "post",
 	dataType: "json",
-	data: {url: url},
+	data: {groupname: groupname},
 	beforeSend: function(jqXHR, settings) {
 	    // https://stackoverflow.com/questions/16276753/jquery-mobile-1-3-1-mobile-loading-not-working/16277865
 	    var interval = setInterval(function(){
@@ -131,14 +134,8 @@ function loadSettings(url){
 	}
     }).done(function(data) {
 	// read groupname
-	if(!checkGroupname(data["groupname"])){
-	    $("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
-	    $("#popupWarning").popup("open");
-	    return;
-	} else {
-	    groupname = data["groupname"].replace(/^ +/, "").replace(/ +$/, "");
-	    $("#groupname").prop("value", groupname);
-	}
+	groupname = data["groupname"].replace(/^ +/, "").replace(/ +$/, "");
+	$("#groupname").prop("value", groupname);
 	
 	// read labels
 	$.each(data["labels"], function(key, value){
@@ -156,7 +153,7 @@ function loadSettings(url){
 	    .selectmenu('refresh');
 	
 	// set button text
-	$("#btn-load-settings").text(url);
+	$("#btn-load-settings").text($.i18n("fwm-m-tab-user-set-value") + " (" + groupname + ")");
 
 	// set auto-save option
 	if(data["auto-save"] == "true"){
@@ -175,7 +172,15 @@ function loadSettings(url){
 	    thresholdOutlier = data["thresholdOutlier"];
 	}
 	$("#threshold-outlier").prop("value", thresholdOutlier);
-	
+
+	// set videoid
+	if(typeof data["videoid"] === 'undefined'){
+	    hiddenVideoId = "";
+	} else {
+	    hiddenVideoId = data["videoid"];
+	    $("#video-url").prop("value", hiddenVideoIdLabel);
+	}
+
     }).fail(function (jqXHR, textStatus, error){
 	unLockScreen("lock");
 	$("#popupWarning-message").html($.i18n("fwm-message-config-read-error") + "<br />"+ textStatus + ", " + error);
@@ -199,16 +204,10 @@ $(document).on('pagecreate', function(event){
 	if(location.search.match(/\?config=(.+)/)){
 	    // ToDo: multiple options
 	    // config= option must be at the end of the url
-	    var configUrl = RegExp.$1;
+	    var configName = RegExp.$1;
 	    
-	    if(configUrl.indexOf("http://") != 0 && configUrl.indexOf("https://") != 0){
-		// this url is a candidate
-		configUrl = "http://" + location.host + 
-		    location.pathname.replace(/\/[^\/]+$/, "/res/") + configUrl + ".json";
-	    }
-	    
-	    loadSettings(configUrl);
-	    console.log("config url:" + configUrl);
+	    loadSettings(configName);
+	    console.log("config url:" + configName);
 	}
     } else if(event.target.id == 'observation'){
     } else if(event.target.id == 'graph'){
@@ -289,9 +288,15 @@ function changeLang(){
     $("#groupname").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
     $("#username").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
     $("#username").prop("placeholder", $.i18n("fwm-m-label-placeholder"));
-    if($("#btn-load-settings").text().indexOf('http') != 0){
+
+    // refresh load-setting button
+    var found = $("#btn-load-settings").text().match(/^.+(\(.+\))$/);
+    if(found){
+	$("#btn-load-settings").text($.i18n("fwm-m-tab-user-set-value") + " " + found[1]);
+    } else {
 	$("#btn-load-settings").text($.i18n("fwm-m-tab-user-empty-value"));
     }
+
     for(i = 1; i <= 8; i++){
 	$("#label" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
 	$("#speaker" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
@@ -698,12 +703,19 @@ function saveSettings(){
 	return false;
     }
 
+    var currentVideoId = $("#video-url").val();
+    if(currentVideoId.match(new RegExp(hiddenVideoIdLabelRegExp))){
+	$("#popupWarning-message").text($.i18n("fwm-message-invalid-videoid-error"));
+	$("#popupWarning").popup("open");
+	return false;
+    }
+
     var speakers = [];
     var labels = [];
     var mode = $("#selector1-observation-mode").val();
     var auto_save = $("#flip-auto-save").val() == "on" ? "true" : "false";
     var currentThresholdOutlier = $("#threshold-outlier").val();
-    
+
     for(var i = 1; i <=8; i++){
 	speakers.push($("#speaker" + i).val())
 	labels.push($("#label" + i).val())
@@ -716,7 +728,8 @@ function saveSettings(){
 	"observation-mode": mode,
 	"auto-save": auto_save,
 	"time-style": selectedTimeStyle,
-	"thresholdOutlier" : currentThresholdOutlier
+	"thresholdOutlier" : currentThresholdOutlier,
+	"videoid" : currentVideoId
     };
     
     var jqXHR = $.ajax({
@@ -1079,8 +1092,8 @@ $(document).on('tap', '#popup-set-url-cancel', function(event) {
 });
 
 $(document).on('tap', '#btn-watch-video', function(event) {
-    var videoID = $("#video-url").val();
-
+    var videoID = getVideoID();
+    
     // prevent popup windows from closing immediately
     event.preventDefault();
     
@@ -1155,7 +1168,7 @@ function onPlayerReady(event){
     if(code.id == 'youtube-player'){
 	player = videoPlayer;
 
-	var videoID = $("#video-url").val();
+	var videoID = getVideoID();
 	videoPlayer.cueVideoById({
 	    videoId: videoID,
 	});
@@ -1506,6 +1519,16 @@ function checkGroupname(groupname){
 	return true;
     } else {
 	return false;
+    }
+}
+
+
+function getVideoID(){
+    var videoID = $("#video-url").val();
+    if(videoID.match(new RegExp(hiddenVideoIdLabelRegExp))){
+	return hiddenVideoId;
+    } else {
+	return videoID;
     }
 }
 
@@ -2029,7 +2052,7 @@ function drawGraph(){
     });
 
     // play video by clicking ticks
-    var videoID = $("#video-url").val();
+    var videoID = getVideoID();
     if(videoID != ""){
 	$(".c3-axis-x .tick")
 	    .on('click', function(d){
