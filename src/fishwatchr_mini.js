@@ -1137,6 +1137,11 @@ function getVideoPlayer(playerName){
     if(playerName == 'youtube-player'){
 	if(videoPlayer == null){ 
 	    videoPlayer = getNewVideoPlayer(playerName);
+	} else {
+	    var videoID = getVideoID();
+	    videoPlayer.cueVideoById({
+		videoId: videoID,
+	    });
 	}
 	return videoPlayer;
     } else {
