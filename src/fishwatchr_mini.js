@@ -78,7 +78,7 @@ var moveDistanceThreshold = 25; // px
 var moveDurationThreshold = 500; // msec
 
 var videoPlayer = null;
-var videoPlayer2 = null;;
+var videoPlayer2 = null;
 var hiddenVideoId = "";
 var hiddenVideoIdLabel = "xxxxxxxxxxxxxxxxxxxx";
 var hiddenVideoIdLabelRegExp = "^xxxxxxxxxxxx+$"; // because google's videoid length is 11
