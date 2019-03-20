@@ -1085,10 +1085,12 @@ $(document).on('tap', '#btn-get-archive', function(event) {
 
 $(document).on('tap', '#popup-set-url-ok', function(event) {
     resultDialog = "ok";
+    $("#popup-set-url").popup("close");
 });
 
 $(document).on('tap', '#popup-set-url-cancel', function(event) {
     resultDialog = "cancel";
+    $("#popup-set-url").popup("close");
 });
 
 $(document).on('tap', '#btn-watch-video', function(event) {
