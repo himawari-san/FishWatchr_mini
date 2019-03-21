@@ -742,7 +742,6 @@ function saveSettings(){
 	    databody: settingsJSON
 	}
     }).done(function (response){
-	var url = response.url;
 	var error = response.error;
 
 	if(error == "already_exists") {
@@ -760,7 +759,6 @@ function saveSettings(){
 	    $("#popup-title").text($.i18n("fwm-js-title-save-complete"));
 	    $("#popup-message-body").html("<p>"
 		  + $.i18n("fwm-message-config-save-complete")
-		  + " (<a href=\"" + url + "\" target=\"_blank\">URL</a>)"
 		  + "</p>");
 	    $("#popup-message").popup("open");
 	}

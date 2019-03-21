@@ -23,12 +23,5 @@ if(file_put_contents($resultFile, json_encode($_POST['databody'], JSON_UNESCAPED
     exit;
 }
 
-// copy the file to www dir
-if(!copy($resultFile, $publish_dir . $filename)){
-    $error = "fail_to_copy";
-    echo json_encode(compact('error'));
-    exit;
-}
-
 echo json_encode(compact('url'));
 ?>
