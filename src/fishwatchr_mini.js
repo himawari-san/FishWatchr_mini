@@ -2075,10 +2075,13 @@ function drawGraph(){
 			} else {
 			    elapsedTime = x[i+1];
 			}
+			var hms = elapsedTime.match(/^(\d\d)(\d\d)(\d\d)$/);
 			
 			videoPlayer2.cueVideoById({
 			    videoId: videoID,
-			    startSeconds: elapsedTime
+			    startSeconds: (parseInt(hms[1], 10) * 3600
+					   + parseInt(hms[2], 10) * 60
+					   + parseInt(hms[3], 10))
 			});
 			
 			$("#popup-watch-video2").popup("open");
