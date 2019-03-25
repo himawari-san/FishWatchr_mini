@@ -50,6 +50,7 @@ var selectedGraph = 'selector-summary-graph'; // default graph
 var selectedAttribute = 'attribute-label';
 var selectedTimeStyle = 'real-time-style';
 var selectedObserver = 'all';
+var categoryYours = '_YOURS_';
 
 var thresholdOutlier = 1800;
 
@@ -1950,7 +1951,18 @@ function drawGraph(){
 	    } else {
 		temp[key] = 1;
 	    }
+
+	    // your annotations
+	    key = categoryYours + "\t" + time;
+	    if(username == mergedAnnotationsCurrent[i][fn_username]){
+		if(key in temp){
+		    temp[key]++;
+		} else {
+		    temp[key] = 1;
+		}
+	    }
 	}
+	categories[categoryYours] = 1;
 	
 	for(var i in type){
 	    var d = new Date(i * histgramInterval * 1000);
