@@ -72,6 +72,7 @@ var flagi18nLoaded = false;
 
 var toolMenuItemID = "";
 var resultDialogRecordTime = "";
+var groupSiteURL = "";
 
 var startTouchY; // for touchend event
 var startTouchTime; // for touchend event
@@ -183,6 +184,13 @@ function loadSettings(groupname){
 	    $("#video-url").prop("value", hiddenVideoIdLabel);
 	}
 
+	// set group site url
+	if(typeof data["groupSiteURL"] === 'undefined'){
+	    groupSiteURL = "";
+	} else {
+	    groupSiteURL = data["groupSiteURL"];
+	}
+	updateGroupURL();
     }).fail(function (jqXHR, textStatus, error){
 	unLockScreen("lock");
 	$("#popupWarning-message").html($.i18n("fwm-message-config-read-error") + "<br />"+ textStatus + ", " + error);
@@ -202,6 +210,8 @@ $(document).on('pagecreate', function(event){
     if(event.target.id == 'home'){
 	// get an url option for 
 	configUrlOption = location.search;
+
+	updateGroupURL();
 	
 	if(location.search.match(/\?config=(.+)/)){
 	    // ToDo: multiple options
@@ -648,6 +658,8 @@ $(document).on('popupafterclose', '#popupToolMenu', function(event) {
 	    }
 	    $("#popupWarning").popup("open");
 	}
+    } else if(toolMenuItemID == "toolMenuItemSetReferenceURL"){
+	$("#popup-set-group-site-url").popup("open");
     }
     toolMenuItemID = ""; // clear
 });
@@ -731,7 +743,8 @@ function saveSettings(){
 	"auto-save": auto_save,
 	"time-style": selectedTimeStyle,
 	"thresholdOutlier" : currentThresholdOutlier,
-	"videoid" : currentVideoId
+	"videoid" : currentVideoId,
+	"groupSiteURL" : groupSiteURL
     };
     
     var jqXHR = $.ajax({
@@ -1093,6 +1106,17 @@ $(document).on('tap', '#popup-set-url-cancel', function(event) {
     $("#popup-set-url").popup("close");
 });
 
+$(document).on('tap', '#popup-set-group-site-url-ok', function(event) {
+    groupSiteURL = $("#group-site-url").val();
+    updateGroupURL();
+    $("#popup-set-group-site-url").popup("close");
+});
+
+$(document).on('tap', '#popup-set-group-site-url-cancel', function(event) {
+    $("#popup-set-group-site-url").popup("close");
+});
+
+
 $(document).on('tap', '#btn-watch-video', function(event) {
     var videoID = getVideoID();
     
@@ -1108,6 +1132,17 @@ $(document).on('tap', '#btn-watch-video', function(event) {
 	$("#popup-watch-video").popup("open");
     }
 });
+
+
+function updateGroupURL(){
+    if(groupSiteURL == ""){
+	$("#liShowGroupSite").hide();
+    } else {
+	$("#liShowGroupSite").show();
+    }
+    $("#group-site-url").prop("value", groupSiteURL);
+    $("#show-group-site").prop("href", groupSiteURL);
+}
 
 
 function initYoutubePlayer() {

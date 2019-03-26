@@ -44,7 +44,7 @@
             <ul data-role="listview" data-inset="true" style="min-width:200px;">
               <li data-icon="action"><a class="fw-option-item" href="http://www2.ninjal.ac.jp/lrc/index.php?%B4%D1%BB%A1%BB%D9%B1%E7%A5%C4%A1%BC%A5%EB%20FishWatchr%2FMini" target="_blank" data-i18n="fwm-nav-option-manual">マニュアル</a></li>
               <li data-icon="action"><a class="fw-option-item" href="https://www.nict.go.jp/JST/JST5.html" target="_blank" data-i18n="fwm-nav-option-jst">日本標準時(NICT)</a></li>
-              <li data-icon="action"><a class="fw-option-item" href="" target="_blank" id="show-group-site" data-i18n="fwm-nav-option-group-site">グループ用サイト</a></li>
+              <li data-icon="action" id="liShowGroupSite"><a class="fw-option-item" href="" target="_blank" id="show-group-site" data-i18n="fwm-nav-option-group-site">グループ用サイト</a></li>
             </ul>
 	    <div data-role="collapsible" data-inset="true">
 	      <h3><span data-i18n="fwm-nav-option-admin">管理</span></h3>
@@ -368,6 +368,22 @@
 		<span data-i18n="fwm-m-label-show-qrcode">グループ名:</span> <a id="url-group-settings" href="#" />
 	      </p> 
               <a href="#" class="ui-btn ui-shadow" data-rel="back" data-i18n="fwm-m-button-close">閉じる</a>
+	    </div>
+	  </div>
+	</div>
+
+	<div data-role="popup" id="popup-set-group-site-url" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px;" class="ui-mini" data-history="false">
+	  <div data-role="header" data-theme="a">
+	    <h1 data-i18n="fwm-m-title-set-group-site">グループ用サイトの設定</h1>
+	  </div>
+	  <div role="main" class="ui-content">
+	    <div class="ui-field-contain">
+	      <label for="group-site-url">URL:</lable>
+	      <input name="textinput-time" id="group-site-url" value="" type="text" />
+	    </div>
+	    <div class="ui-content">
+              <a href="#" class="ui-btn ui-shadow ui-btn-inline record-time-button" id="popup-set-group-site-url-ok">OK</a>
+              <a href="#" class="ui-btn ui-shadow ui-btn-inline record-time-button" id="popup-set-group-site-url-cancel">Cancel</a>
 	    </div>
 	  </div>
 	</div>
