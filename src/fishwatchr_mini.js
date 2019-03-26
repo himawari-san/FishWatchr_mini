@@ -667,6 +667,8 @@ $(document).on('popupafterclose', '#popupToolMenu', function(event) {
 
 
 $(document).on('tap', '.record-time-button', function(event) {
+    event.preventDefault();
+    
     resultDialogRecordTime = "";
     
     if(event.target.id == "record-time-button-id-cancel"){
