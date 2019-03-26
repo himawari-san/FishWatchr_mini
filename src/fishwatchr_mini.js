@@ -188,7 +188,7 @@ function loadSettings(groupname){
 	if(typeof data["groupSiteURL"] === 'undefined'){
 	    groupSiteURL = "";
 	} else {
-	    groupSiteURL = data["groupSiteURL"];
+	    groupSiteURL = sanitize(data["groupSiteURL"]);
 	}
 	updateGroupURL();
     }).fail(function (jqXHR, textStatus, error){
@@ -1108,7 +1108,7 @@ $(document).on('tap', '#popup-set-url-cancel', function(event) {
 });
 
 $(document).on('tap', '#popup-set-group-site-url-ok', function(event) {
-    groupSiteURL = $("#group-site-url").val();
+    groupSiteURL = sanitize($("#group-site-url").val());
     updateGroupURL();
     $("#popup-set-group-site-url").popup("close");
 });
