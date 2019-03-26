@@ -637,6 +637,7 @@ $(document).on('popupafterclose', '#popupToolMenu', function(event) {
     if(toolMenuItemID == "toolMenuItemSaveSettings"){
 	saveSettings();
     } else if(toolMenuItemID == "toolMenuItemRecordCurretTime"){
+	getCurrentStartRecordingTime();
 	$("#popup-record-time").popup("open");
     } else if(toolMenuItemID == "toolMenuItemShowQrCode"){
 	getGroupName();
@@ -1574,6 +1575,71 @@ function getVideoID(){
     }
 }
 
+
+function getCurrentStartRecordingTime(){
+    getGroupName();
+    if(groupname == ""){
+	$("#currentStartRecordingTime").text($.i18n("fwm-m-record-current-recording-time-undefined"));
+	return;
+    }
+
+    $.ajax({
+	url: "get_merged_data.php",
+	type: "post",
+	dataType: "text",
+	beforeSend: function(jqXHR, settings) {
+	    $("#currentStartRecordingTime").text($.i18n("fwm-m-record-current-recording-time-loading"));
+	},
+	data: {
+	    groupname: groupname,
+	    timefile: timeFilePrefix
+	},
+    }).done(function(data) {
+	var arrayAnnotations = data.split("\n");
+	var currentStartRecordingTime = 0;
+	var annotations = new Array();
+	
+	// get start-recording-time
+	if(arrayAnnotations.length == 0){
+	    // do nothing
+	} else if(arrayAnnotations[0].match(new RegExp("^" + timeFilePrefix + "\t(.+)"))){
+	    // get and remove a time information record
+	    currentStartRecordingTime = Date.parse(RegExp.$1.replace(/-/g, "/").replace(/\.\d\d\d$/, ""));
+	    arrayAnnotations.shift();
+	}
+	
+	for(var i = 0; i < arrayAnnotations.length; i++){
+	    if(arrayAnnotations[i] == "") continue;
+	    var arrayFields = arrayAnnotations[i].split("\t");
+	    arrayFields.push(Date.parse(arrayFields[fn_ctime].replace(/-/g, "/")));
+	    annotations[i] = arrayFields;
+	}
+	
+	// sort by date
+	annotations.sort(function(a, b){
+	    if(a[fn_ptime] < b[fn_ptime]){
+		return -1;
+	    } else {
+		return 1;
+	    }
+	});
+
+	// startRecordingTime is the time of the first record, if no time information record
+	if(currentStartRecordingTime == 0 && annotations.length > 0){
+	    currentStartRecordingTime = annotations[0][fn_ptime];
+	}
+
+	if(currentStartRecordingTime == 0){
+	    $("#currentStartRecordingTime").text($.i18n("fwm-m-record-current-recording-time-undefined"));
+	} else {
+	    $("#currentStartRecordingTime")
+		.text(date2FormattedDateTime(new Date(currentStartRecordingTime)));
+	}
+    }).fail(function (jqXHR, textStatus){
+	console.log("hey fail");
+	$("#currentStartRecordingTime").text($.i18n("fwm-m-record-current-recording-time-fail"));
+    });
+}
 
 function updateMergedAnnotationsCurrent(begin, end){
     mergedAnnotationsCurrent = new Array();

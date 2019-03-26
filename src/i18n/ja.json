@@ -107,6 +107,10 @@
     "fwm-m-record-time-input-current-time": "現在時刻入力",
     "fwm-m-record-time-input-manual-time": "手動時刻入力",
     "fwm-m-record-time-example": "例： 2018-01-11 12:11:30",
+    "fwm-m-record-current-recording-time": "現在の設定値:",
+    "fwm-m-record-current-recording-time-undefined": "(未設定)",
+    "fwm-m-record-current-recording-time-loading": "(取得中)",
+    "fwm-m-record-current-recording-time-fail": "(取得失敗)",
     "fwm-m-record-time-warning": "時刻の形式が正しくありません。",
     "fwm-m-popup-record-time-ok": "OK",
     "fwm-m-popup-record-time-cancel": "Cancel"
