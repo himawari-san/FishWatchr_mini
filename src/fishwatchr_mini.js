@@ -66,6 +66,8 @@ var cBaseTime = 0;
 
 var startRecordingTime = 0;
 var timeFilePrefix = "_sys_basetime";
+var offsetTimeToPlay = 10; // sec  
+
 
 var uiLanguage = 'ja';
 var flagi18nLoaded = false;
@@ -2197,12 +2199,18 @@ function drawGraph(){
 			    elapsedTime = x[i+1];
 			}
 			var hms = elapsedTime.match(/^(\d\d)(\d\d)(\d\d)$/);
-			
+			var timeToPlay =
+			    parseInt(hms[1], 10) * 3600
+			    + parseInt(hms[2], 10) * 60
+			    + parseInt(hms[3], 10) - offsetTimeToPlay;
+
+			if(timeToPlay < 0){
+			    timtToPlay = 0;
+			}
+		    
 			videoPlayer2.cueVideoById({
 			    videoId: videoID,
-			    startSeconds: (parseInt(hms[1], 10) * 3600
-					   + parseInt(hms[2], 10) * 60
-					   + parseInt(hms[3], 10))
+			    startSeconds: timeToPlay
 			});
 			
 			$("#popup-watch-video2").popup("open");
