@@ -2025,7 +2025,13 @@ function drawGraph(){
 	var prevTime = 0;
 	
 	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
-	    var time = Math.floor(mergedAnnotationsCurrent[i][fn_ptime]/histgramInterval/1000);
+	    var ptime = mergedAnnotationsCurrent[i][fn_ptime];
+	    // remove annotations that are made before recording the video
+	    if(ptime - startRecordingTime < 0){
+		continue;
+	    }
+
+	    var time = Math.floor(ptime/histgramInterval/1000);
 	    var category = mergedAnnotationsCurrent[i][iAttribute];
 
 	    // insert axises whose frequency is 0
