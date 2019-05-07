@@ -640,6 +640,8 @@ $(document).on('popupafterclose', '#popupToolMenu', function(event) {
 	saveSettings();
     } else if(toolMenuItemID == "toolMenuItemRecordCurretTime"){
 	getCurrentStartRecordingTime();
+	// set default date, that is the current time
+	$("#textinput-time").prop("value", date2FormattedDateTime(new Date(), false));
 	$("#popup-record-time").popup("open");
     } else if(toolMenuItemID == "toolMenuItemShowQrCode"){
 	getGroupName();
