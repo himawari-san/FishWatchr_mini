@@ -83,6 +83,8 @@
     "fwm-message-invalid-username-error": "Alphanumeric characters and _ can be used to make user names.",
     "fwm-message-permission-error": "Only administrators are permitted to execute this function.",
     "fwm-message-invalid-videoid-error": "This video ID is invalid.",
+    "fwm-message-invalid-playback-position-error-1": "Failed to get the playback position.",
+    "fwm-message-invalid-playback-position-error-2": "Please confirm your 'Record Time' setting in the right menu.",
     "fwm-message-group-already-exist-error": "This group name has been already used. Please input another group name.",
     "fwm-message-server-error": "Some server error occurred.",
     "fwm-js-title-save-complete": "Save Complete",

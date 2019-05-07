@@ -2198,14 +2198,33 @@ function drawGraph(){
 			} else {
 			    elapsedTime = x[i+1];
 			}
+
+			// find malformed elapsedTime
+			if(!elapsedTime.match(/^(\d\d)(\d\d)(\d\d)$/)){
+			    $("#popupWarning-message-graph").html(
+				$.i18n("fwm-message-invalid-playback-position-error-1")
+				    + "<br />"
+				    + $.i18n("fwm-message-invalid-playback-position-error-2")
+				    + "<br />(" + elapsedTime + "sec)");
+			    $("#popupWarningGraph").popup("open");
+			    return false;
+			}
+
 			var hms = elapsedTime.match(/^(\d\d)(\d\d)(\d\d)$/);
 			var timeToPlay =
 			    parseInt(hms[1], 10) * 3600
 			    + parseInt(hms[2], 10) * 60
 			    + parseInt(hms[3], 10) - offsetTimeToPlay;
 
-			if(timeToPlay < 0){
-			    timtToPlay = 0;
+			if(timeToPlay < 0 || timeToPlay > 12 * 60 * 60){
+			    // over 12hours
+			    $("#popupWarning-message-graph").html(
+				$.i18n("fwm-message-invalid-playback-position-error-1")
+				    + "<br />"
+				    + $.i18n("fwm-message-invalid-playback-position-error-2")
+				    + "<br />(" + timeToPlay + "sec)");
+			    $("#popupWarningGraph").popup("open");
+			    return false;
 			}
 		    
 			videoPlayer2.cueVideoById({

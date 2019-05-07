@@ -83,6 +83,8 @@
     "fwm-message-invalid-username-error": "ユーザ名は，数字・アルファベット・アンダーバーのみで構成してください。",
     "fwm-message-permission-error": "この機能は，管理者のみが実行できます。",
     "fwm-message-invalid-videoid-error": "不正なビデオIDです。",
+    "fwm-message-invalid-playback-position-error-1": "ビデオの再生位置が取得できませんでした。",
+    "fwm-message-invalid-playback-position-error-2": "右メニューの「時間記録」設定を確認して下さい。",
     "fwm-message-group-already-exist-error": "このグループの設定はすでに登録されています。別のグループ名を付けてください。",
     "fwm-message-server-error": "サーバ側でエラーが発生しました。",
     "fwm-js-title-save-complete": "保存完了",
