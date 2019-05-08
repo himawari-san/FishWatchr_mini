@@ -2076,6 +2076,17 @@ function drawGraph(){
 	    }
 	}
 	categories[categoryYours] = 1;
+
+	// create an empty chart if there is no data to draw
+	if(Object.keys(temp).length == 0){
+	    var chart = c3.generate({
+	    	bindto: '#graph_body',
+	    	data: {
+	    	    columns: []
+	    	}
+	    });
+	    return;
+	}
 	
 	for(var i in type){
 	    var d = new Date(i * histgramInterval * 1000);
