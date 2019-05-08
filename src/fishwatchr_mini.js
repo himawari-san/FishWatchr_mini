@@ -2229,7 +2229,9 @@ function drawGraph(){
 			    + parseInt(hms[2], 10) * 60
 			    + parseInt(hms[3], 10) - offsetTimeToPlay;
 
-			if(timeToPlay < 0 || timeToPlay > 12 * 60 * 60){
+			if(timeToPlay < 0){
+			    timeToPlay = 0;
+			} else if(timeToPlay > 12 * 60 * 60){
 			    // over 12hours
 			    $("#popupWarning-message-graph").html(
 				$.i18n("fwm-message-invalid-playback-position-error-1")
