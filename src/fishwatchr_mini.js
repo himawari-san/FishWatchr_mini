@@ -1602,7 +1602,7 @@ function checkGroupname(groupname){
 
 
 function getVideoID(){
-    var videoID = $("#video-url").val();
+    var videoID = sanitize($("#video-url").val());
     if(videoID.match(new RegExp(hiddenVideoIdLabelRegExp))){
 	return hiddenVideoId;
     } else {
