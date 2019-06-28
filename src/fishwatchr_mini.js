@@ -1161,17 +1161,35 @@ function initYoutubePlayer() {
 
 
 function initVideoPlayer(playerName, popupId){
-    var player = getVideoPlayer(playerName);
 
-    $(popupId).on(
-    	{
-    	    popupbeforeposition: function(){
-    	    },
-    	    popupafterclose: function(){
-		player.stopVideo();
+    if(!isVideoID()) {
+	var videoID = getVideoID();
+	var playerNode = $(popupId).find('.video-player');
+	playerNode.empty();
+	playerNode.append('<video id="browser-video-player" preload="auto" width="100%" height="auto" controls src="' + videoID + '#t=0"/>');
+	videoPlayer2 = playerNode.find("video")[0];
+	
+	$(popupId).on(
+    	    {
+    		popupafterclose: function(){
+		    videoPlayer2.pause();
+    		}
     	    }
-    	}
-    );
+	);
+    } // youtube
+    else {
+	var player = getVideoPlayer(playerName);
+	
+	$(popupId).on(
+    	    {
+    		popupbeforeposition: function(){
+    		},
+    		popupafterclose: function(){
+		    player.stopVideo();
+    		}
+    	    }
+	);
+    }
 }
 
 
@@ -1228,6 +1246,17 @@ function onPlayerReady(event){
 
 function onYoutubePlayerReady(event) {
 };
+
+
+function isVideoID(){
+    var videoID = getVideoID();
+
+    if(videoID.match(/^https?:\/\//)) {
+	return false;
+    } else {
+	return true;
+    }
+}
 
 
 function sanitize(str){
@@ -2242,11 +2271,16 @@ function drawGraph(){
 			    return false;
 			}
 		    
-			videoPlayer2.cueVideoById({
-			    videoId: videoID,
-			    startSeconds: timeToPlay
-			});
-			
+			if(isVideoID()){
+			    videoPlayer2.cueVideoById({
+				videoId: videoID,
+				startSeconds: timeToPlay
+			    });
+			} else {
+			    var url = videoPlayer2.getAttribute('src');
+			    videoPlayer2.setAttribute('src', url.replace(/#t=0/, "#t=" + timeToPlay));
+			}
+			    
 			$("#popup-watch-video2").popup("open");
 			
 			// return after matching the first element.
