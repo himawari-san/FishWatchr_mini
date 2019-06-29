@@ -2278,7 +2278,7 @@ function drawGraph(){
 			    });
 			} else {
 			    var url = videoPlayer2.getAttribute('src');
-			    videoPlayer2.setAttribute('src', url.replace(/#t=0/, "#t=" + timeToPlay));
+			    videoPlayer2.setAttribute('src', url.replace(/#t=\d+/, "#t=" + timeToPlay));
 			}
 			    
 			$("#popup-watch-video2").popup("open");
