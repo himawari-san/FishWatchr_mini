@@ -90,6 +90,7 @@ var videoPlayer2 = null;
 var hiddenVideoId = "";
 var hiddenVideoIdLabel = "xxxxxxxxxxxxxxxxxxxx";
 var hiddenVideoIdLabelRegExp = "^xxxxxxxxxxxx+$"; // because google's videoid length is 11
+var localVideoFile = "";
 
 $(document).ready(function(){
     $(window).on("beforeunload", function(event){
@@ -217,6 +218,12 @@ $(document).on('pagecreate', function(event){
 	// get an url option for 
 	configUrlOption = location.search;
 
+	// initialize localVideoFile and UI 
+	localVideoFile = "";
+	$("#video-url").prop("type", "text"); // Web
+	$("#video-url").prop("value", "");
+	$("#flip-video-file-place").val("Web").flipswitch("refresh");
+	
 	updateGroupURL();
 	
 	if(location.search.match(/\?config=(.+)/)){
@@ -747,8 +754,11 @@ function saveSettings(){
 	return false;
     }
 
-    var currentVideoId = $("#video-url").val();
-    if(currentVideoId.match(new RegExp(hiddenVideoIdLabelRegExp))){
+    var currentVideoId = getVideoID();
+    if(currentVideoId.match(/^blob:/)){
+	currentVideoId = ""; // save no videoID
+    } 
+    if($("#video-url").val().match(new RegExp(hiddenVideoIdLabelRegExp))){
 	$("#popupWarning-message").text($.i18n("fwm-message-invalid-videoid-error"));
 	$("#popupWarning").popup("open");
 	return false;
@@ -1174,6 +1184,25 @@ $(document).on('tap', '#btn-watch-video', function(event) {
 });
 
 
+$(document).on('change', '#video-url', function(event) {
+    if($("#video-url").attr("type") == "file"){
+	localVideoFile = URL.createObjectURL(this.files[0]);
+    }
+});
+
+
+$(document).on('change', '#flip-video-file-place', function(event) {
+    var videoFilePlaceSwitch = $("#flip-video-file-place").val();
+
+    if(videoFilePlaceSwitch == "Web"){
+	$("#video-url").prop("type", "text");
+    } else { // Local
+	$("#video-url").prop("type", "file");
+    }
+    $("#video-url").textinput("refresh");
+});
+
+
 function updateGroupURL(){
     if(groupSiteURL == ""){
 	$("#liShowGroupSite").hide();
@@ -1199,8 +1228,9 @@ function initVideoPlayer(playerName, popupId){
 	var videoID = getVideoID();
 	var playerNode = $(popupId).find('.video-player');
 	playerNode.empty();
-	playerNode.append('<video id="browser-video-player" preload="auto" width="100%" height="auto" controls src="' + videoID + '#t=0"/>');
+	playerNode.append('<video id="browser-video-player" preload="auto" width="100%" height="auto" controls src="' + videoID + '"/>');
 	videoPlayer2 = playerNode.find("video")[0];
+	videoPlayer2.currentTime = 0;
 	
 	$(popupId).on(
     	    {
@@ -1284,7 +1314,7 @@ function onYoutubePlayerReady(event) {
 function isVideoID(){
     var videoID = getVideoID();
 
-    if(videoID.match(/^https?:\/\//)) {
+    if(videoID.match(/(^https?:\/\/||^blob:)/)) {
 	return false;
     } else {
 	return true;
@@ -1635,7 +1665,7 @@ function checkGroupname(groupname){
 
 
 function getVideoID(){
-    var videoID = sanitize($("#video-url").val());
+    var videoID = $('#video-url').attr('type') == "file" ?  localVideoFile : sanitize($("#video-url").val());
     if(videoID.match(new RegExp(hiddenVideoIdLabelRegExp))){
 	return hiddenVideoId;
     } else {
@@ -2417,7 +2447,7 @@ function drawGraph(){
 			    });
 			} else {
 			    var url = videoPlayer2.getAttribute('src');
-			    videoPlayer2.setAttribute('src', url.replace(/#t=\d+/, "#t=" + timeToPlay));
+			    videoPlayer2.currentTime = timeToPlay;
 			}
 			    
 			$("#popup-watch-video2").popup("open");

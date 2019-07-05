@@ -235,7 +235,14 @@
 	    <a data-role="button" id="btn-watch-video" data-mini="true" href="#" data-icon="video" data-i18n="fwm-m-tab-analysis-watch-video">ビデオ表示</a>
 	    <div class="ui-field-contain">
 	      <label for="video-url" data-i18n="fwm-m-tab-analysis-video-id">ビデオID:</label>
-	      <input type="text" name="video-url" id="video-url" value="" placeholder="" />
+	      <input type="file" name="video-url" id="video-url" value="" placeholder="" />
+	    </div>
+	    <div class="ui-field-contain">
+	      <label>ファイルの場所:</label>
+	      <select name="flip-video-file-place" id="flip-video-file-place" data-role="flipswitch" data-mini="true">
+		<option id="flip-video-file-place-local" value="Local">Local</option>
+		<option id="flip-video-file-place-web" value="Web" selected="">Web</option>
+	      </select>
 	    </div>
 	  </div>
 
