@@ -1314,7 +1314,7 @@ function onYoutubePlayerReady(event) {
 function isVideoID(){
     var videoID = getVideoID();
 
-    if(videoID.match(/(^https?:\/\/||^blob:)/)) {
+    if(videoID.match(/^https?:\/\//) || videoID.match(/^blob:/)) {
 	return false;
     } else {
 	return true;
