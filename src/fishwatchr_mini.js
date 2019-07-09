@@ -85,8 +85,6 @@ var startTouchTime; // for touchend event
 var moveDistanceThreshold = 25; // px
 var moveDurationThreshold = 500; // msec
 
-var videoPlayer = null;
-var videoPlayer2 = null;
 var hiddenVideoId = "";
 var hiddenVideoIdLabel = "xxxxxxxxxxxxxxxxxxxx";
 var hiddenVideoIdLabelRegExp = "^xxxxxxxxxxxx+$"; // because google's videoid length is 11
@@ -237,7 +235,6 @@ $(document).on('pagecreate', function(event){
     } else if(event.target.id == 'observation'){
     } else if(event.target.id == 'graph'){
 	defaultFilterText = $.i18n("fwm-m-graph-attribute-value-selector-default");
-	initVideoPlayer('youtube-player2', '#popup-watch-video2');
     }
     
     if(flagi18nLoaded){
@@ -1178,7 +1175,7 @@ $(document).on('tap', '#btn-watch-video', function(event) {
 	$("#popup-message-body").html("<p>" + $.i18n("fwm-message-no-videoid-error") + "</p>");
 	$("#popup-message").popup("open");
     } else {
-        initVideoPlayer('youtube-player', '#popup-watch-video');
+        initVideoPlayer('video-player1', '#popup-watch-video', 0);
 	$("#popup-watch-video").popup("open");
     }
 });
@@ -1214,6 +1211,74 @@ function updateGroupURL(){
 }
 
 
+class VideoPlayer {
+    constructor(name, videoID, startSeconds){
+	this.name = name;
+	this.videoID = videoID;
+	this.startSeconds = startSeconds;
+    }
+}
+
+
+class YouTubeVideoPlayer extends VideoPlayer {
+    constructor(name, videoID, startSeconds){
+	super(name, videoID, startSeconds);
+	this.type = "youtube";
+	this.player = new YT.Player(this.name, {
+	    height: 'auto',
+	    width: 'auto',
+	    videoId: '',
+	    //	playerVar: 'origin=http://localhost',
+	    events: {
+//		'onReady': this.onReady
+	    }
+	});
+    }
+
+    init(){
+	var videoID = this.videoID;
+	var startSeconds = this.startSeconds;
+	this.player.addEventListener('onReady', function(event){
+	    event.target.cueVideoById({
+		videoId: videoID,
+		startSeconds: startSeconds
+	    });
+	});
+    }
+
+    stop(){
+	if(this.player != null){
+	    this.player.stopVideo();
+	    this.player.destroy();
+	    this.player = null;
+	}
+    }
+}
+
+
+class HTML5VideoPlayer extends VideoPlayer {
+    constructor(name, videoID, startSeconds){
+	super(name, videoID, startSeconds);
+	this.type = "html5";
+	$("#" + this.name).empty(); // remove div
+	$("#" + this.name).append('<video id="' + this.name + this.type + '" preload="auto" width="100%" height="auto" controls src="' + this.videoID + '"/>');
+	this.player = $("#" + this.name + this.type)[0];
+	this.player.currentTime = this.startSeconds;
+    }
+
+    init(){}
+
+    stop(){
+	if(this.player != null){
+	    this.player.pause()
+	    $(this.name).empty();
+	}
+    }
+}
+
+
+
+
 function initYoutubePlayer() {
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
@@ -1222,93 +1287,25 @@ function initYoutubePlayer() {
 }
 
 
-function initVideoPlayer(playerName, popupId){
-
+function initVideoPlayer(playerName, popupId, startSeconds){
+    var player = null;
+    var videoID = getVideoID();
+    
     if(!isVideoID()) {
-	var videoID = getVideoID();
-	var playerNode = $(popupId).find('.video-player');
-	playerNode.empty();
-	playerNode.append('<video id="browser-video-player" preload="auto" width="100%" height="auto" controls src="' + videoID + '"/>');
-	videoPlayer2 = playerNode.find("video")[0];
-	videoPlayer2.currentTime = 0;
-	
-	$(popupId).on(
-    	    {
-    		popupafterclose: function(){
-		    videoPlayer2.pause();
-    		}
-    	    }
-	);
+	player = new HTML5VideoPlayer(playerName, videoID, startSeconds);
     } // youtube
     else {
-	var player = getVideoPlayer(playerName);
-	
-	$(popupId).on(
-    	    {
-    		popupbeforeposition: function(){
-    		},
-    		popupafterclose: function(){
-		    player.stopVideo();
-    		}
+	player = new YouTubeVideoPlayer(playerName, videoID, startSeconds);
+	player.init();
+    }
+
+    $(popupId).on({
+    	    popupafterclose: function(){
+		player.stop();
     	    }
-	);
-    }
+    	}
+    );
 }
-
-
-function getVideoPlayer(playerName){
-    if(playerName == 'youtube-player'){
-	if(videoPlayer == null){ 
-	    videoPlayer = getNewVideoPlayer(playerName);
-	} else {
-	    var videoID = getVideoID();
-	    videoPlayer.cueVideoById({
-		videoId: videoID,
-	    });
-	}
-	return videoPlayer;
-    } else {
-	// always getNewVideoPlayer
-	// because youtube player disappears after graph.html page transition
-	videoPlayer2 = getNewVideoPlayer(playerName);
-	return videoPlayer2;
-    }
-}
-
-
-function getNewVideoPlayer(playerName){
-    var player = new YT.Player(playerName, {
-	height: 'auto',
-	width: 'auto',
-	videoId: '',
-//	playerVar: 'origin=http://localhost',
-	events: {
-	    'onReady': onPlayerReady
-	}
-    });
-
-    return player;
-}
-
-
-function onPlayerReady(event){
-    var player;
-    var code = event.target.getIframe();
-
-    if(code.id == 'youtube-player'){
-	player = videoPlayer;
-
-	var videoID = getVideoID();
-	videoPlayer.cueVideoById({
-	    videoId: videoID,
-	});
-    } else {
-	player = videoPlayer2;
-    }
-} 
-
-function onYoutubePlayerReady(event) {
-};
 
 
 function isVideoID(){
@@ -2440,16 +2437,7 @@ function drawGraph(){
 			    return false;
 			}
 		    
-			if(isVideoID()){
-			    videoPlayer2.cueVideoById({
-				videoId: videoID,
-				startSeconds: timeToPlay
-			    });
-			} else {
-			    var url = videoPlayer2.getAttribute('src');
-			    videoPlayer2.currentTime = timeToPlay;
-			}
-			    
+			initVideoPlayer('video-player2', '#popup-watch-video2', timeToPlay);
 			$("#popup-watch-video2").popup("open");
 			
 			// return after matching the first element.
