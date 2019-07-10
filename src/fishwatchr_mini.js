@@ -1278,8 +1278,8 @@ class HTML5VideoPlayer extends VideoPlayer {
 
     stop(){
 	if(this.player != null){
-	    this.player.pause()
-	    $(this.name).empty();
+	    this.player.pause();
+	    $("#" + this.name).empty();
 	}
     }
 }
