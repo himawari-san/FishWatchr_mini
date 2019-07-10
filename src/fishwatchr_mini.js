@@ -1263,10 +1263,18 @@ class HTML5VideoPlayer extends VideoPlayer {
 	$("#" + this.name).empty(); // remove div
 	$("#" + this.name).append('<video id="' + this.name + this.type + '" preload="auto" width="100%" height="auto" controls src="' + this.videoID + '"/>');
 	this.player = $("#" + this.name + this.type)[0];
-	this.player.currentTime = this.startSeconds;
     }
 
-    init(){}
+    init(){
+	// This method is for Safari/iOS.
+	// In Firefox/Linux, simply write in the constructor as follows:
+	// this.player.currentTime = this.startSeconds
+	var player = this.player;
+	var startSeconds = this.startSeconds;
+	this.player.addEventListener('loadeddata', function(event){
+	    player.currentTime = startSeconds;
+	}, {once: true});
+    }
 
     stop(){
 	if(this.player != null){
@@ -1296,8 +1304,8 @@ function initVideoPlayer(playerName, popupId, startSeconds){
     } // youtube
     else {
 	player = new YouTubeVideoPlayer(playerName, videoID, startSeconds);
-	player.init();
     }
+    player.init();
 
     $(popupId).on({
     	    popupafterclose: function(){
