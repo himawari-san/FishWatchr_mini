@@ -70,6 +70,8 @@
     "fwm-m-graph-attribute-label": "Label",
     "fwm-m-graph-attribute-target": "Target",
     "fwm-m-graph-attribute-evaluation": "Evaluation (Ave.)",
+    "fwm-m-graph-attribute-value-filter": "Filter",
+    "fwm-m-graph-attribute-value-selector-default": "All",
     "fwm-graph-observers": "Observers:",
     "fwm-graph-observers-all-sum": "All (sum)",
     "fwm-graph-observers-self": "Self",

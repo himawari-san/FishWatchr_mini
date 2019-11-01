@@ -23,6 +23,8 @@ var fn_etime = 2; // elapsed time (string)
 var fn_ctime = 3; // date & time (string)
 var fn_username = 4;
 var fn_ptime = 5; // Date.parsed ctime (number)
+var defaultFilterValue = "__no_filter__";
+var defaultFilterText = $.i18n("fwm-m-graph-attribute-value-selector-default");
 
 var tempAnnotationSpeaker = "";
 var tempAnnotationLabel = "";
@@ -50,7 +52,9 @@ var selectedGraph = 'selector-summary-graph'; // default graph
 var selectedAttribute = 'attribute-label';
 var selectedTimeStyle = 'real-time-style';
 var selectedObserver = 'all';
+var selectedFilterValue = defaultFilterValue;
 var categoryYours = '_YOURS_';
+var yMaxTimeLineChart = 0;
 
 var thresholdOutlier = 1800;
 
@@ -225,6 +229,7 @@ $(document).on('pagecreate', function(event){
 	}
     } else if(event.target.id == 'observation'){
     } else if(event.target.id == 'graph'){
+	defaultFilterText = $.i18n("fwm-m-graph-attribute-value-selector-default");
 	initVideoPlayer('youtube-player2', '#popup-watch-video2');
     }
     
@@ -290,6 +295,20 @@ $(document).on('pagecontainershow', function(event, ui){
 });
 
 
+function updateAttributeValueSelector(){
+    var categories = selectedAttribute == 'attribute-label' ? labelList : speakerList; 
+    $("#attribute-value-selector > option").remove();
+    $("#attribute-value-selector").append(
+	$('<option>', {value: defaultFilterValue, text: defaultFilterText}));
+    for(var i = 0; i < categories.length; i++){
+	$("#attribute-value-selector").append(
+	    $('<option>', {value: categories[i], text: categories[i]}));
+    }
+    $("#attribute-value-selector").selectmenu('refresh');
+    selectedFilterValue = defaultFilterValue;
+}
+
+
 function changeLang(){
     $.i18n( {
 	locale: uiLanguage
@@ -322,6 +341,7 @@ function changeLang(){
     $("#selector2-observation-mode").selectmenu('refresh');
     $("#select-attribute").selectmenu('refresh');
     $("#select-observer").selectmenu('refresh');
+    $("#attribute-value-selector").selectmenu('refresh');
 }
 
 
@@ -481,6 +501,8 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	    drawGraph();
 	});
 
+	updateAttributeValueSelector();
+	
 	// draw an empty chart to avoid UI collapse
 	var chart = c3.generate({
 	    bindto: '#graph_body',
@@ -962,12 +984,22 @@ $(document).on('tap', '.graph-selector', function(event) {
 
 $(document).on('change', '.attribute-selector', function(event) {
     selectedAttribute = event.target.id;
-    // change the value of attribute-selector-summary
+    // change the value of attribute-selector-timeline
     $("#select-attribute")
 	.val(selectedAttribute)
 	.selectmenu('refresh');
+
+    updateAttributeValueSelector();
+
     drawGraph();
 });
+
+$(document).on('change', '#attribute-value-fillter', function(event) {
+    var selectedOption = $(this).find('option:selected');
+    selectedFilterValue = selectedOption.val();
+    drawGraph();
+});
+
 
 $(document).on('change', '.time-style-selector', function(event) {
     selectedTimeStyle = event.target.value;
@@ -1696,7 +1728,8 @@ function generateGraph(){
     startRecordingTime = 0;
     mergedAnnotations = [];
     mergedAnnotationsCurrent = [];
-
+    yMaxTimeLineChart = 0;
+    
     $.ajax({
 	url: "get_merged_data.php",
 	type: "post",
@@ -1861,8 +1894,21 @@ function drawGraph(){
     var flagLegend = true;
     var chartType = "";
     var iAttribute = selectedAttribute == 'attribute-label' ?  fn_label : fn_speaker;
+    var iAttribute2;
+    var buttonList;
+    var buttonList2;
+    if(selectedAttribute == 'attribute-label'){
+	iAttribute2 = fn_speaker;
+	buttonList = labelList;
+	buttonList2 = speakerList;
+    } else {
+	iAttribute2 = fn_label;
+	buttonList = speakerList;
+	buttonList2 = labelList;
+    }
     var observerType = $("#select-observer").find('option:selected').val();
     var maxEvaluationGrade = undefined;
+    var typesJSON = {};
     
     if(selectedGraph == 'selector-summary-graph'|| selectedGraph == ""){
 	// change ui
@@ -1872,19 +1918,7 @@ function drawGraph(){
 	$("#observer-selector").show();
 	$("#attribute-selector-summary").show();
 	$("#attribute-selector-timeline").hide();
-
-	var iAttribute2;
-	var buttonList;
-	var buttonList2;
-	if(selectedAttribute == 'attribute-label'){
-	    iAttribute2 = fn_speaker;
-	    buttonList = labelList;
-	    buttonList2 = speakerList;
-	} else {
-	    iAttribute2 = fn_label;
-	    buttonList = speakerList;
-	    buttonList2 = labelList;
-	}
+	$("#attribute-value-fillter").hide();
 
 	// initialize typeNames and maxEvaluationGrade
 	for(var i = 0; i < mergedAnnotations.length; i++){
@@ -2042,21 +2076,25 @@ function drawGraph(){
 	flagLegend = false;
 	chartType = "bar";
     } else {
-	// change ui
+	// change ui, selector-timeline-graph'
 	$("#range-slider").show();
 	$("#label-timeRangeSlider").hide();
 	$("#timedisplay-type-selector").show();
 	$("#observer-selector").hide();
 	$("#attribute-selector-summary").hide();
 	$("#attribute-selector-timeline").show();
+	$("#attribute-value-fillter").show();
 
 	var x = ['x'];
 	var y = ['freq'];
 	var temp = {};
+	var temp2 = {};
 	var categoryFreqs = {};
+	var categoryFreqs2 = {};
 	var categories = {};
+	var categories2 = {};
 	var prevTime = 0;
-	
+
 	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
 	    var ptime = mergedAnnotationsCurrent[i][fn_ptime];
 	    // remove annotations that are made before recording the video
@@ -2077,6 +2115,22 @@ function drawGraph(){
 	    }
 	    prevTime = time;
 	    
+	    // filter
+	    if(selectedFilterValue != defaultFilterValue && selectedFilterValue != mergedAnnotationsCurrent[i][iAttribute]){
+		if(type[time] == undefined) type[time] = 0;
+		if(temp[category + "\t" + time] == undefined) temp[category + "\t" + time] = 0;
+		if(username == mergedAnnotationsCurrent[i][fn_username] && temp[categoryYours + "\t" + time] == undefined){
+		    temp[categoryYours + "\t" + time] = 0;
+		}
+		if(temp2[mergedAnnotationsCurrent[i][iAttribute2] + "\t" + time] == undefined){
+		    temp2[mergedAnnotationsCurrent[i][iAttribute2] + "\t" + time] = 0;
+		}
+		if(!(category in categories)){
+		    categories[category] = 0;
+		}
+		continue;
+	    }
+
 	    if(time in type){
 		type[time]++;
 	    } else {
@@ -2103,6 +2157,14 @@ function drawGraph(){
 		    temp[key] = 1;
 		}
 	    }
+
+	    // freq
+	    key = mergedAnnotationsCurrent[i][iAttribute2] + "\t" + time;
+	    if(key in temp2){
+		temp2[key]++;
+	    } else {
+		temp2[key] = 1;
+	    }
 	}
 	categories[categoryYours] = 1;
 
@@ -2128,6 +2190,10 @@ function drawGraph(){
 		xTimes.push(d.toTimeString().replace(/GMT.*/,"").replace(/:/g,""));
 	    }
 	    y.push(type[i]);
+	    
+	    if(type[i] > yMaxTimeLineChart){
+		yMaxTimeLineChart = type[i];
+	    }
  
 	    for(var category in categories){
 		var key = category + "\t" + i;
@@ -2141,26 +2207,78 @@ function drawGraph(){
 		    categoryFreqs[category].push(0);
 		}
 	    }
+
+	    for(var j = 0; j < buttonList2.length; j++){
+		var category = buttonList2[j];
+		var key = category + "\t" + i;
+		if(category in categoryFreqs2 == false){
+		    categoryFreqs2[category] = [category];
+		}
+		
+		if(key in temp2){
+		    categoryFreqs2[category].push(temp2[key]);
+		} else {
+		    categoryFreqs2[category].push(0);
+		}
+	    }
 	}
 	arrayColumns[0] = x;
-	arrayColumns[1] = y;
-	
-	for(var category in categories){
-	    arrayColumns.push(categoryFreqs[category]);
-	}
+//	arrayColumns[1] = y;
 
-	chartType = "";
+	if(selectedAttribute == 'attribute-label'){
+	    for(var i = 0; i < buttonList.length; i++){
+		var category = buttonList[i];
+		if(!(category in categoryFreqs)){
+		    categoryFreqs[category] = [category];
+		    categoryFreqs[category] .push(0);
+		}
+		arrayColumns.push(categoryFreqs[category]);
+	    }
+	    
+	    for(var i = 0; i < buttonList2.length; i++){
+		var category = buttonList2[i];
+		if(!(category in categoryFreqs2)){
+		    categoryFreqs2[category] = [category];
+		    categoryFreqs2[category] .push(0);
+		}
+		arrayColumns.push(categoryFreqs2[category]);
+		typesJSON[category] = 'bar';
+		typeNames2.push(category);
+	    }
+	} else {
+	    for(var i = 0; i < buttonList2.length; i++){
+		var category = buttonList2[i];
+		if(!(category in categoryFreqs2)){
+		    categoryFreqs2[category] = [category];
+		    categoryFreqs2[category] .push(0);
+		}
+		arrayColumns.push(categoryFreqs2[category]);
+		typesJSON[category] = 'bar';
+		typeNames2.push(category);
+	    }
+
+	    for(var i = 0; i < buttonList.length; i++){
+		var category = buttonList[i];
+		if(!(category in categoryFreqs)){
+		    categoryFreqs[category] = [category];
+		    categoryFreqs[category] .push(0);
+		}
+		arrayColumns.push(categoryFreqs[category]);
+	    }
+	}
+	arrayColumns.push(categoryFreqs[categoryYours]);
+
+	chartType = "line";
     }
     
+    var yMax = selectedGraph == 'selector-timeline-graph' ? yMaxTimeLineChart : evaluationGrade;
     var chart = c3.generate({
 	bindto: '#graph_body',
 	data: {
 	    x: 'x',
 	    columns: arrayColumns,
 	    type: chartType,
-	    types: {
-		freq: 'bar'
-	    },
+	    types: typesJSON,
 	    groups: [typeNames2],
 	    order: null
 	},
@@ -2169,7 +2287,7 @@ function drawGraph(){
 		type: 'category',
 	    },
 	    y: {
-		max: maxEvaluationGrade,
+		max: yMax,
 	    }
 	},
 	padding: {

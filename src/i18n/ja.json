@@ -70,6 +70,8 @@
     "fwm-m-graph-attribute-label": "ラベル",
     "fwm-m-graph-attribute-target": "対象",
     "fwm-m-graph-attribute-evaluation": "評価（平均）",
+    "fwm-m-graph-attribute-value-filter": "フィルタ",
+    "fwm-m-graph-attribute-value-selector-default": "すべて",
     "fwm-graph-observers": "観察者：",
     "fwm-graph-observers-all-sum": "全観察者（合計）",
     "fwm-graph-observers-self": "本人",
