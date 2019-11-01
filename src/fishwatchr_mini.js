@@ -2115,7 +2115,24 @@ function drawGraph(){
 		}
 	    }
 	    prevTime = time;
+
+
+	    // add '-' to buttonList, buttonList2 and categories
+	    if(category == '-') {
+		if(buttonList.indexOf(category) == -1){
+		    buttonList.push(category);
+		}
+		for(var j = 0; j < buttonList.length; j++){
+		    if(!(buttonList[j] in categories)){
+			categories[buttonList[j]] = 0;
+		    }
+		}
+	    }
+	    if(mergedAnnotationsCurrent[i][iAttribute2] == '-' && buttonList2.indexOf('-') == -1) {
+		buttonList2.push('-');
+	    }
 	    
+
 	    // filter
 	    if(selectedFilterValue != defaultFilterValue && selectedFilterValue != mergedAnnotationsCurrent[i][iAttribute]){
 		if(type[time] == undefined) type[time] = 0;
