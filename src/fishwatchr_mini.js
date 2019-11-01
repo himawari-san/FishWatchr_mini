@@ -463,6 +463,7 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 	histgramInterval = $("#slider-1").val();
 	$("#slider-1").on("slidestop", function(e){
 	    histgramInterval = $(this).val();
+	    yMaxTimeLineChart = 0;
 	    drawGraph();
 	});
 
