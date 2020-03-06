@@ -119,10 +119,10 @@ function loadSettings(groupname){
     if(!checkGroupname(groupname)){
 	$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
 	$("#popupWarning").popup("open");
-	return;
+	return null;
     }
     
-    $.ajax({
+    return $.ajax({
 	url: "get_config.php",
 	type: "post",
 	dataType: "json",
@@ -224,13 +224,31 @@ $(document).on('pagecreate', function(event){
 	
 	updateGroupURL();
 	
-	if(location.search.match(/\?config=(.+)/)){
-	    // ToDo: multiple options
-	    // config= option must be at the end of the url
-	    var configName = RegExp.$1;
-	    
-	    loadSettings(configName);
-	    console.log("config url:" + configName);
+	var urlQuery = location.search.substring(1);
+	var configName = "";
+	var newVideoID = "";
+	
+	// not support the video id with more than two queries
+	for(var query of urlQuery.split("&")){
+	    if(query.match(/^config=(.+)/)){
+		configName = RegExp.$1;
+	    } else if(query.match(/^vid=(.+)/)){
+		newVideoID = RegExp.$1;
+	    }
+	}
+
+	if(configName != ""){
+	    var obj = loadSettings(configName);
+	    if(newVideoID != "" && obj != null){
+		obj.then(function(){
+		    // overwrite hiddenVideoId
+		    hiddenVideoId = newVideoID;
+		    $("#video-url").prop("value", hiddenVideoIdLabel);
+		});
+	    }
+	} else if(newVideoID != ""){
+	    hiddenVideoId = newVideoID;
+	    $("#video-url").prop("value", hiddenVideoIdLabel);
 	}
     } else if(event.target.id == 'observation'){
     } else if(event.target.id == 'graph'){
