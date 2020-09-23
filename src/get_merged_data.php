@@ -7,6 +7,9 @@ setlocale(LC_ALL, 'ja_JP.UTF-8');
 
 $txt_dir = "txt/";
 $xml_dir = "xml/";
+$time_file_type_elapsed = "elapsed";
+$time_file_type_absolute = "absolute";
+
 
 if(!isset($_POST['groupname'])){
   $error = "no groupname";
@@ -30,8 +33,13 @@ usort($timefiles, function($a, $b){
 // output time info
 if(count($timefiles) != 0){
     $temp = file_get_contents($timefiles[0]);
+    $time_file_type = $time_file_type_absolute;
+    if(preg_match('/' . $time_file_prefix . '_\d+_' . $time_file_type_elapsed . '_', $timefiles[0]) === 1){
+        $time_file_type = $time_file_type_elapsed;
+    }
+
     if(preg_match('/ original_start_time="(.+?)"/', $temp, $matches)){
-        $annotations = $time_file_prefix . "\t" . $matches[1] . "\n";
+        $annotations = $time_file_prefix . "\t" . $matches[1] . "\t" . $time_file_type . "\n";
     }
 }
 
