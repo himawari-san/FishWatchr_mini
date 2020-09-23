@@ -70,6 +70,8 @@ var cBaseTime = 0;
 
 var startRecordingTime = 0;
 var timeFilePrefix = "_sys_basetime";
+var timeFileElasedType = "elapsed";
+var timeFileAbsoluteType = "absolute";
 var offsetTimeToPlay = 10; // sec  
 
 
@@ -736,13 +738,15 @@ $(document).on('popupafterclose', '#popup-record-time', function(event) {
     }
 
     var selectedID = $('[name="radio-choice-time-info"]:checked').attr('id');
-
+    var fileType = $("#checkbox-input-time-option").prop('checked') ? timeFileElasedType : timeFileAbsoluteType;
+    
     if(selectedID == "radio-choice-time-info-current"){
-	saveCurrentTime(new Date());
+	saveCurrentTime(new Date(), fileType);
     } else if(selectedID == "radio-choice-time-info-manual") {
 	if($("#textinput-time").val().match(/^(\d\d\d\d)-(\d\d)-(\d\d)\s+(\d\d):(\d\d):(\d\d)/)){
 	    saveCurrentTime(new Date(RegExp.$1, RegExp.$2 - 1, RegExp.$3,
-				     RegExp.$4, RegExp.$5, RegExp.$6));
+				     RegExp.$4, RegExp.$5, RegExp.$6),
+			    fileType);
 	} else {
 	    $("#popupWarning-message").html($.i18n("fwm-m-record-time-warning")
 					    + " <br />"
@@ -839,7 +843,7 @@ function saveSettings(){
 }    
 
 
-function saveCurrentTime(newStartTime){
+function saveCurrentTime(newStartTime, timeFileType){
     var newname = timeFilePrefix;
     var dummyResults = [];
 
@@ -854,7 +858,7 @@ function saveCurrentTime(newStartTime){
 	    $("#popupWarning").popup("open");
 	    return false;
 	} else {
-	    newname += "_" + cBaseTime + "_" + trueGroupname;
+	    newname += "_" + cBaseTime + "_" + timeFileType;
 	    cBaseTime++;
 	}
     } else {
