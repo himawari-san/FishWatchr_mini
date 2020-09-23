@@ -90,6 +90,8 @@ var hiddenVideoIdLabel = "xxxxxxxxxxxxxxxxxxxx";
 var hiddenVideoIdLabelRegExp = "^xxxxxxxxxxxx+$"; // because google's videoid length is 11
 var localVideoFile = "";
 
+var saveEventAutoSave = "auto-save";
+
 $(document).ready(function(){
     $(window).on("beforeunload", function(event){
 	return "unload this page?";
@@ -575,7 +577,7 @@ $(document).on('pagecontainerbeforehide', function(event, ui){
 	updateSavenameList();
 
 	if($("#flip-auto-save-on").prop("selected")){
-	    saveToServer();
+	    saveToServer(saveEventAutoSave);
 	    console.log("auto-save");
 	} else {
 	    console.log("no auto-save");
@@ -867,7 +869,7 @@ function saveCurrentTime(newStartTime){
 
     if($("#flip-auto-save-on").prop("selected")){
 	// auto-save
-	saveToServer();
+	saveToServer(saveEventAutoSave);
     } else {
 	// show messsage
 	$("#popup-title").text($.i18n("fwm-title-save-time-info"));
@@ -1062,7 +1064,7 @@ $(document).on('change', '#attribute-selector-summary', function(event) {
 
 
 function saveToServer(event){
-    if(event == null){
+    if(event == saveEventAutoSave){
 	// when auto-save
 	iAnnotationStorage = annotationStorage.length-1;
     }
