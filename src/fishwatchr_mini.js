@@ -837,8 +837,7 @@ function saveSettings(){
 }    
 
 
-function saveCurrentTime(time){
-    var newStartTime = time;
+function saveCurrentTime(newStartTime){
     var newname = timeFilePrefix;
     var dummyResults = [];
 
