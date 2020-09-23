@@ -5,8 +5,6 @@ header('Content-Type: application/text');
 
 setlocale(LC_ALL, 'ja_JP.UTF-8');
 
-$txt_dir = "txt/";
-$xml_dir = "xml/";
 $time_file_type_elapsed = "elapsed";
 $time_file_type_absolute = "absolute";
 
