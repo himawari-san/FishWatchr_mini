@@ -108,6 +108,7 @@
     "fwm-m-title-show-qrcode": "QRコードの表示",
     "fwm-m-label-show-qrcode": "グループ名:",
     "fwm-m-title-record-time": "時刻情報の記録",
+    "fwm-m-record-time-input-option": "経過時間で同期",
     "fwm-m-record-time-input-current-time": "現在時刻入力",
     "fwm-m-record-time-input-manual-time": "手動時刻入力",
     "fwm-m-record-time-example": "例： 2018-01-11 12:11:30",
