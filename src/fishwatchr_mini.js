@@ -1724,11 +1724,16 @@ function getCurrentStartRecordingTime(){
 	var arrayAnnotations = data.split("\n");
 	var currentStartRecordingTime = 0;
 	var annotations = new Array();
+	var timeFileType = ""; // absolute
 	
 	// get start-recording-time
 	if(arrayAnnotations.length == 0){
 	    // do nothing
-	} else if(arrayAnnotations[0].match(new RegExp("^" + timeFilePrefix + "\t(.+)"))){
+	} else if(arrayAnnotations[0].match(new RegExp("^" + timeFilePrefix + "\t(.+)\t(.+)"))){
+	    // arrayAnnotations[0]: _sys_basetime \t basetime \t filetype
+	    if(RegExp.$2 == "elapsed"){
+		timeFileType = "<br/>(" + $.i18n("fwm-m-record-time-input-option") + ")";
+	    }
 	    // get and remove a time information record
 	    currentStartRecordingTime = Date.parse(RegExp.$1.replace(/-/g, "/").replace(/\.\d\d\d$/, ""));
 	    arrayAnnotations.shift();
@@ -1759,7 +1764,7 @@ function getCurrentStartRecordingTime(){
 	    $("#currentStartRecordingTime").text($.i18n("fwm-m-record-current-recording-time-undefined"));
 	} else {
 	    $("#currentStartRecordingTime")
-		.text(date2FormattedDateTime(new Date(currentStartRecordingTime)));
+		.html(date2FormattedDateTime(new Date(currentStartRecordingTime)) + timeFileType);
 	}
     }).fail(function (jqXHR, textStatus){
 	console.log("hey fail");
