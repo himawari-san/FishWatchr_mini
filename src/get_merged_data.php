@@ -32,7 +32,7 @@ usort($timefiles, function($a, $b){
 if(count($timefiles) != 0){
     $temp = file_get_contents($timefiles[0]);
     $time_file_type = $time_file_type_absolute;
-    if(preg_match('/' . $time_file_prefix . '_\d+_' . $time_file_type_elapsed . '_', $timefiles[0]) === 1){
+    if(preg_match('/' . $time_file_prefix . '_\d+_' . $time_file_type_elapsed . '_/', $timefiles[0]) === 1){
         $time_file_type = $time_file_type_elapsed;
     }
 
