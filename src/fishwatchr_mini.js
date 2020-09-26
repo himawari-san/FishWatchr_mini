@@ -1594,15 +1594,9 @@ function getAnnotationsAsText(){
 
     if(iAnnotationStorage < 0) return;
 
-    var annotationInfo = annotationStorage[iAnnotationStorage];
     var result = "";
-
-    for (var v of annotationInfo.annotations){
-	var fv = v.split(fseparator);
-	fv[fn_ctime] = fv[fn_ctime].replace(/\.\d\d\d$/, "");
-	fv[fn_etime] = fv[fn_etime].replace(/\.\d\d\d$/, "");
-
-	result += fv.join(fseparator) + "\n";
+    for (var v of annotationStorage[iAnnotationStorage].annotations){
+	result += v + "\n";
     }
 
     return result;
