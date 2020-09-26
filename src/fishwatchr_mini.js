@@ -1529,14 +1529,19 @@ function time2FormattedTime(time, flagMsec){
 }
 
 function formattedTime2Sec(ftime){
-    if(ftime.match(/^(\d\d):(\d\d):(\d\d)\.(\d\d\d)/)){
-	return (RegExp.$1*1000) * 3600 +
-	    (RegExp.$2*1000) * 60 +
-	    (RegExp.$3*1000) +
-	    (RegExp.$4*1);
-    } else {
-	return -1;
+    var matches = ftime.match(/^(\d\d):(\d\d):(\d\d)(\.(\d\d\d))?/);
+    var result = -1;
+    
+    if(matches != null){
+	var result = matches[1] * 1000 * 3600
+	    + matches[2] * 1000 * 60
+	    + matches[3] * 1000;
+	if(matches[4] != undefined){
+	    result += matches[4];
+	}
     }
+
+    return result;
 }
 
 
