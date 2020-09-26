@@ -1533,11 +1533,11 @@ function formattedTime2Sec(ftime){
     var result = -1;
     
     if(matches != null){
-	var result = matches[1] * 1000 * 3600
+	result = matches[1] * 1000 * 3600
 	    + matches[2] * 1000 * 60
 	    + matches[3] * 1000;
 	if(matches[4] != undefined){
-	    result += matches[4];
+	    result += (matches[5]*1);
 	}
     }
 
@@ -1555,7 +1555,7 @@ function parseDate(strDate){
 	newDate.setFullYear(matches[1], matches[2] - 1, matches[3]);
 	newDate.setHours(matches[4], matches[5], matches[6]);
 	if(matches[7] != undefined){
-	    newDate.setMilliseconds(matches[7]);
+	    newDate.setMilliseconds(matches[8]);
 	}
 	
 	time = newDate.getTime();
@@ -1760,7 +1760,7 @@ function getCurrentStartRecordingTime(){
 	for(var i = 0; i < arrayAnnotations.length; i++){
 	    if(arrayAnnotations[i] == "") continue;
 	    var arrayFields = arrayAnnotations[i].split("\t");
-	    arrayFields.push(parseDate(arrayFields[fn_ctime]);
+	    arrayFields.push(parseDate(arrayFields[fn_ctime]));
 	    annotations[i] = arrayFields;
 	}
 	
@@ -1836,7 +1836,7 @@ function generateGraph(){
 	for(var i = 0; i < arrayAnnotations.length; i++){
 	    if(arrayAnnotations[i] == "") continue;
 	    var arrayFields = arrayAnnotations[i].split("\t");
-	    arrayFields.push(parseDate(arrayFields[fn_ctime]);
+	    arrayFields.push(parseDate(arrayFields[fn_ctime]));
 	    mergedAnnotations[i] = arrayFields;
 	}
 	
