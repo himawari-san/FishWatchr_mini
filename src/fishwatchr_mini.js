@@ -1545,6 +1545,25 @@ function formattedTime2Sec(ftime){
 }
 
 
+function parseDate(strDate){
+    var matches = strDate.match(/^(\d\d\d\d)-(\d\d)-(\d\d) (\d\d):(\d\d):(\d\d)(\.(\d\d\d))?/);
+    var time = NaN;
+
+    if(matches != null){
+	var newDate = new Date();
+
+	newDate.setFullYear(matches[1], matches[2] - 1, matches[3]);
+	newDate.setHours(matches[4], matches[5], matches[6]);
+	if(matches[7] != undefined){
+	    newDate.setMilliseconds(matches[7]);
+	}
+	
+	time = newDate.getTime();
+    }
+    
+    return time;
+}
+
 
 function displayTime(elementId){
     var now = date2FormattedTime(new Date());
@@ -1740,14 +1759,14 @@ function getCurrentStartRecordingTime(){
 		timeFileType = "<br/>(" + $.i18n("fwm-m-record-time-input-option") + ")";
 	    }
 	    // get and remove a time information record
-	    currentStartRecordingTime = Date.parse(RegExp.$1.replace(/-/g, "/").replace(/\.\d\d\d$/, ""));
+	    currentStartRecordingTime = parseDate(RegExp.$1);
 	    arrayAnnotations.shift();
 	}
 	
 	for(var i = 0; i < arrayAnnotations.length; i++){
 	    if(arrayAnnotations[i] == "") continue;
 	    var arrayFields = arrayAnnotations[i].split("\t");
-	    arrayFields.push(Date.parse(arrayFields[fn_ctime].replace(/-/g, "/")));
+	    arrayFields.push(parseDate(arrayFields[fn_ctime]);
 	    annotations[i] = arrayFields;
 	}
 	
@@ -1816,14 +1835,14 @@ function generateGraph(){
 	    // do nothing
 	} else if(arrayAnnotations[0].match(new RegExp("^" + timeFilePrefix + "\t(.+)"))){
 	    // get and remove a time information record
-	    startRecordingTime = Date.parse(RegExp.$1.replace(/-/g, "/").replace(/\.\d\d\d$/, ""));
+	    startRecordingTime = parseDate(RegExp.$1);
 	    arrayAnnotations.shift();
 	}
 	
 	for(var i = 0; i < arrayAnnotations.length; i++){
 	    if(arrayAnnotations[i] == "") continue;
 	    var arrayFields = arrayAnnotations[i].split("\t");
-	    arrayFields.push(Date.parse(arrayFields[fn_ctime].replace(/-/g, "/")));
+	    arrayFields.push(parseDate(arrayFields[fn_ctime]);
 	    mergedAnnotations[i] = arrayFields;
 	}
 	
