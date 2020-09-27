@@ -1823,11 +1823,16 @@ function generateGraph(){
 	//async: false
     }).done(function(data) {
 	var arrayAnnotations = data.split("\n");
+	var flagElapsedTimeFile = false;
 
 	// get start-recording-time
 	if(arrayAnnotations.length == 0){
 	    // do nothing
-	} else if(arrayAnnotations[0].match(new RegExp("^" + timeFilePrefix + "\t(.+)"))){
+	} else if(arrayAnnotations[0].match(new RegExp("^" + timeFilePrefix + "\t(.+)\t(.+)"))){
+	    // arrayAnnotations[0]: _sys_basetime \t basetime \t filetype
+	    if(RegExp.$2 == "elapsed"){
+		flagElapsedTimeFile = true;
+	    }
 	    // get and remove a time information record
 	    startRecordingTime = parseDate(RegExp.$1);
 	    arrayAnnotations.shift();
@@ -1836,7 +1841,15 @@ function generateGraph(){
 	for(var i = 0; i < arrayAnnotations.length; i++){
 	    if(arrayAnnotations[i] == "") continue;
 	    var arrayFields = arrayAnnotations[i].split("\t");
-	    arrayFields.push(parseDate(arrayFields[fn_ctime]));
+
+	    if(flagElapsedTimeFile){
+		arrayFields[fn_ptime] =
+		    startRecordingTime + 
+		    formattedTime2Sec(arrayFields[fn_etime]);
+		arrayFields[fn_ctime] = date2FormattedDateTime(new Date(arrayFields[fn_ptime]), true);
+	    } else {
+		arrayFields[fn_ptime] = parseDate(arrayFields[fn_ctime]);
+	    }
 	    mergedAnnotations[i] = arrayFields;
 	}
 	
