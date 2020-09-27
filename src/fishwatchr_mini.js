@@ -234,10 +234,13 @@ $(document).on('pagecreate', function(event){
 	
 	// not support the video id with more than two queries
 	for(var query of urlQuery.split("&")){
-	    if(query.match(/^config=(.+)/)){
-		configName = RegExp.$1;
-	    } else if(query.match(/^vid=(.+)/)){
-		newVideoID = RegExp.$1;
+	    var matches = query.match(/^(config|vid)=(.+)/);
+	    if(matches == null){
+		// do nothing
+	    } else if(matches[1] == "config"){
+		configName = matches[2];
+	    } else if(matches[1] == "vid"){
+		newVideoID = matches[2];
 	    }
 	}
 
@@ -743,10 +746,9 @@ $(document).on('popupafterclose', '#popup-record-time', function(event) {
     if(selectedID == "radio-choice-time-info-current"){
 	saveCurrentTime(new Date(), fileType);
     } else if(selectedID == "radio-choice-time-info-manual") {
-	if($("#textinput-time").val().match(/^(\d\d\d\d)-(\d\d)-(\d\d)\s+(\d\d):(\d\d):(\d\d)/)){
-	    saveCurrentTime(new Date(RegExp.$1, RegExp.$2 - 1, RegExp.$3,
-				     RegExp.$4, RegExp.$5, RegExp.$6),
-			    fileType);
+	var inputDate = parseDate($("#textinput-time").val());
+	if(inputDate != NaN){
+	    saveCurrentTime(new Date(inputDate), fileType);
 	} else {
 	    $("#popupWarning-message").html($.i18n("fwm-m-record-time-warning")
 					    + " <br />"
@@ -1546,7 +1548,7 @@ function formattedTime2Sec(ftime){
 
 
 function parseDate(strDate){
-    var matches = strDate.match(/^(\d\d\d\d)-(\d\d)-(\d\d) (\d\d):(\d\d):(\d\d)(\.(\d\d\d))?/);
+    var matches = strDate.match(/^(\d\d\d\d)-(\d\d)-(\d\d)\s+(\d\d):(\d\d):(\d\d)(\.(\d\d\d))?/);
     var time = NaN;
 
     if(matches != null){
@@ -1745,16 +1747,17 @@ function getCurrentStartRecordingTime(){
 	var timeFileType = ""; // absolute
 	
 	// get start-recording-time
-	if(arrayAnnotations.length == 0){
-	    // do nothing
-	} else if(arrayAnnotations[0].match(new RegExp("^" + timeFilePrefix + "\t(.+)\t(.+)"))){
-	    // arrayAnnotations[0]: _sys_basetime \t basetime \t filetype
-	    if(RegExp.$2 == "elapsed"){
-		timeFileType = "<br/>(" + $.i18n("fwm-m-record-time-input-option") + ")";
+	if(arrayAnnotations.length != 0){
+	    var matches = arrayAnnotations[0].match(new RegExp("^" + timeFilePrefix + "\t(.+)\t(.+)"));
+	    if(matches != null){
+		// arrayAnnotations[0]: _sys_basetime \t basetime \t filetype
+		if(matches[2] == "elapsed"){
+		    timeFileType = "<br/>(" + $.i18n("fwm-m-record-time-input-option") + ")";
+		}
+		// get and remove a time information record
+		currentStartRecordingTime = parseDate(matches[1]);
+		arrayAnnotations.shift();
 	    }
-	    // get and remove a time information record
-	    currentStartRecordingTime = parseDate(RegExp.$1);
-	    arrayAnnotations.shift();
 	}
 	
 	for(var i = 0; i < arrayAnnotations.length; i++){
@@ -1826,16 +1829,17 @@ function generateGraph(){
 	var flagElapsedTimeFile = false;
 
 	// get start-recording-time
-	if(arrayAnnotations.length == 0){
-	    // do nothing
-	} else if(arrayAnnotations[0].match(new RegExp("^" + timeFilePrefix + "\t(.+)\t(.+)"))){
-	    // arrayAnnotations[0]: _sys_basetime \t basetime \t filetype
-	    if(RegExp.$2 == "elapsed"){
-		flagElapsedTimeFile = true;
+	if(arrayAnnotations.length != 0){
+	    var matches = arrayAnnotations[0].match(new RegExp("^" + timeFilePrefix + "\t(.+)\t(.+)"));
+	    if(matches != null){
+		// arrayAnnotations[0]: _sys_basetime \t basetime \t filetype
+		if(matches[2] == "elapsed"){
+		    flagElapsedTimeFile = true;
+		}
+		// get and remove a time information record
+		startRecordingTime = parseDate(matches[1]);
+		arrayAnnotations.shift();
 	    }
-	    // get and remove a time information record
-	    startRecordingTime = parseDate(RegExp.$1);
-	    arrayAnnotations.shift();
 	}
 	
 	for(var i = 0; i < arrayAnnotations.length; i++){
