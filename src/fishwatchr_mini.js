@@ -2295,14 +2295,15 @@ function drawGraph(){
 	    return;
 	}
 	
+	var adjustedStartRecordingTime = Math.floor(startRecordingTime/histgramInterval/1000) * histgramInterval * 1000;
 	for(var i in type){
 	    var d = new Date(i * histgramInterval * 1000);
 	    if(selectedTimeStyle == "real-time-style"){
 		x.push(d.toTimeString().replace(/GMT.*/,"").replace(/:/g,""));
-		xTimes.push(time2FormattedTime(d - startRecordingTime).replace(/:/g,""));
+		xTimes.push(time2FormattedTime(d - adjustedStartRecordingTime).replace(/:/g,""));
 	    } else {
 		// elapsed-time-style
-		x.push(time2FormattedTime(d - startRecordingTime).replace(/:/g,""));
+		x.push(time2FormattedTime(d - adjustedStartRecordingTime).replace(/:/g,""));
 		xTimes.push(d.toTimeString().replace(/GMT.*/,"").replace(/:/g,""));
 	    }
 	    y.push(type[i]);
