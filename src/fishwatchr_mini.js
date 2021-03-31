@@ -94,8 +94,8 @@ var localVideoFile = "";
 
 var saveEventAutoSave = "auto-save";
 
-$(document).ready(function(){
-    $(window).on("beforeunload", function(event){
+document.addEventListener("DOMContentLoaded", () => {
+    window.addEventListener("beforeunload", function(event){
 	return "unload this page?";
     });
 
@@ -112,12 +112,55 @@ $(document).ready(function(){
 	    loadSettings(configName);
 	}
     });
-
+    
+    startClock();
     initYoutubePlayer();
 
+    
     console.log("document ready!!");
 });
 
+
+// pagecontainershow
+window.addEventListener('pageshow', () => {
+    initializePage();
+    initializeEvent();
+
+    console.log("osname:" + osname);
+
+    // activate the selected tab's navi
+    var activeTag = $('#tabs').tabs("option", "active");
+    switch(activeTag){
+    case 0: $('#username-tab').trigger('click');
+	break;
+    case 1: $('#annotation-tab').trigger('click');
+	break;
+    case 2: $('#analysis-tab').trigger('click');
+	break;
+    case 3: $('#data-tab').trigger('click');
+    }
+    
+    if(osname == "iOS"){
+	$('#save-as-tsv').addClass("ui-state-disabled");
+	$('#save-as-xml').addClass("ui-state-disabled");
+    } else {
+	$('#save-as-tsv').removeClass("ui-state-disabled");
+	$('#save-as-xml').removeClass("ui-state-disabled");
+    }
+    
+    $("#" + selectedTimeStyle + "-home").trigger("click"); // tricky code. no click, no refresh.
+    $("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio("refresh");
+});
+
+
+
+function startClock(){
+    timerID = setInterval(displayTime, timerInterval, "#current_time_home");
+    console.log("new timer:" + timerID);
+    annotationResults = [];
+    selectedAttribute = "attribute-label";
+    selectedGraph = "selector-summary-graph";
+}
 
 function loadSettings(groupname){
     if(!checkGroupname(groupname)){
@@ -215,51 +258,46 @@ function loadSettings(groupname){
 }
 
 
-$(document).on('pagecreate', function(event){
-    if(event.target.id == 'home'){
-	// get an url option for 
-	configUrlOption = location.search;
+function initializePage() {
+    // get an url option for 
+    configUrlOption = location.search;
 
-	// initialize localVideoFile and UI 
-	localVideoFile = "";
-	$("#video-url").prop("type", "text"); // Web
-	$("#video-url").prop("value", "");
-	$("#flip-video-file-place").val("Web").flipswitch("refresh");
-	
-	updateGroupURL();
-	
-	var urlQuery = location.search.substring(1);
-	var configName = "";
-	var newVideoID = "";
-	
-	// not support the video id with more than two queries
-	for(var query of urlQuery.split("&")){
-	    var matches = query.match(/^(config|vid)=(.+)/);
-	    if(matches == null){
-		// do nothing
-	    } else if(matches[1] == "config"){
-		configName = matches[2];
-	    } else if(matches[1] == "vid"){
-		newVideoID = matches[2];
-	    }
+    // initialize localVideoFile and UI 
+    localVideoFile = "";
+    $("#video-url").prop("type", "text"); // Web
+    $("#video-url").prop("value", "");
+    $("#flip-video-file-place").val("Web").flipswitch("refresh");
+    
+    updateGroupURL();
+    
+    var urlQuery = location.search.substring(1);
+    var configName = "";
+    var newVideoID = "";
+    
+    // not support the video id with more than two queries
+    for(var query of urlQuery.split("&")){
+	var matches = query.match(/^(config|vid)=(.+)/);
+	if(matches == null){
+	    // do nothing
+	} else if(matches[1] == "config"){
+	    configName = matches[2];
+	} else if(matches[1] == "vid"){
+	    newVideoID = matches[2];
 	}
-
-	if(configName != ""){
-	    var obj = loadSettings(configName);
-	    if(newVideoID != "" && obj != null){
-		obj.then(function(){
-		    // overwrite hiddenVideoId
-		    hiddenVideoId = newVideoID;
-		    $("#video-url").prop("value", hiddenVideoIdLabel);
-		});
-	    }
-	} else if(newVideoID != ""){
-	    hiddenVideoId = newVideoID;
-	    $("#video-url").prop("value", hiddenVideoIdLabel);
+    }
+    
+    if(configName != ""){
+	var obj = loadSettings(configName);
+	if(newVideoID != "" && obj != null){
+	    obj.then(function(){
+		// overwrite hiddenVideoId
+		hiddenVideoId = newVideoID;
+		$("#video-url").prop("value", hiddenVideoIdLabel);
+	    });
 	}
-    } else if(event.target.id == 'observation'){
-    } else if(event.target.id == 'graph'){
-	defaultFilterText = $.i18n("fwm-m-graph-attribute-value-selector-default");
+    } else if(newVideoID != ""){
+	hiddenVideoId = newVideoID;
+	$("#video-url").prop("value", hiddenVideoIdLabel);
     }
     
     if(flagi18nLoaded){
@@ -279,49 +317,288 @@ $(document).on('pagecreate', function(event){
 	    console.log('fail1!');
 	});
     }
-});
+}
 
 
-$(document).on('pagecontainerchange', function(event, ui){
-    history.pushState(null, null, null);
-    console.log("history change!!");
-});
-
-
-// pagecontainershow
-$(document).on('pagecontainershow', function(event, ui){
-    console.log("osname:" + osname);
-    if(ui.toPage.is('#home')){
-	// activate the selected tab's navi
-	var activeTag = $('#tabs').tabs("option", "active");
-	switch(activeTag){
-	    case 0: $('#username-tab').trigger('click');
-	    break;
-	    case 1: $('#annotation-tab').trigger('click');
-	    break;
-	    case 2: $('#analysis-tab').trigger('click');
-	    break;
-	    case 3: $('#data-tab').trigger('click');
+function initializeEvent(){
+    // push start button
+    document.querySelector('#btn-start').addEventListener('tap', function(event) {
+	if(event.taget.id != 'btn-start'){
+	    return;
 	}
+	
+	startTime = new Date();
+	
+	// get username
+	username = $("#username").val().replace(/^ +/, "").replace(/ +$/, "");
+	$("#username").prop("value", username);
+	
+	getGroupName();
+	
+	if(username == ""){
+	    $("#popupWarning-message").text($.i18n("fwm-message-username-error"));
+	    $("#popupWarning").popup("open");
+	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
+	    return false;
+	} else if(username.match(/^[A-Za-z0-9_]+$/) == null){
+	    $("#popupWarning-message").text($.i18n("fwm-message-invalid-username-error"));
+	    $("#popupWarning").popup("open");
+	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
+	    return false;
+	} else if(!checkGroupname(groupname) && groupname != ""){
+	    $("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
+	    $("#popupWarning").popup("open");
+	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
+	    return false;
+	}
+    });
 
-	if(osname == "iOS"){
-	    $('#save-as-tsv').addClass("ui-state-disabled");
-	    $('#save-as-xml').addClass("ui-state-disabled");
+    // tool menu 
+    document.querySelector('#popupToolMenu').addEventListener('popupafterclose', function(event) {
+	if(toolMenuItemID == "toolMenuItemSaveSettings"){
+	    saveSettings();
+	} else if(toolMenuItemID == "toolMenuItemRecordCurretTime"){
+	    getCurrentStartRecordingTime();
+	    // set default date, that is the current time
+	    $("#textinput-time").prop("value", date2FormattedDateTime(new Date(), false));
+	    $("#popup-record-time").popup("open");
+	} else if(toolMenuItemID == "toolMenuItemShowQrCode"){
+	    getGroupName();
+	    if(checkGroupname(groupname)){
+		var groupURL = location.protocol + "//" 
+		    + location.host 
+		    + location.pathname.replace(/\.html.+/, ".html")
+		    + "?config=" + groupname;
+		$("#qrcode-group-settings-url").html("");
+		$("#qrcode-group-settings-url").qrcode(groupURL);
+		$("#url-group-settings").prop("href", groupURL);
+		$("#url-group-settings").text(groupname);
+		$("#popup-show-qrcode").popup("open");
+	    } else {
+		if(groupname != ""){
+		    $("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
+		} else {
+		    $("#popupWarning-message").text($.i18n("fwm-message-no-groupname-error"));
+		}
+		$("#popupWarning").popup("open");
+	    }
+	} else if(toolMenuItemID == "toolMenuItemSetReferenceURL"){
+	    $("#popup-set-group-site-url").popup("open");
+	}
+	toolMenuItemID = ""; // clear
+    });
+
+    document.querySelectorAll(".record-time-button").forEach(button => {
+	button.addEventListener('tap', function(event) {
+	    event.preventDefault();
+	    
+	    resultDialogRecordTime = "";
+	    
+	    if(event.target.id == "record-time-button-id-cancel"){
+		resultDialogRecordTime = "cancel";
+	    }
+	    
+	    $("#popup-record-time").popup("close");
+	});
+    });
+    
+    document.querySelector('#popup-record-time').addEventListener('popupafterclose', function(event) {
+	if(resultDialogRecordTime == "cancel"){
+	    return;
+	}
+	
+	var selectedID = $('[name="radio-choice-time-info"]:checked').attr('id');
+	var fileType = $("#checkbox-input-time-option").prop('checked') ? timeFileElasedType : timeFileAbsoluteType;
+	
+	if(selectedID == "radio-choice-time-info-current"){
+	    saveCurrentTime(new Date(), fileType);
+	} else if(selectedID == "radio-choice-time-info-manual") {
+	    var inputDate = parseDate($("#textinput-time").val());
+	    if(inputDate != NaN){
+		saveCurrentTime(new Date(inputDate), fileType);
+	    } else {
+		$("#popupWarning-message").html($.i18n("fwm-m-record-time-warning")
+						+ " <br />"
+						+ $.i18n("fwm-m-record-time-example"));
+		$("#popupWarning").popup("open");
+	    }
+	}
+    });
+
+
+    // draw charts
+    document.querySelector('#btn-show-graph').addEventListener('tap', function(event) {
+	thresholdOutlier = $("#threshold-outlier").val();
+	getGroupName();
+	
+	if(thresholdOutlier == ""){
+	    thresholdOutlier = Number.MAX_VALUE;
+	} else if(isNaN(thresholdOutlier) || thresholdOutlier < 0){
+	    $("#popupWarning-message").text($.i18n("fwm-message-invalid-threshold-error"));
+	    $("#popupWarning").popup("open");
+	    $("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
+	    return false;
+	} else if(!checkGroupname(groupname)){
+	    $("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
+	    $("#popupWarning").popup("open");
+	    $("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
+	    return false;
 	} else {
-	    $('#save-as-tsv').removeClass("ui-state-disabled");
-	    $('#save-as-xml').removeClass("ui-state-disabled");
+	    thresholdOutlier *= 1000; // milisec
 	}
+    });
 
-	$("#" + selectedTimeStyle + "-home").trigger("click"); // tricky code. no click, no refresh.
-	$("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio("refresh");
-    } else if(ui.toPage.is('#graph')){
-	generateGraph();
 
-	$("#" + selectedGraph).trigger("click");
-	$("#" + selectedAttribute).prop("checked", true).checkboxradio("refresh");
-	$("#" + selectedTimeStyle).prop("checked", true).checkboxradio("refresh");
-    }
-});
+    document.querySelectorAll('.fw-lang-item').forEach(item => {
+	item.addEventListener('tap', function(event) {
+	    uiLanguage = event.target.id.replace(/^lang-item-/, "");
+	    
+	    $("#popupLangMenu").popup("close");
+	    $("#lang-selector-button").text($("#" + event.target.id).text());
+	    changeLang();
+	});
+    });
+
+    
+    document.querySelectorAll('.fw-option-item').forEach(item => {
+	    item.addEventListener('tap', function(event) {
+		toolMenuItemID = event.target.id; // for popupafterclose
+		$("#popupToolMenu").popup("close");
+	    });
+    });
+
+
+    document.querySelector('#btn-get-archive').addEventListener('tap', function(event) {
+	// get groupname
+	groupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
+	$("#groupname").prop("value", groupname);
+	groupname = $("#groupname").val().replace(/\$$/, "");
+	
+	if(groupname == ""){
+	    $("#popupWarning-message").text($.i18n("fwm-message-no-groupname-error"));
+	    $("#popupWarning").popup("open");
+	    return false;
+	} else if(groupname.match(/^[A-Za-z0-9_]+$/) == null){
+	    $("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
+	    $("#popupWarning").popup("open");
+	    return false;
+	}
+	
+	var dataBody = "";
+	var fileType = "";
+	
+	$.ajax({
+	    url: "archive.php",
+	    type: "post",
+	    dataType: "json",
+	    data: {
+		groupname: groupname
+	    }
+	})
+	    .done(function (response){
+		$("#resultDataURLZIP").prop("href", response.result_url);
+		$("#popupGetZipURL").popup("open");
+		console.log(response.result_url);
+	    })
+	    .fail(function (jqXHR, textStatus){
+		console.log("ajax fail!!," + textStatus);
+	    });
+    });
+    
+    
+    document.querySelector('#popup-set-url-ok').addEventListener('tap', function(event) {
+	resultDialog = "ok";
+	$("#popup-set-url").popup("close");
+    });
+    
+    document.querySelector('#popup-set-url-cancel').addEventListener('tap', function(event) {
+	resultDialog = "cancel";
+	$("#popup-set-url").popup("close");
+    });
+    
+    document.querySelector('#popup-set-group-site-url-ok').addEventListener('tap', function(event) {
+	groupSiteURL = sanitize($("#group-site-url").val());
+	updateGroupURL();
+	$("#popup-set-group-site-url").popup("close");
+    });
+    
+    document.querySelector('#popup-set-group-site-url-cancel').addEventListener('tap', function(event) {
+	$("#popup-set-group-site-url").popup("close");
+    });
+    
+    
+    document.querySelector('#btn-watch-video').addEventListener('tap', function(event) {
+	var videoID = getVideoID();
+	
+	// prevent popup windows from closing immediately
+	event.preventDefault();
+	
+	if(videoID == ""){
+	    $("#popup-title").text($.i18n("fwm-m-title-error"));
+	    $("#popup-message-body").html("<p>" + $.i18n("fwm-message-no-videoid-error") + "</p>");
+	    $("#popup-message").popup("open");
+	} else {
+            initVideoPlayer('video-player1', '#popup-watch-video', 0);
+	    $("#popup-watch-video").popup("open");
+	}
+    });
+    
+    
+    document.querySelector('#video-url').addEventListener('change', function(event) {
+	if($("#video-url").attr("type") == "file"){
+	    localVideoFile = URL.createObjectURL(this.files[0]);
+	}
+    });
+    
+    
+    document.querySelector('#flip-video-file-place').addEventListener('change', function(event) {
+	var videoFilePlaceSwitch = $("#flip-video-file-place").val();
+	
+	if(videoFilePlaceSwitch == "Web"){
+	    $("#video-url").prop("type", "text");
+	} else { // Local
+	    $("#video-url").prop("type", "file");
+	}
+	$("#video-url").textinput("refresh");
+    });
+
+
+    document.querySelectorAll('.process-selection-item').forEach(item => {
+	item.addEventListener('tap', function(event) {
+	    selectedProcessID = event.target.id;
+	    
+	    event.stopImmediatePropagation();
+	    
+	    if(selectedProcessID == "save-as-tsv" || selectedProcessID == "save-as-xml"){
+		// wait to close popups until starting to download data
+		// for firefox on android
+		setTimeout(function(){
+		    $("#popup-select-process").popup("close");
+		}, 1000);
+	    } else {
+		$("#popup-select-process").popup("close");
+	    }
+	});
+    });
+
+
+    document.querySelector('#popup-select-process').addEventListener('popupafterclose', function(event) {
+	if(selectedProcessID == "save-as-tsv" || selectedProcessID == "save-as-xml"){
+	} else if(selectedProcessID == "print-as-tsv"){
+	    $("#print-annatations").empty();
+	    $("#print-annatations").append(sanitize(getAnnotationsAsText()).replace(/\n/g, "<br />\n"));
+	    $("#popup-print-annatations").popup("open");
+	} else if(selectedProcessID == "print-as-xml"){
+	    $("#print-annatations").empty();
+	    $("#print-annatations").append(sanitize(getAnnotationsAsXML()).replace(/\n/g, "<br />\n"));
+	    $("#popup-print-annatations").popup("open");
+	} else if(selectedProcessID != ""){
+	    saveToServer(selectedProcessID);
+	}
+	selectedProcessID = ""; // clear
+    });
+
+}
 
 
 function updateAttributeValueSelector(){
@@ -375,7 +652,8 @@ function changeLang(){
 
 
 // pagecontainerbeforeshow
-$(document).on('pagecontainerbeforeshow', function(event, ui){
+document.addEventListener('pagecontainerbeforeshow', function(event, ui){
+//document.addEventListener('DOMContentLoaded', function(event, ui){
     if(timerID != -1){
 	clearInterval(timerID);
 	console.log("timer cleared:" + timerID);
@@ -544,221 +822,6 @@ $(document).on('pagecontainerbeforeshow', function(event, ui){
 });
 
 
-//pagebeforehide
-$(document).on('pagecontainerbeforehide', function(event, ui){
-
-    if(ui.prevPage.is('#home')){
-	// get username
-	username = $("#username").val().replace(/^ +/, "").replace(/ +$/, "");
-	$("#username").prop("value", username);
-	
-	// get groupname
-	getGroupName();
-
-	// get vauels of speakers and labels
-	speakerList = [];
-	labelList = [];
-	for(var i = 1; i <= nBoxes; i++){
-	    var pn = "speaker" + i;
-	    annotatedSpeakers[pn] = sanitizeJ($("#" + pn).val());
-	    if(annotatedSpeakers[pn] != ""){
-		speakerList.push(annotatedSpeakers[pn]);
-	    }
-
-	    pn = "label" + i;
-	    annotatedLabels[pn] = sanitizeJ($("#" + pn).val());
-	    if(annotatedLabels[pn] != ""){
-		labelList.push(annotatedLabels[pn]);
-	    }
-	}
-
-	// get annotation mode
-	annotationMode = $("#selector1-observation-mode").val();
-    } else if(ui.prevPage.is('#observation')){
-	console.log("observation page closed!!");
-	// save annotations to annotationStorage
-	var newdata = {starttime:startTime, username:username, annotations:annotationResults.concat()};
-	annotationStorage.push(newdata);
-	updateSavenameList();
-
-	if($("#flip-auto-save-on").prop("selected")){
-	    saveToServer(saveEventAutoSave);
-	    console.log("auto-save");
-	} else {
-	    console.log("no auto-save");
-	}
-    }
-});
-
-
-// push startbutton
-$(document).on('tap', '#btn-start', function(event) {
-    startTime = new Date();
-
-    // get username
-    username = $("#username").val().replace(/^ +/, "").replace(/ +$/, "");
-    $("#username").prop("value", username);
-
-    getGroupName();
-    
-    if(username == ""){
-	$("#popupWarning-message").text($.i18n("fwm-message-username-error"));
-	$("#popupWarning").popup("open");
-	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
-	return false;
-    } else if(username.match(/^[A-Za-z0-9_]+$/) == null){
-	$("#popupWarning-message").text($.i18n("fwm-message-invalid-username-error"));
-	$("#popupWarning").popup("open");
-	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
-	return false;
-    } else if(!checkGroupname(groupname) && groupname != ""){
-	$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
-	$("#popupWarning").popup("open");
-	$("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
-	return false;
-    }
-});
-
-
-$(document).on('touchstart', '.btn-annotation', function(event) {
-    startTouchY = getTouchY(event);
-    startTouchTime = performance.now();
-});
-
-
-// based on https://blog.mobiscroll.com/working-with-touch-events/
-function getTouchY(e) {
-    return /touch/.test(e.type) ? (e.originalEvent || e).changedTouches[0]['clientY'] : e['clientY'];
-}
-
-// push annotation_button
-$(document).on('touchend, vmouseup', '.btn-annotation', function(event) {
-    var buttonID = event.target.id;
-
-    // cancel the event when the observation screen is scrolled
-    if(Math.abs(getTouchY(event) - startTouchY) > moveDistanceThreshold
-       || performance.now() - startTouchTime > moveDurationThreshold){
-	// stop focusing on the button
-	$("#" + buttonID).blur(); // doesn't work on ios
-	return false;
-    }
-
-    var now = new Date();
-    var currentTime = date2FormattedDateTime(now, 1);
-    var elapsedTime = time2FormattedTime(now.getTime() - startTime.getTime(), 1);
-    var annotation = "";
-    var buttonText = event.target.innerHTML;
-    
-    if(annotationMode == "mode_speaker"){
-	tempAnnotationSpeaker = buttonText;
-	tempAnnotationLabel = "-";
-    } else if(annotationMode == "mode_label"){
-	tempAnnotationSpeaker = "-";
-	tempAnnotationLabel = buttonText;
-    } else if(annotationMode == "mode_speaker_label"){
-	if(buttonID.indexOf("label") == -1) {
-	    tempAnnotationSpeaker = buttonText;
-	    return;
-	} else if(tempAnnotationSpeaker == "" || tempAnnotationSpeaker == "-"){
-	    return;
-	} else {
-	    tempAnnotationLabel = buttonText;
-	}
-    } else if(annotationMode == "mode_label_speaker"){
-	if(buttonID.indexOf("speaker") == -1) {
-	    tempAnnotationLabel = buttonText;
-	    return;
-	} else if(tempAnnotationLabel == "" || tempAnnotationLabel == "-"){
-	    return;
-	} else {
-	    tempAnnotationSpeaker = buttonText;
-	}
-    }
-    
-    annotation = tempAnnotationSpeaker + fseparator + tempAnnotationLabel + fseparator + elapsedTime + fseparator + currentTime + fseparator + username;
-    annotationResults.push(annotation);
-    displayResults();
-    // blink the button
-    $("#" + buttonID).fadeOut(100, function(){
-	$(this).fadeIn(100);
-    });
-    tempAnnotationSpeaker = "-";
-    tempAnnotationLabel = "-";
-});
-
-
-$(document).on('popupafterclose', '#popupToolMenu', function(event) {
-    if(toolMenuItemID == "toolMenuItemSaveSettings"){
-	saveSettings();
-    } else if(toolMenuItemID == "toolMenuItemRecordCurretTime"){
-	getCurrentStartRecordingTime();
-	// set default date, that is the current time
-	$("#textinput-time").prop("value", date2FormattedDateTime(new Date(), false));
-	$("#popup-record-time").popup("open");
-    } else if(toolMenuItemID == "toolMenuItemShowQrCode"){
-	getGroupName();
-	if(checkGroupname(groupname)){
-	    var groupURL = location.protocol + "//" 
-		+ location.host 
-		+ location.pathname.replace(/\.html.+/, ".html")
-		+ "?config=" + groupname;
-	    $("#qrcode-group-settings-url").html("");
-	    $("#qrcode-group-settings-url").qrcode(groupURL);
-	    $("#url-group-settings").prop("href", groupURL);
-	    $("#url-group-settings").text(groupname);
-	    $("#popup-show-qrcode").popup("open");
-	} else {
-	    if(groupname != ""){
-		$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
-	    } else {
-		$("#popupWarning-message").text($.i18n("fwm-message-no-groupname-error"));
-	    }
-	    $("#popupWarning").popup("open");
-	}
-    } else if(toolMenuItemID == "toolMenuItemSetReferenceURL"){
-	$("#popup-set-group-site-url").popup("open");
-    }
-    toolMenuItemID = ""; // clear
-});
-
-
-$(document).on('tap', '.record-time-button', function(event) {
-    event.preventDefault();
-    
-    resultDialogRecordTime = "";
-    
-    if(event.target.id == "record-time-button-id-cancel"){
-	resultDialogRecordTime = "cancel";
-    }
-
-    $("#popup-record-time").popup("close");
-});
-
-
-$(document).on('popupafterclose', '#popup-record-time', function(event) {
-    if(resultDialogRecordTime == "cancel"){
-	return;
-    }
-
-    var selectedID = $('[name="radio-choice-time-info"]:checked').attr('id');
-    var fileType = $("#checkbox-input-time-option").prop('checked') ? timeFileElasedType : timeFileAbsoluteType;
-    
-    if(selectedID == "radio-choice-time-info-current"){
-	saveCurrentTime(new Date(), fileType);
-    } else if(selectedID == "radio-choice-time-info-manual") {
-	var inputDate = parseDate($("#textinput-time").val());
-	if(inputDate != NaN){
-	    saveCurrentTime(new Date(inputDate), fileType);
-	} else {
-	    $("#popupWarning-message").html($.i18n("fwm-m-record-time-warning")
-					    + " <br />"
-					    + $.i18n("fwm-m-record-time-example"));
-	    $("#popupWarning").popup("open");
-	}
-    }
-});
-
-
 function saveSettings(){
     var trueGroupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
     $("#groupname").prop("value", trueGroupname);
@@ -891,182 +954,7 @@ function saveCurrentTime(newStartTime, timeFileType){
 
 
 
-// draw charts
-$(document).on('tap', '#btn-show-graph', function(event) {
-    thresholdOutlier = $("#threshold-outlier").val();
-    getGroupName();
 
-    if(thresholdOutlier == ""){
-	thresholdOutlier = Number.MAX_VALUE;
-    } else if(isNaN(thresholdOutlier) || thresholdOutlier < 0){
-	$("#popupWarning-message").text($.i18n("fwm-message-invalid-threshold-error"));
-	$("#popupWarning").popup("open");
-	$("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
-	return false;
-    } else if(!checkGroupname(groupname)){
-	$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
-	$("#popupWarning").popup("open");
-	$("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
-	return false;
-    } else {
-	thresholdOutlier *= 1000; // milisec
-    }
-});
-
-
-// detect change of select menu
-$(document).on("change", "#selector2-observation-mode", function () {
-    updateAnnotationButtons();
-});
-
-
-$(document).on('tap', '.disp-button-delete', function(event) {
-    var deletedTargetID = event.target.id;
-    var iEnd = annotationResults.length - 1;
-    if(deletedTargetID == "disp-button1"){
-	if(iEnd >= 0) {
-	    console.log("DID:" + deletedTargetID);
-	    annotationResults.splice(iEnd, 1);
-	    displayResults();
-	    return;
-	}
-    } else if(deletedTargetID == "disp-button2"){
-	if(iEnd >= 1) {
-	    annotationResults.splice(iEnd-1, 1);
-	    displayResults();
-	    console.log("DID:" + deletedTargetID);
-	    return;
-	}
-    }
-});
-
-
-$(document).on('tap', '.savename-button', function(event) {
-    iAnnotationStorage = event.target.id.match(/\d+$/)[0];
-
-    // txt
-    var blobTxt = getAnnotationsAsBlob ("text/plain");
-    $("#save-as-tsv").prop("download", "fw_mini_" + username + ".txt");
-    $("#save-as-tsv").prop("href", URL.createObjectURL(blobTxt));
-
-    // xml
-    var blobXML = getAnnotationsAsBlob ("text/xml");
-    $("#save-as-xml").prop("download", "fw_mini_" + username +  ".xml");
-    $("#save-as-xml").prop("href", URL.createObjectURL(blobXML));
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    
-    $("#popup-select-process").popup("open");
-});
-
-
-$(document).on('tap', '.process-selection-item', function(event) {
-    selectedProcessID = event.target.id;
-
-    event.stopImmediatePropagation();
-
-    if(selectedProcessID == "save-as-tsv" || selectedProcessID == "save-as-xml"){
-	// wait to close popups until starting to download data
-	// for firefox on android
-	setTimeout(function(){
-	    $("#popup-select-process").popup("close");
-	}, 1000);
-    } else {
-	$("#popup-select-process").popup("close");
-    }
-});
-
-
-$(document).on('popupafterclose', '#popup-select-process', function(event) {
-    if(selectedProcessID == "save-as-tsv" || selectedProcessID == "save-as-xml"){
-    } else if(selectedProcessID == "print-as-tsv"){
-	$("#print-annatations").empty();
-	$("#print-annatations").append(sanitize(getAnnotationsAsText()).replace(/\n/g, "<br />\n"));
-	$("#popup-print-annatations").popup("open");
-    } else if(selectedProcessID == "print-as-xml"){
-	$("#print-annatations").empty();
-	$("#print-annatations").append(sanitize(getAnnotationsAsXML()).replace(/\n/g, "<br />\n"));
-	$("#popup-print-annatations").popup("open");
-    } else if(selectedProcessID != ""){
-	saveToServer(selectedProcessID);
-    }
-    selectedProcessID = ""; // clear
-});
-
-
-$(document).on('tap', '.fw-lang-item', function(event) {
-    uiLanguage = event.target.id.replace(/^lang-item-/, "");
-
-    $("#popupLangMenu").popup("close");
-    $("#lang-selector-button").text($("#" + event.target.id).text());
-    changeLang();
-});
-
-$(document).on('tap', '.fw-option-item', function(event) {
-    toolMenuItemID = event.target.id; // for popupafterclose
-    $("#popupToolMenu").popup("close");
-});
-
-
-
-$(document).on('tap', '.graph-selector', function(event) {
-    selectedGraph = event.target.id;
-    drawGraph();
-});
-
-$(document).on('change', '.attribute-selector', function(event) {
-    selectedAttribute = event.target.id;
-    // change the value of attribute-selector-timeline
-    $("#select-attribute")
-	.val(selectedAttribute)
-	.selectmenu('refresh');
-
-    updateAttributeValueSelector();
-
-    drawGraph();
-});
-
-$(document).on('change', '#attribute-value-fillter', function(event) {
-    var selectedOption = $(this).find('option:selected');
-    selectedFilterValue = selectedOption.val();
-    drawGraph();
-});
-
-
-$(document).on('change', '.time-style-selector', function(event) {
-    selectedTimeStyle = event.target.value;
-    changeTimeStyle();
-    drawGraph();
-});
-
-$(document).on('change', '#select-observer', function(event) {
-    var selectedOption = $(this).find('option:selected');
-    selectedObserver = selectedOption.val(); 
-    drawGraph();
-});
-
-$(document).on('change', '#attribute-selector-summary', function(event) {
-    var selectedOption = $(this).find('option:selected');
-    selectedAttribute = selectedOption.val();
-    // change the value of attribute-selector-timeline
-    if(selectedAttribute == "attribute-label"){
-	$("#attribute-observation-target")
-	    .prop("checked", false)
-	    .checkboxradio("refresh");
-	$("#attribute-label")
-	    .prop("checked", true)
-	    .checkboxradio("refresh");
-    } else {
-	$("#attribute-observation-target")
-	    .prop("checked", true)
-	    .checkboxradio("refresh");
-	$("#attribute-label")
-	    .prop("checked", false)
-	    .checkboxradio("refresh");
-    }
-    drawGraph();
-});
 
 
 function saveToServer(event){
@@ -1129,100 +1017,6 @@ function store(savename, groupname, fileType, dataBody){
 }
 
 
-
-$(document).on('tap', '#btn-get-archive', function(event) {
-    // get groupname
-    groupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
-    $("#groupname").prop("value", groupname);
-    groupname = $("#groupname").val().replace(/\$$/, "");
-
-    if(groupname == ""){
-	$("#popupWarning-message").text($.i18n("fwm-message-no-groupname-error"));
-	$("#popupWarning").popup("open");
-	return false;
-    } else if(groupname.match(/^[A-Za-z0-9_]+$/) == null){
-	$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
-	$("#popupWarning").popup("open");
-	return false;
-    }
-    
-    var dataBody = "";
-    var fileType = "";
-    
-    $.ajax({
-	url: "archive.php",
-	type: "post",
-	dataType: "json",
-	data: {
-	    groupname: groupname
-	}
-    })
-    .done(function (response){
-	$("#resultDataURLZIP").prop("href", response.result_url);
-	$("#popupGetZipURL").popup("open");
-	console.log(response.result_url);
-    })
-    .fail(function (jqXHR, textStatus){
-	console.log("ajax fail!!," + textStatus);
-    });
-});
-
-
-$(document).on('tap', '#popup-set-url-ok', function(event) {
-    resultDialog = "ok";
-    $("#popup-set-url").popup("close");
-});
-
-$(document).on('tap', '#popup-set-url-cancel', function(event) {
-    resultDialog = "cancel";
-    $("#popup-set-url").popup("close");
-});
-
-$(document).on('tap', '#popup-set-group-site-url-ok', function(event) {
-    groupSiteURL = sanitize($("#group-site-url").val());
-    updateGroupURL();
-    $("#popup-set-group-site-url").popup("close");
-});
-
-$(document).on('tap', '#popup-set-group-site-url-cancel', function(event) {
-    $("#popup-set-group-site-url").popup("close");
-});
-
-
-$(document).on('tap', '#btn-watch-video', function(event) {
-    var videoID = getVideoID();
-    
-    // prevent popup windows from closing immediately
-    event.preventDefault();
-    
-    if(videoID == ""){
-	$("#popup-title").text($.i18n("fwm-m-title-error"));
-	$("#popup-message-body").html("<p>" + $.i18n("fwm-message-no-videoid-error") + "</p>");
-	$("#popup-message").popup("open");
-    } else {
-        initVideoPlayer('video-player1', '#popup-watch-video', 0);
-	$("#popup-watch-video").popup("open");
-    }
-});
-
-
-$(document).on('change', '#video-url', function(event) {
-    if($("#video-url").attr("type") == "file"){
-	localVideoFile = URL.createObjectURL(this.files[0]);
-    }
-});
-
-
-$(document).on('change', '#flip-video-file-place', function(event) {
-    var videoFilePlaceSwitch = $("#flip-video-file-place").val();
-
-    if(videoFilePlaceSwitch == "Web"){
-	$("#video-url").prop("type", "text");
-    } else { // Local
-	$("#video-url").prop("type", "file");
-    }
-    $("#video-url").textinput("refresh");
-});
 
 
 function updateGroupURL(){
@@ -1458,6 +1252,28 @@ function updateSavenameList(){
 		"</li>");
     }
     $("#savename-list").listview("refresh");
+
+
+    document.querySelectorAll('.savename-button').forEach(button => {
+	button.addEventListener('tap', function(event) {
+	    iAnnotationStorage = event.target.id.match(/\d+$/)[0];
+	    
+	    // txt
+	    var blobTxt = getAnnotationsAsBlob ("text/plain");
+	    $("#save-as-tsv").prop("download", "fw_mini_" + username + ".txt");
+	    $("#save-as-tsv").prop("href", URL.createObjectURL(blobTxt));
+	    
+	    // xml
+	    var blobXML = getAnnotationsAsBlob ("text/xml");
+	    $("#save-as-xml").prop("download", "fw_mini_" + username +  ".xml");
+	    $("#save-as-xml").prop("href", URL.createObjectURL(blobXML));
+	    
+	    event.preventDefault();
+	    event.stopImmediatePropagation();
+	    
+	    $("#popup-select-process").popup("open");
+	});
+    });
 }
 
 
