@@ -129,16 +129,17 @@ window.addEventListener('pageshow', () => {
     console.log("osname:" + osname);
 
     // activate the selected tab's navi
-    var activeTag = $('#tabs').tabs("option", "active");
-    switch(activeTag){
-    case 0: $('#username-tab').trigger('click');
-	break;
-    case 1: $('#annotation-tab').trigger('click');
-	break;
-    case 2: $('#analysis-tab').trigger('click');
-	break;
-    case 3: $('#data-tab').trigger('click');
-    }
+    // jqm remove
+    // var activeTag = $('#tabs').tabs("option", "active");
+    // switch(activeTag){
+    // case 0: $('#username-tab').trigger('click');
+    // 	break;
+    // case 1: $('#annotation-tab').trigger('click');
+    // 	break;
+    // case 2: $('#analysis-tab').trigger('click');
+    // 	break;
+    // case 3: $('#data-tab').trigger('click');
+    // }
     
     if(osname == "iOS"){
 	$('#save-as-tsv').addClass("ui-state-disabled");
@@ -149,7 +150,8 @@ window.addEventListener('pageshow', () => {
     }
     
     $("#" + selectedTimeStyle + "-home").trigger("click"); // tricky code. no click, no refresh.
-    $("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio("refresh");
+    // jqm remove
+    // $("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio("refresh");
 });
 
 
@@ -266,7 +268,8 @@ function initializePage() {
     localVideoFile = "";
     $("#video-url").prop("type", "text"); // Web
     $("#video-url").prop("value", "");
-    $("#flip-video-file-place").val("Web").flipswitch("refresh");
+    // jqm remove
+    //$("#flip-video-file-place").val("Web").flipswitch("refresh");
     
     updateGroupURL();
     
@@ -323,9 +326,6 @@ function initializePage() {
 function initializeEvent(){
     // push start button
     document.querySelector('#btn-start').addEventListener('tap', function(event) {
-	if(event.taget.id != 'btn-start'){
-	    return;
-	}
 	
 	startTime = new Date();
 	
@@ -624,8 +624,9 @@ function changeLang(){
     $('#observation').i18n();
     $('#graph').i18n();
     
-    $("#groupname").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
-    $("#username").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
+    // jqm remove
+    //$("#groupname").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
+    //$("#username").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
     $("#username").prop("placeholder", $.i18n("fwm-m-label-placeholder"));
 
     // refresh load-setting button
@@ -637,17 +638,19 @@ function changeLang(){
     }
 
     for(i = 1; i <= 8; i++){
-	$("#label" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
-	$("#speaker" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
+	// jqm remove
+	//$("#label" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
+	//$("#speaker" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
 	$("#label" + i).prop("placeholder", $.i18n("fwm-m-button-label"));
 	$("#speaker" + i).prop("placeholder", $.i18n("fwm-m-button-target"));
     }
     // refresh selector
-    $("#selector1-observation-mode").selectmenu('refresh');
-    $("#selector2-observation-mode").selectmenu('refresh');
-    $("#select-attribute").selectmenu('refresh');
-    $("#select-observer").selectmenu('refresh');
-    $("#attribute-value-selector").selectmenu('refresh');
+    // jqm remove
+    // $("#selector1-observation-mode").selectmenu('refresh');
+    // $("#selector2-observation-mode").selectmenu('refresh');
+    // $("#select-attribute").selectmenu('refresh');
+    // $("#select-observer").selectmenu('refresh');
+    // $("#attribute-value-selector").selectmenu('refresh');
 }
 
 
