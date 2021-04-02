@@ -223,22 +223,22 @@
 	  
 	  <!-- data-panel --> 
 	  <div class="tab-pane fade" id="data-panel" role="tabpanel">
-	    <div class="ui-field-contain">
-	      <a id="btn-get-archive" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-right ui-corner-all" href="#" data-i18n="fwm-m-tab-data-group-results">グループ結果のダウンロード</a>
+	    <div class="mb-3">
+	      <button type="button" id="btn-get-archive" class="btn btn-primary" data-i18n="fwm-m-tab-data-group-results">グループ結果のダウンロード</button>
 	    </div>
-	    <div class="ui-field-contain">
-	      <label for="flip-auto-save" data-i18n="fwm-m-tab-data-autosave">オートセーブ：</label>
-	      <select name="flip-auto-save" id="flip-auto-save" data-role="flipswitch">
+	    <div class="mb-3">
+	      <label for="flip-auto-save" class="form-label" data-i18n="fwm-m-tab-data-autosave">オートセーブ：</label>
+	      <select class="form-select" id="flip-auto-save">
 		<option id="flip-auto-save-off" value="off" selected="" data-i18n="fwm-m-tab-data-autosave-off">Off</option>
 		<option id="flip-auto-save-on" value="on" data-i18n="fwm-m-tab-data-autosave-on">On</option>
 	      </select>
 	    </div>
 	    
-	    <div class="ui-field-contain">
-	      <label for="savename-list" data-i18n="fwm-m-tab-data-dataset-list">記録されたデータセットリスト：</label>
-	      <ul id="savename-list" data-role="listview" data-split-icon="action" data-split-theme="a" data-inset="true">
-		<li data-i18n="fwm-no-saved-data">（保存データ - なし）</li>
-	      </ul>
+	    <div class="mb-3">
+	      <label for="savename-list" class="form-label" data-i18n="fwm-m-tab-data-dataset-list">記録されたデータセットリスト：</label>
+	      <select class="form-select" id="savename-list">
+		<option data-i18n="fwm-no-saved-data">（保存データ - なし）</option>
+	      </select>
 	    </div>
 	  </div>
 	</div>
