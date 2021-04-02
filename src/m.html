@@ -77,7 +77,7 @@
 	<div class="home-panel">
 	  <ul class="nav nav-tabs mb-3" role="tablist">
 	    <li class="nav-item" role="presentation"><a class="nav-link active" id="username-tab" data-bs-toggle="tab" href="#username-panel" aria-controls="username-panel" role="tab" aria-selected="true" data-i18n="fwm-m-tab-user">ユーザ名</a></li>
-	    <li class="nav-item" role="presentation"><a class="nav-link" id="annotation-tab" data-bs-toggle="tab" href="#annotation-panel" aria-controls="annotation-panel" role="tab" aria-selected="false" data-i18n="fwm-m-tab-button">ボタン</a></li>
+	    <li class="nav-item" role="presentation"><a class="nav-link" id="annotation-tab" data-bs-toggle="tab" href="#button-setting-panel" aria-controls="button-setting-panel" role="tab" aria-selected="false" data-i18n="fwm-m-tab-button">ボタン</a></li>
 	    <li class="nav-item" role="presentation"><a class="nav-link" id="analysis-tab" data-bs-toggle="tab" href="#analysis-panel" aria-controls="analysis-panel" role="tab" aria-selected="false" data-i18n="fwm-m-tab-analysis">分析</a></li>
 	    <li class="nav-item" role="presentation"><a class="nav-link" id="data-tab" data-bs-toggle="tab" href="#data-panel" aria-controls="data-panel" role="tab" aria-selected="false" data-i18n="fwm-m-tab-data">データ</a></li>
 	  </ul>
@@ -103,134 +103,90 @@
 	    </div>
 	  </div>
 
-	  <!-- annotation-panel --> 
-	  <div class="tab-pane fade" id="annotation-panel" role="tabpanel">
-	    <div class="ui-field-contain">
-	      <select id="selector1-observation-mode" name="selector1-observation-mode" data-mini="true">
+	  <!-- button-setting-panel --> 
+	  <div class="tab-pane fade" id="button-setting-panel" role="tabpanel">
+	    <div class="container">
+	      <select class="form-select mb-3" id="selector1-observation-mode">
 		<option value="mode_speaker" data-i18n="fwm-m-tab-buttons-mode-target">観察モード：対象</option>
 		<option value="mode_label" data-i18n="fwm-m-tab-buttons-mode-label">観察モード：ラベル</option>
 		<option value="mode_speaker_label" data-i18n="fwm-m-tab-buttons-mode-target_label">観察モード：対象⇒ラベル</option>
 		<option value="mode_label_speaker" data-i18n="fwm-m-tab-buttons-mode-label_target">観察モード：ラベル⇒対象</option>
 	      </select>
 	    </div>
-	    <div class="ui-grid-a">
-	      <div class="ui-block-a">
-		<input id="speaker1" name="speaker1" type="text"
-		       data-clear-btn="true" data-clear-btn-text="クリア"
-		       data-mini="false"
+	    <div class="row row-cols-2">
+	      <div class="col">
+		<input id="speaker1" type="text" class="form-control"
 		       value="対象１"
 		       placeholder="対象名" />
 	      </div>
-	      <div class="ui-block-b">
-		<input id="label1" name="label1" type="text"
-		       data-clear-btn="true" data-clear-btn-text="クリア"
-		       data-mini="false"
+	      <div class="col">
+		<input id="label1" type="text" class="form-control"
 		       value="ラベル１"
 		       placeholder="ラベル" />
 	      </div>
 	      
-	      <div class="ui-block-a">
-		<input id="speaker2" name="speaker2" type="text"
-		       data-clear-btn="true" data-clear-btn-text="クリア"
-		       data-mini="false"
+	      <div class="col">
+		<input id="speaker2" type="text" class="form-control"
 		       value="対象２"
 		       placeholder="対象名" />
 	      </div>
-	      <div class="ui-block-b">
-		<input id="label2" name="label2" type="text"
-		       data-clear-btn="true" data-clear-btn-text="クリア"
-		       data-mini="false"
+	      <div class="col">
+		<input id="label2" type="text" class="form-control"
 		       value="ラベル２"
 		       placeholder="ラベル" />
 	      </div>
 	      
-	      <div class="ui-block-a">
-		<input id="speaker3" name="speaker3" type="text"
-		       data-mini="false"
-		       data-clear-btn="true"
-		       data-clear-btn-text="クリア"
+	      <div class="col">
+		<input id="speaker3" type="text" class="form-control"
 		       placeholder="対象名" />
 	      </div>
-	      <div class="ui-block-b">
-		<input id="label3" name="label3" type="text"
-		       data-mini="false"
-		       data-clear-btn="true"
-		       data-clear-btn-text="クリア"
+	      <div class="col">
+		<input id="label3" type="text" class="form-control"
 		       placeholder="ラベル" />
 	      </div>
 	      
-	      <div class="ui-block-a">
-		<input id="speaker4" name="speaker4" type="text"
-		       data-mini="false"
-		       data-clear-btn="true"
-		       data-clear-btn-text="クリア"
+	      <div class="col">
+		<input id="speaker4" type="text" class="form-control"
 		       placeholder="対象名" />
 	      </div>
-	      <div class="ui-block-b">
-		<input id="label4" name="label4" type="text"
-		       data-mini="false"
-		       data-clear-btn="true"
-		       data-clear-btn-text="クリア"
+	      <div class="col">
+		<input id="label4" type="text" class="form-control"
 		       placeholder="ラベル" />
 	      </div>
 	      
-	      <div class="ui-block-a">
-		<input id="speaker5" name="speaker5" type="text"
-		       data-mini="false"
-		       data-clear-btn="true"
-		       data-clear-btn-text="クリア"
+	      <div class="col">
+		<input id="speaker5" type="text" class="form-control"
 		       placeholder="対象名" />
 	      </div>
-	      <div class="ui-block-b">
-		<input id="label5" name="label5" type="text"
-		       data-mini="false"
-		       data-clear-btn="true"
-		       data-clear-btn-text="クリア"
+	      <div class="col">
+		<input id="label5" type="text" class="form-control"
 		       placeholder="ラベル" />
 	      </div>
 
-	      <div class="ui-block-a">
-		<input id="speaker6" name="speaker6" type="text"
-		       data-mini="false"
-		       data-clear-btn="true"
-		       data-clear-btn-text="クリア"
+	      <div class="col">
+		<input id="speaker6" type="text" class="form-control"
 		       placeholder="対象名" />
 	      </div>
-	      <div class="ui-block-b">
-		<input id="label6" name="label6" type="text"
-		       data-mini="false"
-		       data-clear-btn="true"
-		       data-clear-btn-text="クリア"
+	      <div class="col">
+		<input id="label6" type="text" class="form-control"
 		       placeholder="ラベル" />
 	      </div>
 
-	      <div class="ui-block-a">
-		<input id="speaker7" name="speaker7" type="text"
-		       data-mini="false"
-		       data-clear-btn="true"
-		       data-clear-btn-text="クリア"
+	      <div class="col">
+		<input id="speaker7" type="text" class="form-control"
 		       placeholder="対象名" />
 	      </div>
-	      <div class="ui-block-b">
-		<input id="label7" name="label7" type="text"
-		       data-mini="false"
-		       data-clear-btn="true"
-		       data-clear-btn-text="クリア"
+	      <div class="col">
+		<input id="label7" type="text" class="form-control"
 		       placeholder="ラベル" />
 	      </div>
 
-	      <div class="ui-block-a">
-		<input id="speaker8" name="speaker8" type="text"
-		       data-mini="false"
-		       data-clear-btn="true"
-		       data-clear-btn-text="クリア"
+	      <div class="col">
+		<input id="speaker8" type="text" class="form-control"
 		       placeholder="対象名" />
 	      </div>
-	      <div class="ui-block-b">
-		<input id="label8" name="label8" type="text"
-		       data-mini="false"
-		       data-clear-btn="true"
-		       data-clear-btn-text="クリア"
+	      <div class="col">
+		<input id="label8" type="text" class="form-control"
 		       placeholder="ラベル" />
 	      </div>
 	    </div>
