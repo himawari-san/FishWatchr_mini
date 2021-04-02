@@ -34,37 +34,39 @@
     <link href="c3.min.css" rel="stylesheet" />
   </head>
   <body>
-    <div id="home" data-role="page">
+    <div id="home">
       <div data-role="header">
-	<h1>FishWatchr Mini</h1>
-	<a href="#popupLangMenu" data-rel="popup" data-transition="slideup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-lang ui-btn-icon-left ui-btn-a ui-mini ui-btn-icon-notext" style="font-weight:normal;" id="lang-selector-button">Japanese</a>
-	<div data-role="popup" id="popupLangMenu" data-theme="a">
-          <ul data-role="listview" data-inset="true" style="min-width:200px;">
-            <li data-role="list-divider">Choose Your Language</li>
-            <li><a class="ui-btn fw-lang-item" id="lang-item-ja">Japanese</a></li>
-            <li><a class="ui-btn fw-lang-item" id="lang-item-en">English</a></li>
-          </ul>
-	</div>
-	<a href="#popupToolMenu" data-rel="popup" data-transition="slideup" class="ui-btn ui-btn-inline ui-icon-bars ui-btn-icon-right ui-btn-icon-notext"></a>
-	<div data-role="popup" id="popupToolMenu" data-theme="a">
-	  <div data-role="collabsibleset">
-            <ul data-role="listview" data-inset="true" style="min-width:200px;">
-              <li data-icon="action"><a class="fw-option-item" href="http://www2.ninjal.ac.jp/lrc/index.php?%B4%D1%BB%A1%BB%D9%B1%E7%A5%C4%A1%BC%A5%EB%20FishWatchr%2FMini" target="_blank" data-i18n="fwm-nav-option-manual">マニュアル</a></li>
-              <li data-icon="action"><a class="fw-option-item" href="https://www.nict.go.jp/JST/JST5.html" target="_blank" data-i18n="fwm-nav-option-jst">日本標準時(NICT)</a></li>
-              <li data-icon="action" id="liShowGroupSite"><a class="fw-option-item" href="" target="_blank" id="show-group-site" data-i18n="fwm-nav-option-group-site">グループ用サイト</a></li>
-            </ul>
-	    <div data-role="collapsible" data-inset="true">
-	      <h3><span data-i18n="fwm-nav-option-admin">管理</span></h3>
-	      <ul data-role="listview" data-inset="false" style="min-width:200px;">
-		<li data-icon="edit"><a id="toolMenuItemSaveSettings" class="fw-option-item" href="#" data-i18n="fwm-nav-option-save-settings">設定保存</a></li>
-		<li data-icon="edit"><a id="toolMenuItemRecordCurretTime" class="fw-option-item" href="#" data-i18n="fwm-nav-option-record-time">時間記録</a></li>
-		<li data-icon="edit"><a id="toolMenuItemSetReferenceURL" class="fw-option-item" href="#" data-i18n="fwm-nav-option-set-group-site-url">グループサイト設定</a></li>
-		<li data-icon="action"><a id="toolMenuItemShowQrCode" class="fw-option-item" href="#" data-i18n="fwm-nav-option-show-qrcode">QRコード表示</a></li>
+	<nav class="navbar navbar-light bg-light">
+	  <div class="container-fluid d-flex">
+	    <span class="navbar-brand flex-grow-1" href="#">FishWatchr Mini</span>
+	    <div class="dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+		Language
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+		<li><a class="dropdown-item fw-lang-item" href="#" id="lang-item-ja">Japanese</a></li>
+		<li><a class="dropdown-item fw-lang-item" href="#" id="lang-item-en">English</a></li>
               </ul>
-	    </div>
+            </div>
+	    <div class="dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+		Options
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+		<li><a class="dropdown-item" href="http://www2.ninjal.ac.jp/lrc/index.php?%B4%D1%BB%A1%BB%D9%B1%E7%A5%C4%A1%BC%A5%EB%20FishWatchr%2FMini" data-i18n="fwm-nav-option-manual">マニュアル</a></li>
+		<li><a class="dropdown-item" href="https://www.nict.go.jp/JST/JST5.html" data-i18n="fwm-nav-option-jst">日本標準時(NICT)</a></li>
+		<li><a class="dropdown-item" href="" id="show-group-site" data-i18n="fwm-nav-option-group-site">グループ用サイト</a></li>
+		<li><hr class="dropdown-divider"></li>
+		<li><span class="dropdown-header">管理用設定</span></li>
+		<li><a class="dropdown-item" href="#" id="toolMenuItemSaveSettings" data-i18n="fwm-nav-option-save-settings">設定保存</a></li>
+		<li><a class="dropdown-item" href="#" id="toolMenuItemRecordCurretTime" data-i18n="fwm-nav-option-record-time">時間記録</a></li>
+		<li><a class="dropdown-item" href="#" id="toolMenuItemSetReferenceURL"  data-i18n="fwm-nav-option-set-group-site-url">グループサイト設定</a></li>
+		<li><a class="dropdown-item" href="#" id="toolMenuItemShowQrCode" data-i18n="fwm-nav-option-show-qrcode">QRコード表示</a></li>
+              </ul>
+            </div>
 	  </div>
 	</div>
-      </div>
+      </nav>
       <div data-role="main" class="ui-content">
 	<div class="time">
 	  <span data-i18n="fwm-m-time">現在時刻： </span><span id="current_time_home"><span data-i18n="fwm-m-processing">Processing ...</span></span>

@@ -354,40 +354,41 @@ function initializeEvent(){
     });
 
     // tool menu 
-    document.querySelector('#popupToolMenu').addEventListener('popupafterclose', function(event) {
-	if(toolMenuItemID == "toolMenuItemSaveSettings"){
-	    saveSettings();
-	} else if(toolMenuItemID == "toolMenuItemRecordCurretTime"){
-	    getCurrentStartRecordingTime();
-	    // set default date, that is the current time
-	    $("#textinput-time").prop("value", date2FormattedDateTime(new Date(), false));
-	    $("#popup-record-time").popup("open");
-	} else if(toolMenuItemID == "toolMenuItemShowQrCode"){
-	    getGroupName();
-	    if(checkGroupname(groupname)){
-		var groupURL = location.protocol + "//" 
-		    + location.host 
-		    + location.pathname.replace(/\.html.+/, ".html")
-		    + "?config=" + groupname;
-		$("#qrcode-group-settings-url").html("");
-		$("#qrcode-group-settings-url").qrcode(groupURL);
-		$("#url-group-settings").prop("href", groupURL);
-		$("#url-group-settings").text(groupname);
-		$("#popup-show-qrcode").popup("open");
+    document.querySelector('#toolMenuItemSaveSettings').addEventListener('click', function(event) {
+	saveSettings();
+    });
+    document.querySelector('#toolMenuItemRecordCurretTime').addEventListener('click', function(event) {
+	getCurrentStartRecordingTime();
+	// set default date, that is the current time
+	$("#textinput-time").prop("value", date2FormattedDateTime(new Date(), false));
+	$("#popup-record-time").popup("open");
+    });
+    document.querySelector('#toolMenuItemShowQrCode').addEventListener('click', function(event) {
+	getGroupName();
+	if(checkGroupname(groupname)){
+	    var groupURL = location.protocol + "//" 
+		+ location.host 
+		+ location.pathname.replace(/\.html.+/, ".html")
+		+ "?config=" + groupname;
+	    $("#qrcode-group-settings-url").html("");
+	    $("#qrcode-group-settings-url").qrcode(groupURL);
+	    $("#url-group-settings").prop("href", groupURL);
+	    $("#url-group-settings").text(groupname);
+	    $("#popup-show-qrcode").popup("open");
+	} else {
+	    if(groupname != ""){
+		$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
 	    } else {
-		if(groupname != ""){
-		    $("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
-		} else {
-		    $("#popupWarning-message").text($.i18n("fwm-message-no-groupname-error"));
-		}
-		$("#popupWarning").popup("open");
+		$("#popupWarning-message").text($.i18n("fwm-message-no-groupname-error"));
 	    }
-	} else if(toolMenuItemID == "toolMenuItemSetReferenceURL"){
-	    $("#popup-set-group-site-url").popup("open");
+	    $("#popupWarning").popup("open");
 	}
-	toolMenuItemID = ""; // clear
+    });
+    document.querySelector('#toolMenuItemSetReferenceURL').addEventListener('click', function(event) {
+	$("#popup-set-group-site-url").popup("open");
     });
 
+    
     document.querySelectorAll(".record-time-button").forEach(button => {
 	button.addEventListener('tap', function(event) {
 	    event.preventDefault();
@@ -450,22 +451,24 @@ function initializeEvent(){
 
 
     document.querySelectorAll('.fw-lang-item').forEach(item => {
-	item.addEventListener('tap', function(event) {
+	item.addEventListener('click', function(event) {
 	    uiLanguage = event.target.id.replace(/^lang-item-/, "");
-	    
-	    $("#popupLangMenu").popup("close");
-	    $("#lang-selector-button").text($("#" + event.target.id).text());
+
+	    // jqm remove
+	    // $("#popupLangMenu").popup("close");
+	    // $("#lang-selector-button").text($("#" + event.target.id).text());
 	    changeLang();
 	});
     });
 
-    
-    document.querySelectorAll('.fw-option-item').forEach(item => {
-	    item.addEventListener('tap', function(event) {
-		toolMenuItemID = event.target.id; // for popupafterclose
-		$("#popupToolMenu").popup("close");
-	    });
-    });
+
+    // jqm remove
+    // document.querySelectorAll('.fw-option-item').forEach(item => {
+    // 	    item.addEventListener('tap', function(event) {
+    // 		toolMenuItemID = event.target.id; // for popupafterclose
+    // 		$("#popupToolMenu").popup("close");
+    // 	    });
+    // });
 
 
     document.querySelector('#btn-get-archive').addEventListener('tap', function(event) {
