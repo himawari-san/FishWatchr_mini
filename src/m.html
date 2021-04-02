@@ -93,7 +93,7 @@
 		<input id="username" class="form-control" type="text" placeholder="Your username" value="" />
 	      </div>
 	      <div class="mb-3">
-		<label for="groupname"  class="form-label" data-i18n="fwm-m-tab-user-groupname">グループ名：</label>
+		<label for="groupname" class="form-label" data-i18n="fwm-m-tab-user-groupname">グループ名：</label>
 		<input id="groupname" class="form-control" type="text" placeholder="" value="" />
 	      </div>
 		
@@ -195,19 +195,25 @@
 	  
 	  <!-- analysis-panel --> 
 	  <div class="tab-pane fade" id="analysis-panel" role="tabpanel">
-	    <a data-role="button" id="btn-show-graph" data-mini="true" href="graph.html" data-icon="chart" data-i18n="fwm-m-tab-analysis-display-chart">グラフ表示</a>
-	    <div class="ui-field-contain">
-	      <label for="threshold-outlier" data-i18n="fwm-m-tab-analysis-chart-outlier">外れ値検出(sec)：</label>
-	      <input type="text" name="threshold-outlier" id="threshold-outlier" value="1800" placeholder="(sec)" />
+	    <div class="mb-3">
+	      <button type="button" id="btn-show-graph" class="btn btn-primary" data-i18n="fwm-m-tab-analysis-display-chart">グラフ表示</button>
 	    </div>
-	    <a data-role="button" id="btn-watch-video" data-mini="true" href="#" data-icon="video" data-i18n="fwm-m-tab-analysis-watch-video">ビデオ表示</a>
-	    <div class="ui-field-contain">
-	      <label for="video-url" data-i18n="fwm-m-tab-analysis-video-id">ビデオID:</label>
-	      <input type="file" name="video-url" id="video-url" value="" placeholder="" />
+	      
+	    <div class="mb-3">
+	      <label for="threshold-outlier" class="form-label" data-i18n="fwm-m-tab-analysis-chart-outlier">外れ値検出(sec)：</label>
+	      <input type="text" class="form-control" name="threshold-outlier" id="threshold-outlier" value="1800" placeholder="(sec)" />
 	    </div>
-	    <div class="ui-field-contain">
-	      <label>ファイルの場所:</label>
-	      <select name="flip-video-file-place" id="flip-video-file-place" data-role="flipswitch" data-mini="true">
+	    <div class="mb-3">
+	      <button type="button" id="btn-watch-video" class="btn btn-primary" data-i18n="fwm-m-tab-analysis-watch-video">ビデオ表示</button>
+	    </div>
+	    
+	    <div class="mb-3">
+	      <label for="video-url" class="form-label" data-i18n="fwm-m-tab-analysis-video-id">ビデオID:</label>
+	      <input type="file" id="video-url" class="form-control" value="" placeholder="" />
+	    </div>
+	    <div class="mb-3">
+	      <label for="flip-video-file-place" class="form-label">ファイルの場所:</label>
+	      <select class="form-select" id="flip-video-file-place">
 		<option id="flip-video-file-place-local" value="Local">Local</option>
 		<option id="flip-video-file-place-web" value="Web" selected="">Web</option>
 	      </select>
