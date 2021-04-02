@@ -67,23 +67,26 @@
 	  </div>
 	</div>
       </nav>
-      <div data-role="main" class="ui-content">
+      <div class="container-fluid">
 	<div class="time">
 	  <span data-i18n="fwm-m-time">現在時刻： </span><span id="current_time_home"><span data-i18n="fwm-m-processing">Processing ...</span></span>
 	</div>
-	<div style="padding-top:10px; padding-bottom:10px">
-	  <a data-role="button" id="btn-start" href="observation.html" data-icon="search" data-i18n="fwm-m-start-observation">観察開始！</a>
+	<div class="d-grid">
+	  <button type="button" class="btn btn-primary" id="btn-start" data-i18n="fwm-m-start-observation">観察開始！</button>
 	</div>
-	<div data-role="tabs" id="tabs" data-mini="true" class="ui-body-a">
-	  <div data-role="navbar">
-	    <ul>
-	      <li><a id="username-tab" href="#username-panel" data-ajax="false" data-i18n="fwm-m-tab-user">ユーザ名</a></li>
-	      <li><a id="annotation-tab" href="#annotation-panel" data-ajax="false" data-i18n="fwm-m-tab-button">ボタン</a></li>
-	      <li><a id="analysis-tab" href="#analysis-panel" data-ajax="false" data-i18n="fwm-m-tab-analysis">分析</a></li>
-	      <li><a id="data-tab" href="#data-panel" data-ajax="false" data-i18n="fwm-m-tab-data">データ</a></li>
-	    </ul>
-	  </div>
-	  <div id="username-panel" class="ui-body ui-content">
+	<div class="home-panel">
+	  <ul class="nav nav-tabs" role="tablist">
+	    <li class="nav-item" role="presentation"><a class="nav-link active" id="username-tab" data-bs-toggle="tab" href="#username-panel" aria-controls="username-panel" role="tab" aria-selected="true" data-i18n="fwm-m-tab-user">ユーザ名</a></li>
+	    <li class="nav-item" role="presentation"><a class="nav-link" id="annotation-tab" data-bs-toggle="tab" href="#annotation-panel" aria-controls="annotation-panel" role="tab" aria-selected="false" data-i18n="fwm-m-tab-button">ボタン</a></li>
+	    <li class="nav-item" role="presentation"><a class="nav-link" id="analysis-tab" data-bs-toggle="tab" href="#analysis-panel" aria-controls="analysis-panel" role="tab" aria-selected="false" data-i18n="fwm-m-tab-analysis">分析</a></li>
+	    <li class="nav-item" role="presentation"><a class="nav-link" id="data-tab" data-bs-toggle="tab" href="#data-panel" aria-controls="data-panel" role="tab" aria-selected="false" data-i18n="fwm-m-tab-data">データ</a></li>
+	  </ul>
+	</div>
+
+
+	<div class="tab-content">
+	  <!-- username-panel --> 
+	  <div class="tab-pane fade show active" id="username-panel" role="tabpanel">
 	    <div class="ui-field-contain">
 	      <label for="username" data-i18n="fwm-m-tab-user-username">ユーザ名：</label>
 	      <input id="username" name="username" type="text"
@@ -102,7 +105,9 @@
 	      <a href="#popup-set-url" id="btn-load-settings" data-rel="popup" data-history="false" class="ui-btn uis-shadow ui-corner-all ui-icon-gear ui-btn-icon-left ui-mini" data-position-to="window">(設定の読込み)</a>
 	    </div>
 	  </div>
-	  <div id="annotation-panel" class="ui-body-d ui-content">
+
+	  <!-- annotation-panel --> 
+	  <div class="tab-pane fade" id="annotation-panel" role="tabpanel">
 	    <div class="ui-field-contain">
 	      <select id="selector1-observation-mode" name="selector1-observation-mode" data-mini="true">
 		<option value="mode_speaker" data-i18n="fwm-m-tab-buttons-mode-target">観察モード：対象</option>
@@ -234,7 +239,9 @@
 	    </div>
 	  </div>
 
-	  <div id="analysis-panel" class="ui-body ui-content ui-corner-all">
+	  
+	  <!-- analysis-panel --> 
+	  <div class="tab-pane fade" id="analysis-panel" role="tabpanel">
 	    <a data-role="button" id="btn-show-graph" data-mini="true" href="graph.html" data-icon="chart" data-i18n="fwm-m-tab-analysis-display-chart">グラフ表示</a>
 	    <div class="ui-field-contain">
 	      <label for="threshold-outlier" data-i18n="fwm-m-tab-analysis-chart-outlier">外れ値検出(sec)：</label>
@@ -254,7 +261,9 @@
 	    </div>
 	  </div>
 
-	  <div id="data-panel" class="ui-body-d ui-content ui-corner-all ui-mini">
+	  
+	  <!-- data-panel --> 
+	  <div class="tab-pane fade" id="data-panel" role="tabpanel">
 	    <div class="ui-field-contain">
 	      <a id="btn-get-archive" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-right ui-corner-all" href="#" data-i18n="fwm-m-tab-data-group-results">グループ結果のダウンロード</a>
 	    </div>
@@ -265,7 +274,7 @@
 		<option id="flip-auto-save-on" value="on" data-i18n="fwm-m-tab-data-autosave-on">On</option>
 	      </select>
 	    </div>
-
+	    
 	    <div class="ui-field-contain">
 	      <label for="savename-list" data-i18n="fwm-m-tab-data-dataset-list">記録されたデータセットリスト：</label>
 	      <ul id="savename-list" data-role="listview" data-split-icon="action" data-split-theme="a" data-inset="true">
@@ -274,31 +283,32 @@
 	    </div>
 	  </div>
 	</div>
-	
-	<div data-role="popup" id="popupWarning" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;">
-	  <div data-role="header">
-	    <h3 data-i18n="fwm-m-title-error">エラー</h3>
-	    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" data-i18n="fwm-m-button-close">閉じる</a>
-	  </div>
-	  <div role="main" class="ui-content">
-	    <p id="popupWarning-message"></p>
-	  </div>
+      </div>
+      
+      <div data-role="popup" id="popupWarning" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;">
+	<div data-role="header">
+	  <h3 data-i18n="fwm-m-title-error">エラー</h3>
+	  <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" data-i18n="fwm-m-button-close">閉じる</a>
 	</div>
-
-	<div data-role="popup" id="popupURL" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;" data-history="false">
-	  <div data-role="header">
-	    <h3 data-i18n="fwm-m-title-result-data">結果データ</h3>
-	    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" data-i18n="fwm-m-button-close">閉じる</a>
-	  </div>
-	  <div role="main" class="ui-content">
-	    <p><span data-i18n="fwm-m-message-save-to-server1">観察結果は，FishWatchr mini のサイトに保存されました。次のリンクからダウンロードして下さい。リンクの有効期限は，約180日です。</span> (<a href="#" id="resultDataURLText" target="_blank" data-i18n="fwm-m-message-save-to-server2">Text形式</a>, <a href="#" id="resultDataURLXML" target="_blank" data-i18n="fwm-m-message-save-to-server3">XML形式</a>)</p>
-	  </div>
+	<div role="main" class="ui-content">
+	  <p id="popupWarning-message"></p>
 	</div>
-
-	<div data-role="popup" id="popupGetZipURL" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;" data-history="false">
-	  <div data-role="header">
-	    <h3 data-i18n="fwm-m-title-group-data">グループ結果データ</h3>
-	    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+      </div>
+      
+      <div data-role="popup" id="popupURL" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;" data-history="false">
+	<div data-role="header">
+	  <h3 data-i18n="fwm-m-title-result-data">結果データ</h3>
+	  <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" data-i18n="fwm-m-button-close">閉じる</a>
+	</div>
+	<div role="main" class="ui-content">
+	  <p><span data-i18n="fwm-m-message-save-to-server1">観察結果は，FishWatchr mini のサイトに保存されました。次のリンクからダウンロードして下さい。リンクの有効期限は，約180日です。</span> (<a href="#" id="resultDataURLText" target="_blank" data-i18n="fwm-m-message-save-to-server2">Text形式</a>, <a href="#" id="resultDataURLXML" target="_blank" data-i18n="fwm-m-message-save-to-server3">XML形式</a>)</p>
+	</div>
+      </div>
+      
+      <div data-role="popup" id="popupGetZipURL" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;" data-history="false">
+	<div data-role="header">
+	  <h3 data-i18n="fwm-m-title-group-data">グループ結果データ</h3>
+	  <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
 	  </div>
 	  <div role="main" class="ui-content">
 	    <p><span data-i18n="fwm-m-message-group-data1">指定されたグループの結果をFishWatchr Miniのサイトからダウンロードします。このリンクは，約180日有効です。</span> (<a href="#" id="resultDataURLZIP" target="_blank" data-i18n="fwm-m-message-group-data2">zip形式</a>)</p>
