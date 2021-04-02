@@ -75,7 +75,7 @@
 	  <button type="button" class="btn btn-primary" id="btn-start" data-i18n="fwm-m-start-observation">観察開始！</button>
 	</div>
 	<div class="home-panel">
-	  <ul class="nav nav-tabs" role="tablist">
+	  <ul class="nav nav-tabs mb-3" role="tablist">
 	    <li class="nav-item" role="presentation"><a class="nav-link active" id="username-tab" data-bs-toggle="tab" href="#username-panel" aria-controls="username-panel" role="tab" aria-selected="true" data-i18n="fwm-m-tab-user">ユーザ名</a></li>
 	    <li class="nav-item" role="presentation"><a class="nav-link" id="annotation-tab" data-bs-toggle="tab" href="#annotation-panel" aria-controls="annotation-panel" role="tab" aria-selected="false" data-i18n="fwm-m-tab-button">ボタン</a></li>
 	    <li class="nav-item" role="presentation"><a class="nav-link" id="analysis-tab" data-bs-toggle="tab" href="#analysis-panel" aria-controls="analysis-panel" role="tab" aria-selected="false" data-i18n="fwm-m-tab-analysis">分析</a></li>
@@ -87,22 +87,19 @@
 	<div class="tab-content">
 	  <!-- username-panel --> 
 	  <div class="tab-pane fade show active" id="username-panel" role="tabpanel">
-	    <div class="ui-field-contain">
-	      <label for="username" data-i18n="fwm-m-tab-user-username">ユーザ名：</label>
-	      <input id="username" name="username" type="text"
-		     data-clear-btn="true" data-clear-btn-text="クリア"
-		     placeholder="Your username"
-		     value="" />
-	    </div>
-	    <div class="ui-field-contain">
-	      <label for="groupname" data-i18n="fwm-m-tab-user-groupname">グループ名：</label>
-	      <input id="groupname" name="groupname" type="text"
-		     data-clear-btn="true" data-clear-btn-text="クリア"
-		     placeholder=""
-		     value="" />
-	    </div>
-	    <div class="ui-field-contain">
-	      <a href="#popup-set-url" id="btn-load-settings" data-rel="popup" data-history="false" class="ui-btn uis-shadow ui-corner-all ui-icon-gear ui-btn-icon-left ui-mini" data-position-to="window">(設定の読込み)</a>
+	    <div class="container">
+	      <div class="mb-3">
+		<label for="username" class="form-label" data-i18n="fwm-m-tab-user-username">ユーザ名：</label>
+		<input id="username" class="form-control" type="text" placeholder="Your username" value="" />
+	      </div>
+	      <div class="mb-3">
+		<label for="groupname"  class="form-label" data-i18n="fwm-m-tab-user-groupname">グループ名：</label>
+		<input id="groupname" class="form-control" type="text" placeholder="" value="" />
+	      </div>
+		
+	      <div class="d-grid mx-auto">
+		<button type="button" class="btn btn-secondary" href="#popup-set-url" id="btn-load-settings">(設定の読込み)</button>
+	      </div>
 	    </div>
 	  </div>
 
