@@ -1,5 +1,6 @@
 var now = "";
 var nBoxes = 8;
+var pageIDs = ['home', 'observation', 'graph'];
 var shortcutKeys = ["q", "w", "e", "r", "t", "y", "u", "i", "o"]; // nBox <= 9
 var buttonAreaRatio1 = "300px";
 var buttonAreaRatio2 = "450px";
@@ -98,6 +99,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	return "unload this page?";
     });
 
+    // show home page
+    changePageTo('home');
+    
     startClock();
     initYoutubePlayer();
 
@@ -139,6 +143,20 @@ window.addEventListener('pageshow', () => {
     // $("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio("refresh");
 });
 
+
+function changePageTo(id){
+    pageIDs.forEach(pageID => {
+	var page = document.getElementById(pageID);
+
+	if(page == null){
+	    
+	} else if(id == pageID){
+	    page.removeAttribute('hidden');
+	} else {
+	    page.setAttribute('hidden', '');
+	}
+    });
+}
 
 
 function startClock(){
@@ -309,9 +327,19 @@ function initializePage() {
 
 
 function initializeEvent(){
+    // back from the obserbation page to home
+    document.getElementById('back_from_observation_to_home').addEventListener('click', function(event) {
+	changePageTo('home');
+    });
+
+    // back from the graph page to home
+    document.getElementById('back_from_graph_to_home').addEventListener('click', function(event) {
+	changePageTo('home');
+    });
+
+    
     // push start button
     document.querySelector('#btn-start').addEventListener('click', function(event) {
-	
 	startTime = new Date();
 	
 	// get username
@@ -333,6 +361,8 @@ function initializeEvent(){
 	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	}
+
+	changePageTo('observation');
     });
 
     // tool menu 
@@ -408,7 +438,7 @@ function initializeEvent(){
 
 
     // draw charts
-    document.querySelector('#btn-show-graph').addEventListener('tap', function(event) {
+    document.querySelector('#btn-show-graph').addEventListener('click', function(event) {
 	thresholdOutlier = $("#threshold-outlier").val();
 	getGroupName();
 	
@@ -425,6 +455,8 @@ function initializeEvent(){
 	} else {
 	    thresholdOutlier *= 1000; // milisec
 	}
+
+	changePageTo('graph');
     });
 
 
