@@ -258,37 +258,54 @@
 	</div>
       </div>
 
-      
-      <div data-role="popup" id="popupURL" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;" data-history="false">
-	<div data-role="header">
-	  <h3 data-i18n="fwm-m-title-result-data">結果データ</h3>
-	  <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" data-i18n="fwm-m-button-close">閉じる</a>
-	</div>
-	<div role="main" class="ui-content">
-	  <p><span data-i18n="fwm-m-message-save-to-server1">観察結果は，FishWatchr mini のサイトに保存されました。次のリンクからダウンロードして下さい。リンクの有効期限は，約180日です。</span> (<a href="#" id="resultDataURLText" target="_blank" data-i18n="fwm-m-message-save-to-server2">Text形式</a>, <a href="#" id="resultDataURLXML" target="_blank" data-i18n="fwm-m-message-save-to-server3">XML形式</a>)</p>
+
+      <!-- jqm / temporary migration -->
+      <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
+	<div class="toast" id="popupURL" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+	  <div class="toast-header">
+	    <strong data-i18n="fwm-m-title-result-data">結果データ</strong>
+	    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+	  </div>
+	  <div class="toast-body">
+	    <span data-i18n="fwm-m-message-save-to-server1">観察結果は，FishWatchr mini のサイトに保存されました。次のリンクからダウンロードして下さい。リンクの有効期限は，約180日です。</span> (<a href="#" id="resultDataURLText" target="_blank" data-i18n="fwm-m-message-save-to-server2">Text形式</a>, <a href="#" id="resultDataURLXML" target="_blank" data-i18n="fwm-m-message-save-to-server3">XML形式</a>)
+	  </div>
 	</div>
       </div>
-      
-      <div data-role="popup" id="popupGetZipURL" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;" data-history="false">
-	<div data-role="header">
-	  <h3 data-i18n="fwm-m-title-group-data">グループ結果データ</h3>
-	  <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+
+
+      <!-- jqm / temporary migration -->
+      <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
+	<div class="toast" id="popupURL" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+	  <div class="toast-header">
+	    <strong data-i18n="fwm-m-title-group-data">グループ結果データ</strong>
+	    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 	  </div>
-	  <div role="main" class="ui-content">
-	    <p><span data-i18n="fwm-m-message-group-data1">指定されたグループの結果をFishWatchr Miniのサイトからダウンロードします。このリンクは，約180日有効です。</span> (<a href="#" id="resultDataURLZIP" target="_blank" data-i18n="fwm-m-message-group-data2">zip形式</a>)</p>
+	  <div class="toast-body">
+	    <span data-i18n="fwm-m-message-group-data1">指定されたグループの結果をFishWatchr Miniのサイトからダウンロードします。このリンクは，約180日有効です。</span> (<a href="#" id="resultDataURLZIP" target="_blank" data-i18n="fwm-m-message-group-data2">zip形式</a>)
 	  </div>
 	</div>
-	
-	<div data-role="popup" id="popup-print-annatations" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;" class="ui-mini" data-history="false">
-	  <div data-role="header" data-theme="a">
-	    <h1 data-i18n="fwm-m-title-observation-data">観察結果の表示</h1>
-	  </div>
-	  <div role="main" class="ui-content">
-	    <div id="print-annatations" class="ui-body">
+      </div>
+
+
+      <!-- jqm / temporary migration -->
+      <div class="modal" id="popup-print-annatations" tabindex="-1">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+	    <div class="modal-header">
+              <h1 data-i18n="fwm-m-title-observation-data">観察結果の表示</h1>	      
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	    </div>
-            <a href="#" class="ui-btn ui-shadow" data-rel="back" data-i18n="fwm-m-button-close">閉じる</a>
+	    <div class="modal-body">
+	      <div id="print-annatations"></div>
+	    </div>
+	    <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-i18n="fwm-m-button-close">閉じる</button>
+	    </div>
 	  </div>
 	</div>
+      </div>
+
+      
 	<div data-role="popup" id="popup-set-url" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;" class="ui-mini" data-history="false">
 	  <div data-role="header" data-theme="a">
 	    <h1 data-i18n="fwm-m-title-config-url">設定の読み込み</h1>
