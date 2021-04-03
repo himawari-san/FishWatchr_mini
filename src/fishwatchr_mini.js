@@ -104,8 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	    return;
 	}
 	if($("#urlSettings").val() == ""){
-	    $("#popupWarning-message").text($.i18n("fwm-message-specify-url"));
-	    $("#popupWarning").popup("open");
+	    showErrorMessage($.i18n("fwm-message-specify-url"));
 	} else {
 	    var configName = $("#urlSettings").val();
 
@@ -166,8 +165,7 @@ function startClock(){
 
 function loadSettings(groupname){
     if(!checkGroupname(groupname)){
-	$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
-	$("#popupWarning").popup("open");
+	showErrorMessage($.i18n("fwm-message-groupname-error"));
 	return null;
     }
     
@@ -247,8 +245,8 @@ function loadSettings(groupname){
 	updateGroupURL();
     }).fail(function (jqXHR, textStatus, error){
 	unLockScreen("lock");
-	$("#popupWarning-message").html($.i18n("fwm-message-config-read-error") + "<br />"+ textStatus + ", " + error);
-	$("#popupWarning").popup("open");
+	// jqm / Need to test
+	showErrorMessage($.i18n("fwm-message-config-read-error") + "<br />"+ textStatus + ", " + error);
 	console.log("fail!!");
     }).always(function(){
 	var interval = setInterval(function(){
@@ -261,6 +259,7 @@ function loadSettings(groupname){
 
 
 function initializePage() {
+
     // get an url option for 
     configUrlOption = location.search;
 
@@ -325,7 +324,7 @@ function initializePage() {
 
 function initializeEvent(){
     // push start button
-    document.querySelector('#btn-start').addEventListener('tap', function(event) {
+    document.querySelector('#btn-start').addEventListener('click', function(event) {
 	
 	startTime = new Date();
 	
@@ -334,20 +333,17 @@ function initializeEvent(){
 	$("#username").prop("value", username);
 	
 	getGroupName();
-	
+
 	if(username == ""){
-	    $("#popupWarning-message").text($.i18n("fwm-message-username-error"));
-	    $("#popupWarning").popup("open");
+	    showErrorMessage($.i18n("fwm-message-username-error"));
 	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(username.match(/^[A-Za-z0-9_]+$/) == null){
-	    $("#popupWarning-message").text($.i18n("fwm-message-invalid-username-error"));
-	    $("#popupWarning").popup("open");
+	    showErrorMessage($.i18n("fwm-message-invalid-username-error"));
 	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(!checkGroupname(groupname) && groupname != ""){
-	    $("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
-	    $("#popupWarning").popup("open");
+	    showErrorMessage($.i18n("fwm-message-groupname-error"));
 	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	}
@@ -377,11 +373,10 @@ function initializeEvent(){
 	    $("#popup-show-qrcode").popup("open");
 	} else {
 	    if(groupname != ""){
-		$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
+		showErrorMessage($.i18n("fwm-message-groupname-error"));
 	    } else {
-		$("#popupWarning-message").text($.i18n("fwm-message-no-groupname-error"));
+		showErrorMessage($.i18n("fwm-message-no-groupname-error"));
 	    }
-	    $("#popupWarning").popup("open");
 	}
     });
     document.querySelector('#toolMenuItemSetReferenceURL').addEventListener('click', function(event) {
@@ -418,10 +413,9 @@ function initializeEvent(){
 	    if(inputDate != NaN){
 		saveCurrentTime(new Date(inputDate), fileType);
 	    } else {
-		$("#popupWarning-message").html($.i18n("fwm-m-record-time-warning")
-						+ " <br />"
-						+ $.i18n("fwm-m-record-time-example"));
-		$("#popupWarning").popup("open");
+		showErrorMessage($.i18n("fwm-m-record-time-warning")
+				 + " <br />"
+				 + $.i18n("fwm-m-record-time-example"));
 	    }
 	}
     });
@@ -435,13 +429,11 @@ function initializeEvent(){
 	if(thresholdOutlier == ""){
 	    thresholdOutlier = Number.MAX_VALUE;
 	} else if(isNaN(thresholdOutlier) || thresholdOutlier < 0){
-	    $("#popupWarning-message").text($.i18n("fwm-message-invalid-threshold-error"));
-	    $("#popupWarning").popup("open");
+	    showErrorMessage($.i18n("fwm-message-invalid-threshold-error"));
 	    $("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(!checkGroupname(groupname)){
-	    $("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
-	    $("#popupWarning").popup("open");
+	    showErrorMessage($.i18n("fwm-message-groupname-error"));
 	    $("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else {
@@ -478,12 +470,10 @@ function initializeEvent(){
 	groupname = $("#groupname").val().replace(/\$$/, "");
 	
 	if(groupname == ""){
-	    $("#popupWarning-message").text($.i18n("fwm-message-no-groupname-error"));
-	    $("#popupWarning").popup("open");
+	    showErrorMessage($.i18n("fwm-message-no-groupname-error"));
 	    return false;
 	} else if(groupname.match(/^[A-Za-z0-9_]+$/) == null){
-	    $("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
-	    $("#popupWarning").popup("open");
+	    showErrorMessage($.i18n("fwm-message-groupname-error"));
 	    return false;
 	}
 	
@@ -601,6 +591,15 @@ function initializeEvent(){
 	selectedProcessID = ""; // clear
     });
 
+}
+
+
+function showErrorMessage(message){
+    var errorToast = new bootstrap.Toast(document.querySelector("#popupWarning"));
+    var errorMessage = document.querySelector("#popupWarning-message");
+    
+    errorMessage.textContent = message;
+    errorToast.show();
 }
 
 
@@ -836,13 +835,11 @@ function saveSettings(){
 	trueGroupname = trueGroupname.replace(/\$$/, "");
 	
 	if(!checkGroupname(trueGroupname)){
-	    $("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
-	    $("#popupWarning").popup("open");
+	    showErrorMessage($.i18n("fwm-message-groupname-error"));
 	    return false;
 	}
     } else {
-	$("#popupWarning-message").text($.i18n("fwm-message-permission-error"));
-	$("#popupWarning").popup("open");
+	showErrorMessage($.i18n("fwm-message-permission-error"));
 	return false;
     }
 
@@ -851,8 +848,7 @@ function saveSettings(){
 	currentVideoId = ""; // save no videoID
     } 
     if($("#video-url").val().match(new RegExp(hiddenVideoIdLabelRegExp))){
-	$("#popupWarning-message").text($.i18n("fwm-message-invalid-videoid-error"));
-	$("#popupWarning").popup("open");
+	showErrorMessage($.i18n("fwm-message-invalid-videoid-error"));
 	return false;
     }
 
@@ -925,16 +921,14 @@ function saveCurrentTime(newStartTime, timeFileType){
 	trueGroupname = trueGroupname.replace(/\$$/, "");
 	
 	if(!checkGroupname(trueGroupname)){
-	    $("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
-	    $("#popupWarning").popup("open");
+	    showErrorMessage($.i18n("fwm-message-groupname-error"));
 	    return false;
 	} else {
 	    newname += "_" + cBaseTime + "_" + timeFileType;
 	    cBaseTime++;
 	}
     } else {
-	$("#popupWarning-message").text($.i18n("fwm-message-permission-error"));
-	$("#popupWarning").popup("open");
+	showErrorMessage($.i18n("fwm-message-permission-error"));
 	return false;
     }
 
@@ -979,8 +973,7 @@ function saveToServer(event){
     groupname = $("#groupname").val().replace(/\$$/, "");
     
     if(groupname != "" && groupname.match(/^[A-Za-z0-9_]+$/) == null){
-	$("#popupWarning-message").text($.i18n("fwm-message-groupname-error"));
-	$("#popupWarning").popup("open");
+	showErrorMessage($.i18n("fwm-message-groupname-error"));
 	return false;
     }
 

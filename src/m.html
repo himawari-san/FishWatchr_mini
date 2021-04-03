@@ -244,15 +244,20 @@
 	</div>
       </div>
       
-      <div data-role="popup" id="popupWarning" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;">
-	<div data-role="header">
-	  <h3 data-i18n="fwm-m-title-error">エラー</h3>
-	  <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" data-i18n="fwm-m-button-close">閉じる</a>
-	</div>
-	<div role="main" class="ui-content">
-	  <p id="popupWarning-message"></p>
+
+      <!-- toast used by showErrorMessage() -->
+      <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
+	<div class="toast" id="popupWarning" role="alert" aria-live="assertive" aria-atomic="true">
+	  <div class="toast-header">
+	    <strong data-i18n="fwm-m-title-error">エラー</strong>
+	    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+	  </div>
+	  <div class="toast-body">
+	    <span id="popupWarning-message"></span>
+	  </div>
 	</div>
       </div>
+
       
       <div data-role="popup" id="popupURL" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;" data-history="false">
 	<div data-role="header">
