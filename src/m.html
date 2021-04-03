@@ -98,7 +98,7 @@
 	      </div>
 		
 	      <div class="d-grid mx-auto">
-		<button type="button" class="btn btn-secondary" href="#popup-set-url" id="btn-load-settings">(設定の読込み)</button>
+		<button type="button" id="btn-load-settings" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#popup-set-url">(設定の読込み)</button>
 	      </div>
 	    </div>
 	  </div>
@@ -305,19 +305,48 @@
 	</div>
       </div>
 
-      
-	<div data-role="popup" id="popup-set-url" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;" class="ui-mini" data-history="false">
-	  <div data-role="header" data-theme="a">
-	    <h1 data-i18n="fwm-m-title-config-url">設定の読み込み</h1>
-	  </div>
-	  <div role="main" class="ui-content">
-	    <p data-i18n="fwm-m-message-config-url">グループ名を入力してください</p>
-	    <input id="urlSettings" type="url" value="" data-clear-btn="true" data-clear-btn-text="クリア" />
-            <a href="#" id="popup-set-url-ok" class="ui-btn ui-shadow ui-btn-inline" data-i18n="fwm-m-config-ok">　設　定　</a>
-            <a href="#" id="popup-set-url-cancel" class="ui-btn ui-shadow ui-btn-inline" data-i18n="fwm-m-config-cancel">キャンセル</a>
+
+      <!-- modal dialog for load-setting -->
+      <div class="modal" id="popup-set-url" tabindex="-1">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+	    <div class="modal-header">
+              <h5 data-i18n="fwm-m-title-config-url">設定の読み込み</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	    </div>
+	    <div class="modal-body">
+	      <label for="urlSettings" class="form-label" data-i18n="fwm-m-message-config-url">グループ名を入力してください</label>
+	      <input id="urlSettings" type="url" value="" class="form-control" />
+	    </div>
+	    <div class="modal-footer">
+              <button type="button" id="popup-set-url-cancel" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="fwm-m-config-cancel">キャンセル</button>
+              <button type="button" id="popup-set-url-ok" class="btn btn-primary" data-bs-dismiss="modal" data-i18n="fwm-m-config-ok">　設　定　</button>
+	    </div>
 	  </div>
 	</div>
+      </div>
 
+      
+      <!-- modal dialog for showModalErrorMessage() -->
+      <div class="modal" id="modal-error-dialog" tabindex="-1">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+	    <div class="modal-header">
+              <h1 data-i18n="fwm-m-title-error">エラー</h1>	      
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	    </div>
+	    <div class="modal-body">
+	      <div id="modal-error-message"></div>
+	    </div>
+	    <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-i18n="fwm-m-button-close">閉じる</button>
+	    </div>
+	  </div>
+	</div>
+      </div>
+
+      
+      
 	<div data-role="popup" id="popup-select-process" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px;" class="ui-mini" data-history="false">
 	  <div data-role="header" data-theme="a">
 	    <h1 data-i18n="fwm-m-title-select-process">処理の選択</h1>

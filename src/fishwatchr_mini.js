@@ -64,7 +64,6 @@ var dataHandlingMode = "print-as-tsv";
 
 var urlSettings = "";
 var configUrlOption = "";
-var resultDialog = "cancel";
 
 var cBaseTime = 0;
 
@@ -99,19 +98,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	return "unload this page?";
     });
 
-    $("#popup-set-url").on("popupafterclose", function(event, ui){
-	if(resultDialog == "cancel"){
-	    return;
-	}
-	if($("#urlSettings").val() == ""){
-	    showErrorMessage($.i18n("fwm-message-specify-url"));
-	} else {
-	    var configName = $("#urlSettings").val();
-
-	    loadSettings(configName);
-	}
-    });
-    
     startClock();
     initYoutubePlayer();
 
@@ -499,15 +485,18 @@ function initializeEvent(){
     });
     
     
-    document.querySelector('#popup-set-url-ok').addEventListener('tap', function(event) {
-	resultDialog = "ok";
-	$("#popup-set-url").popup("close");
+    document.querySelector('#popup-set-url-ok').addEventListener('click', function(event) {
+	var modalElement = document.getElementById('popup-set-url');
+	var modal = bootstrap.Modal.getInstance(document.getElementById('popup-set-url'));
+
+	if($("#urlSettings").val() == ""){
+	    showModalErrorMessage($.i18n("fwm-message-specify-url"));
+	} else {
+	    var configName = $("#urlSettings").val();
+	    loadSettings(configName);
+	}
     });
     
-    document.querySelector('#popup-set-url-cancel').addEventListener('tap', function(event) {
-	resultDialog = "cancel";
-	$("#popup-set-url").popup("close");
-    });
     
     document.querySelector('#popup-set-group-site-url-ok').addEventListener('tap', function(event) {
 	groupSiteURL = sanitize($("#group-site-url").val());
@@ -600,6 +589,15 @@ function showErrorMessage(message){
     
     errorMessage.textContent = message;
     errorToast.show();
+}
+
+
+function showModalErrorMessage(message){
+    var modalDialog = new bootstrap.Modal(document.getElementById('modal-error-dialog'));
+    var errorMessage = document.getElementById('modal-error-message');
+    
+    errorMessage.textContent = message;
+    modalDialog.show();
 }
 
 
