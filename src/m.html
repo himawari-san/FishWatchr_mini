@@ -502,5 +502,118 @@
 	<h3>Copyright 2016-2020 Masaya YAMAGUCHI</h3>
       </div>
     </div>
+
+    <div class="disableSelection" id="graph" data-role="page">
+      <div data-role="main" class="ui-content" >
+	<div data-role="navbar">
+	  <ul>
+	    <li><a id="selector-summary-graph" class="graph-selector ui-btn-active" href="#" data-i18n="fwm-m-graph-tab-style-attribute">属性別</a></li>
+	    <li><a id="selector-timeline-graph" class="graph-selector" href="#" data-i18n="fwm-m-graph-tab-style-time">時間</a></li>
+	  </ul>
+	</div>
+	<!-- graph -->
+	<div id="graph_body"></div>
+
+	<!-- scale slider in summary-graph only -->
+	<div id="range-slider">
+	  <label for="slider-1" data-i18n="fwm-m-graph-interval-range">区間幅(sec)／表示範囲</label>
+	  <input type="range" name="slider-1" id="slider-1" value="60" min="15" max="300" step="5" readonly="true" />
+	</div>
+	
+	<!-- range slider -->
+	<!-- this div is based on http://jsfiddle.net/ezanker/fu26u/204/ -->
+	<div id="label-timeRangeSlider" data-i18n="fwm-m-graph-time-range">表示範囲</div>  <!-- summary-graph only -->
+        <div class="timeRangeSlider" style="position:relative">
+          <div id="theTimeRange" class="time-slider" data-role="rangeslider" style="position:relative;">
+            <label for="time1" style="display:none">Time Range:</label>
+            <input type="range" name="time1" id="time1" min="0" max="100" value="0" step="60" />
+            <label for="time2">Time Range:</label>
+            <input type="range" name="time2" id="time2" min="0" max="100" value="100" step="60" />
+          </div>
+          <input type="text" data-role="none" id="time1label" class="timeLabel ui-shadow-inset ui-body-inherit ui-corner-all ui-slider-input" value="" readonly="true" />
+          <input type="text" data-role="none" id="time2label" class="timeLabel2 ui-body-inherit ui-corner-all ui-slider-input" value="" readonly="true" />
+        </div>
+
+	<!-- attribute value selector in summary-graph only -->
+	<div id="attribute-value-fillter" class=" ui-mini">
+	  <label for="attribute-value-selector" class="select" data-i18n="fwm-m-graph-attribute-value-filter">フィルタ：</label>
+	  <select name="attribute-value-selector" id="attribute-value-selector">
+	  </select>
+	</div>
+
+	<div class="ui-grid-solo ui-mini">
+	  <div class="ui-grid-a">
+	    <div class="ui-block-a">
+	      <!-- summary-graph only -->
+	      <div id="attribute-selector-summary">
+		<label for="select-attribute" class="select" data-i18n="fwm-m-graph-attributes">属性：</label>
+		<select name="select-attribute" id="select-attribute">
+		  <option value="attribute-label" data-i18n="fwm-m-graph-attribute-label">ラベル</option>
+		  <option value="attribute-observation-target" data-i18n="fwm-m-graph-attribute-target">対象</option>
+		  <option value="attribute-eval-average" data-i18n="fwm-m-graph-attribute-evaluation">評価（平均）</option>
+		</select>
+	      </div>
+
+	      <!-- timeline-graph only -->
+              <fieldset id="attribute-selector-timeline" data-role="controlgroup" data-type="horizontal">
+		<legend data-i18n="fwm-m-graph-attributes">属性：</legend>
+		<input class="attribute-selector" id="attribute-label" name="attribute" type="radio" value="label" />
+		<label for="attribute-label" data-i18n="fwm-m-graph-attribute-label">ラベル</label>
+		<input class="attribute-selector" id="attribute-observation-target" name="attribute" type="radio" value="speaker" />
+		<label for="attribute-observation-target" data-i18n="fwm-m-graph-attribute-target">対象</label>
+              </fieldset>
+	    </div>
+	    <div class="ui-block-b">
+	      <!-- timeline-graph only -->
+	      <fieldset id="timedisplay-type-selector" data-role="controlgroup" data-type="horizontal">
+		<legend data-i18n="fwm-m-tab-chart-time-style">時間表示：</legend>
+		<input class="time-style-selector" id="real-time-style" name="time-style" type="radio" value="real-time-style" />
+		<label for="real-time-style" data-i18n="fwm-button-time-style-clock">　時刻　</label>
+		<input class="time-style-selector" id="elapsed-time-style" name="time-style" type="radio" value="elapsed-time-style" />
+		<label for="elapsed-time-style" data-i18n="fwm-button-time-style-elapsed">経過時間</label>
+	      </fieldset>
+
+	      <!-- summary-graph only -->
+	      <div id="observer-selector">
+		<label for="select-observer" class="select" data-i18n="fwm-graph-observers">観察者：</label>
+		<select name="select-observer" id="select-observer">
+		  <option value="all" data-i18n="fwm-graph-observers-all-sum">全観察者（合計）</option>
+		  <option value="user-only" data-i18n="fwm-graph-observers-self">本人</option>
+		  <option value="user-comparison" data-i18n="fwm-graph-observers-self-others">本人／他の観察者</option>
+		  <option value="all-comparison" data-i18n="fwm-graph-observers-every-observer">全観察者（比較）</option>
+		</select>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="box_button ui-body">
+	  <a id="link_to_top_graph" data-role="button" data-corners="true" href="m.html" data-icon="star" data-i18n="fwm-graph-button-back">戻る</a>
+	</div>
+
+	<div data-role="popup" id="popupWarningGraph" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;" data-history="false">
+	  <div data-role="header">
+	    <h3 data-i18n="fwm-m-title-error">エラー</h3>
+	    <a href="#" data-rel="back" data-history="false" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" data-i18n="fwm-m-button-close">閉じる</a>
+	  </div>
+	  <div role="main" class="ui-content">
+	    <p id="popupWarning-message-graph"></p>
+	  </div>
+	</div>
+
+	<div data-role="popup" id="popup-watch-video2" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px" class="ui-mini" data-history="false">
+	  <div data-role="header" data-theme="a">
+	    <h1 data-i18n="fwm-m-title-watch-video">ビデオの表示</h1>
+	  </div>
+	  <div role="main" class="ui-content">
+	    <div id="video-player2"></div>
+            <a href="#" class="ui-btn ui-shadow" data-rel="back" data-i18n="fwm-m-button-close">閉じる</a>
+	  </div>
+	</div>
+      </div>
+      <div data-role="footer">
+	<h3>Copyright 2016-2018 Masaya YAMAGUCHI</h3>
+      </div>
+    </div>
   </body>
 </html>
