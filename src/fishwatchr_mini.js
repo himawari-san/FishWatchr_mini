@@ -1,6 +1,7 @@
 var now = "";
 var nBoxes = 8;
-var pageIDs = ['home', 'observation', 'graph'];
+var currentPageId = "home";
+var pageIds = ['home', 'observation', 'graph'];
 var shortcutKeys = ["q", "w", "e", "r", "t", "y", "u", "i", "o"]; // nBox <= 9
 var buttonAreaRatio1 = "300px";
 var buttonAreaRatio2 = "450px";
@@ -145,17 +146,28 @@ window.addEventListener('pageshow', () => {
 
 
 function changePageTo(id){
-    pageIDs.forEach(pageID => {
-	var page = document.getElementById(pageID);
 
-	if(page == null){
-	    
-	} else if(id == pageID){
-	    page.removeAttribute('hidden');
-	} else {
+    // hide
+    pageIds.forEach(pageId => {
+	var page = document.getElementById(pageId);
+	if(page != null && id != pageId){
+	    if(pageId == currentPageId){
+		processBeforeHide(pageId);		
+	    }
 	    page.setAttribute('hidden', '');
 	}
     });
+
+    processBeforeShow(id);
+
+    // show
+    pageIds.forEach(pageId => {
+	if(id == pageId){
+	    document.getElementById(pageId).removeAttribute('hidden');
+	}
+    });
+
+    currentPageId = id;
 }
 
 
@@ -686,9 +698,53 @@ function changeLang(){
 }
 
 
-// pagecontainerbeforeshow
-document.addEventListener('pagecontainerbeforeshow', function(event, ui){
-//document.addEventListener('DOMContentLoaded', function(event, ui){
+function processBeforeHide(pageId){
+    if(pageId == "home"){
+	// get username
+	username = $("#username").val().replace(/^ +/, "").replace(/ +$/, "");
+	$("#username").prop("value", username);
+	
+	// get groupname
+	getGroupName();
+
+	// get values of speakers and labels
+	speakerList = [];
+	labelList = [];
+	for(var i = 1; i <= nBoxes; i++){
+	    var pn = "speaker" + i;
+	    annotatedSpeakers[pn] = sanitizeJ($("#" + pn).val());
+	    if(annotatedSpeakers[pn] != ""){
+		speakerList.push(annotatedSpeakers[pn]);
+	    }
+
+	    pn = "label" + i;
+	    annotatedLabels[pn] = sanitizeJ($("#" + pn).val());
+	    if(annotatedLabels[pn] != ""){
+		labelList.push(annotatedLabels[pn]);
+	    }
+	}
+
+	// get annotation mode
+	annotationMode = $("#selector1-observation-mode").val();
+    } else if(pageId == "observation"){
+	console.log("observation page closed!!");
+	// save annotations to annotationStorage
+	var newdata = {starttime:startTime, username:username, annotations:annotationResults.concat()};
+	annotationStorage.push(newdata);
+	updateSavenameList();
+
+	if($("#flip-auto-save-on").prop("selected")){
+	    saveToServer(saveEventAutoSave);
+	    console.log("auto-save");
+	} else {
+	    console.log("no auto-save");
+	}
+    }
+}
+
+
+
+function processBeforeShow(pageId){
     if(timerID != -1){
 	clearInterval(timerID);
 	console.log("timer cleared:" + timerID);
@@ -697,16 +753,19 @@ document.addEventListener('pagecontainerbeforeshow', function(event, ui){
     removeShortcutAll();
     
     // observation page
-    if(ui.toPage.is('#observation')){
+    if(pageId == "observation"){
+	var panelA = document.getElementById('panel-a');
+	var panelB = document.getElementById('panel-b');
+
 	// start new timer
 	timerID = setInterval(displayElapsedTime, timerInterval, "#current_time_observation");
 
 	// display username
-	$("#current_username").text(username);
+	document.getElementById('current_username').innerText = username;
 
 	// panel initialization
-	$("#panel-a").empty();
-	$("#panel-b").empty();
+	panelA.textContent = '';
+	panelB.textContent = '';
 
 	// count the number of buttons
 	var na = 0; // the number of buttons in panel-a
@@ -725,11 +784,11 @@ document.addEventListener('pagecontainerbeforeshow', function(event, ui){
 
 	// change the size of panels for buttons 
 	if(na > buttonAreaRatioChange || nb > buttonAreaRatioChange){
-	    $("#panel-a").prop("style", "height:" + buttonAreaRatio2);
-	    $("#panel-b").prop("style", "height:" + buttonAreaRatio2);
+	    panelA.setAttribute('style', "height:" + buttonAreaRatio2);
+	    panelB.setAttribute('style', "height:" + buttonAreaRatio2);
 	} else {
-	    $("#panel-a").prop("style", "height:" + buttonAreaRatio1);
-	    $("#panel-b").prop("style", "height:" + buttonAreaRatio1);
+	    panelA.setAttribute('style', "height:" + buttonAreaRatio1);
+	    panelB.setAttribute('style', "height:" + buttonAreaRatio1);
 	}
 
 
@@ -752,18 +811,18 @@ document.addEventListener('pagecontainerbeforeshow', function(event, ui){
 	    
 	    if(v != undefined && v != ""){
 		var newID = "bt_speaker" + ca;
-		var newTag =
-		    "<button class=\"btn-annotation ui-button\" id=\"" + newID +
-		    "\" style=\"height:" +
-		    buttonHeightRatio[na-1] + ";\">" +
-		    v +
-		    "</button>";
-		$("#panel-a").append(newTag);
+		var newButton = document.createElement("button");
+		newButton.setAttribute("class", "btn btn-outline-primary w-100 m-1");
+		newButton.setAttribute("id", newID);
+		newButton.setAttribute("style", "height:" + buttonHeightRatio[na-1]);
+		newButton.innerText = v;
+		panelA.appendChild(newButton);
+
 		if(annotationMode == "mode_label"){
 		    $("#" + newID).prop("disabled", true);
 		}
-			shortcut.add(shortcutKeys[ca-1],
-				     shortcutCallback("bt_speaker", ca));
+		shortcut.add(shortcutKeys[ca-1],
+			     shortcutCallback("bt_speaker", ca));
 		ca++;
 	    } 
 
@@ -771,13 +830,12 @@ document.addEventListener('pagecontainerbeforeshow', function(event, ui){
 	    v = annotatedLabels[pn];
 	    if(v != undefined && v != ""){
 		var newID = "bt_label" + cb;
-		var newTag =
-		    "<button class=\"btn-annotation ui-button\" id=\"" + newID +
-		    "\" style=\"height:" +
-		    buttonHeightRatio[nb-1] + ";\">" +
-		    v +
-		    "</button>";
-		$("#panel-b").append(newTag);
+		var newButton = document.createElement("button");
+		newButton.setAttribute("class", "btn btn-outline-primary w-100 m-1");
+		newButton.setAttribute("id", newID);
+		newButton.setAttribute("style", "height:" + buttonHeightRatio[nb-1]);
+		newButton.innerText = v;
+		panelB.appendChild(newButton);
 		if(annotationMode == "mode_speaker"){
 		    $("#" + newID).prop("disabled", true);
 		}
@@ -785,21 +843,19 @@ document.addEventListener('pagecontainerbeforeshow', function(event, ui){
 		cb++;
 	    } 
 	}
-	$("#panel-a").trigger("create");
-	$("#panel-b").trigger("create");
 
 	// initialize selectmenu
-	$("#selector2-observation-mode").val(annotationMode).selectmenu("refresh");
+	//$("#selector2-observation-mode").val(annotationMode).selectmenu("refresh");
 
 	// update the url of the top page 
 	$("#link_to_top").prop("href", "m.html" + configUrlOption);
-    } else if(ui.toPage.is('#home')){
+    } else if(pageId == "home"){
 	timerID = setInterval(displayTime, timerInterval, "#current_time_home");
 	console.log("new timer:" + timerID);
 	annotationResults = [];
 	selectedAttribute = "attribute-label";
 	selectedGraph = "selector-summary-graph";
-    } else if(ui.toPage.is('#graph')){
+    } else if(pageId == "graph"){
 	$("#link_to_top_graph").prop("href", "m.html" + configUrlOption);
 
 	histgramInterval = $("#slider-1").val();
@@ -854,7 +910,7 @@ document.addEventListener('pagecontainerbeforeshow', function(event, ui){
 	    }
 	});
     }
-});
+};
 
 
 function saveSettings(){
@@ -1280,7 +1336,8 @@ function updateSavenameList(){
 		"</a>" +
 		"</li>");
     }
-    $("#savename-list").listview("refresh");
+    // jqm, remove 
+    //$("#savename-list").listview("refresh");
 
 
     document.querySelectorAll('.savename-button').forEach(button => {
