@@ -455,45 +455,48 @@
       </div>
     </div>
     
-    <div id="observation" data-role="page" style="touch-action: manipulation;">
-      <div data-role="main" class="ui-content" >
-	<fieldset class="ui-grid-a ui-body ui-corner-all">
-	  <div id="panel-a" class="ui-block-a button-panel" style="height:300px">
-	    <button class="btn-annotation" id="bt_speaker1" style="height:97%;">対象１</button>
-	  </div>
-	  <div id="panel-b" class="ui-block-b button-panel" style="height:300px">
-	    <button class="btn-annotation" id="bt_label1" style="height:97%;">ラベル１</button>
-	  </div>
-	  <div class="time_username ui-body ui-mini" style="text-align:center">
-	    <span id="current_username">Username ...</span> (<span id="current_time_observation">Processing ...</span>)
-	  </div>
-	  <div class="ui-body">
-	    <select id="selector2-observation-mode" data-mini="true">
-              <option value="mode_speaker" data-i18n="fwm-m-tab-buttons-mode-target">観察モード：対象</option>
-              <option value="mode_label" data-i18n="fwm-m-tab-buttons-mode-label">観察モード：ラベル</option>
-              <option value="mode_speaker_label" data-i18n="fwm-m-tab-buttons-mode-target_label">観察モード：対象⇒ラベル</option>
-              <option value="mode_label_speaker" data-i18n="fwm-m-tab-buttons-mode-label_target">観察モード：ラベル⇒対象</option>
-	    </select>
-	  </div>
-	</fieldset>
 
-
-	<!-- latest annotations -->
-	<div class="box_result ui-body-c ui-corner-all ui-mini">
-	  <ul data-role="listview" data-split-icon="delete" data-split-theme="a" data-inset="true">
-	    <li>
-	      <a href="#" ><span id="disp1" data-i18n="fwm-no-annotation-data">（直近のアノテーション - なし）</span></a>
-	      <a href="#"  class="disp-button-delete ui-button" id="disp-button1">test</a>
-	    </li>
-	    <li>
-	      <a href="#" ><span id="disp2" data-i18n="fwm-no-annotation-data">（直近のアノテーション - なし）</span></a>
-	      <a href="#"  class="disp-button-delete ui-button" id="disp-button2">test</a>
-	    </li>
-	  </ul>
+    <!-- observation page -->
+    <div id="observation">
+      <div class="container h-auto">
+	<div class="row row-col-2" style="height:300px">
+	  <div id="panel-a" class="col">
+	    <button type="button" class="btn btn-outline-primary w-100 h-100 m-2" id="bt_speaker1">対象１</button>
+	  </div>
+	  <div id="panel-b" class="col">
+	    <button type="button" class="btn btn-outline-primary w-100 h-100 m-2" id="bt_label1">ラベル１</button>
+	  </div>
 	</div>
-	<div class="box_button ui-body">
-	  <button id="back_from_observation_to_home" type="button" data-i18n="fwm-observation-button-finish" >終了</button>
+      </div>
+      <div class="m-3 text-center">
+	<span id="current_username">Username ...</span> (<span id="current_time_observation">Processing ...</span>)
+      </div>
+      <div class="m-3 w-75 mx-auto">
+	<select class="form-select" id="selector2-observation-mode" data-mini="true">
+          <option value="mode_speaker" data-i18n="fwm-m-tab-buttons-mode-target">観察モード：対象</option>
+          <option value="mode_label" data-i18n="fwm-m-tab-buttons-mode-label">観察モード：ラベル</option>
+          <option value="mode_speaker_label" data-i18n="fwm-m-tab-buttons-mode-target_label">観察モード：対象⇒ラベル</option>
+          <option value="mode_label_speaker" data-i18n="fwm-m-tab-buttons-mode-label_target">観察モード：ラベル⇒対象</option>
+	</select>
+      </div>
+      
+      <!-- latest annotations -->
+      <div class="list-group m-3">
+	<div class="list-group-item p-0 m-0 d-flex">
+	  <span class="m-1 flex-fill" id="disp1" data-i18n="fwm-no-annotation-data">（直近のアノテーション - なし）</span>
+	  <button href="#"  type="button" class="btn" id="disp-button1">
+	    <img src="icons/x-square.svg" alt="x" />
+	  </button>
 	</div>
+	<div class="list-group-item p-0 m-0 d-flex">
+	  <span class="m-1 flex-fill" id="disp2" data-i18n="fwm-no-annotation-data">（直近のアノテーション - なし）</span>
+	  <button href="#"  type="button" class="btn" id="disp-button2">
+	    <img src="icons/x-square.svg" alt="x" />
+	  </button>
+	</div>
+      </div>
+      <div class="m-3 text-center">
+	<button class="btn btn-secondary" id="back_from_observation_to_home" type="button" data-i18n="fwm-observation-button-finish" >終了</button>
       </div>
     </div>
 
