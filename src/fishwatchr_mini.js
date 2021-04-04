@@ -6,6 +6,9 @@ var shortcutKeys = ["q", "w", "e", "r", "t", "y", "u", "i", "o"]; // nBox <= 9
 var buttonAreaRatio1 = "300px";
 var buttonAreaRatio2 = "450px";
 var buttonAreaRatioChange = 5; // if <=5 ratio1, otherwise ratio2 
+var annotationButtonColor = "btn-outline-primary";
+var annotationButtonBlinkColor = "btn-dark";
+var annotationButtonBlinkInterval = 150;
 var annotatedSpeakers = {};
 var annotatedLabels = {};
 var speakerList = [];
@@ -83,8 +86,8 @@ var toolMenuItemID = "";
 var resultDialogRecordTime = "";
 var groupSiteURL = "";
 
-var startTouchY; // for touchend event
-var startTouchTime; // for touchend event
+var startMouseDownY; // for mousedown event
+var startMouseDonwTime; // for mousedown event
 var moveDistanceThreshold = 25; // px
 var moveDurationThreshold = 500; // msec
 
@@ -854,7 +857,7 @@ function processBeforeShow(pageId){
 	    if(v != undefined && v != ""){
 		var newID = "bt_speaker" + ca;
 		var newButton = document.createElement("button");
-		newButton.setAttribute("class", "btn btn-outline-primary w-100 m-1");
+		newButton.setAttribute("class", "btn btn-annotation w-100 m-1 " + annotationButtonColor);
 		newButton.setAttribute("id", newID);
 		newButton.setAttribute("style", "height:" + buttonHeightRatio[na-1]);
 		newButton.innerText = v;
@@ -865,6 +868,7 @@ function processBeforeShow(pageId){
 		}
 		shortcut.add(shortcutKeys[ca-1],
 			     shortcutCallback("bt_speaker", ca));
+		addEventListerToAnnotationButton(newButton);
 		ca++;
 	    } 
 
@@ -873,7 +877,7 @@ function processBeforeShow(pageId){
 	    if(v != undefined && v != ""){
 		var newID = "bt_label" + cb;
 		var newButton = document.createElement("button");
-		newButton.setAttribute("class", "btn btn-outline-primary w-100 m-1");
+		newButton.setAttribute("class", "btn btn-annotation w-100 m-1 " + annotationButtonColor);
 		newButton.setAttribute("id", newID);
 		newButton.setAttribute("style", "height:" + buttonHeightRatio[nb-1]);
 		newButton.innerText = v;
@@ -882,6 +886,7 @@ function processBeforeShow(pageId){
 		    newButton.setAttribute("disabled", "");
 		}
 		shortcut.add(cb + "", shortcutCallback("bt_label", cb));
+		addEventListerToAnnotationButton(newButton);
 		cb++;
 	    } 
 	}
@@ -953,6 +958,78 @@ function processBeforeShow(pageId){
 	});
     }
 };
+
+
+function addEventListerToAnnotationButton(button) {
+    // push an annotation button down
+    button.addEventListener('mousedown', function(event) {
+	startMouseDownY = event.pageY;
+	startMouseDonwTime = performance.now();
+    });
+
+    
+    // release an annotation button
+    button.addEventListener('mouseup', function(event) {
+	var buttonID = event.target.id;
+	
+	// cancel the event when the observation screen is scrolled
+	if(Math.abs(event.pageY - startMouseDownY) > moveDistanceThreshold
+	   || performance.now() - startMouseDonwTime > moveDurationThreshold){
+	    // stop focusing on the button
+	    this.blur();
+	    return false;
+	}
+	
+	var now = new Date();
+	var currentTime = date2FormattedDateTime(now, 1);
+	var elapsedTime = time2FormattedTime(now.getTime() - startTime.getTime(), 1);
+	var annotation = "";
+	var buttonText = event.target.innerHTML;
+	
+	if(annotationMode == "mode_speaker"){
+	    tempAnnotationSpeaker = buttonText;
+	    tempAnnotationLabel = "-";
+	} else if(annotationMode == "mode_label"){
+	    tempAnnotationSpeaker = "-";
+	    tempAnnotationLabel = buttonText;
+	} else if(annotationMode == "mode_speaker_label"){
+	    if(buttonID.indexOf("label") == -1) {
+		tempAnnotationSpeaker = buttonText;
+		return;
+	    } else if(tempAnnotationSpeaker == "" || tempAnnotationSpeaker == "-"){
+		return;
+	    } else {
+		tempAnnotationLabel = buttonText;
+	    }
+	} else if(annotationMode == "mode_label_speaker"){
+	    if(buttonID.indexOf("speaker") == -1) {
+		tempAnnotationLabel = buttonText;
+		return;
+	    } else if(tempAnnotationLabel == "" || tempAnnotationLabel == "-"){
+		return;
+	    } else {
+		tempAnnotationSpeaker = buttonText;
+	    }
+	}
+	
+	annotation = tempAnnotationSpeaker + fseparator + tempAnnotationLabel + fseparator + elapsedTime + fseparator + currentTime + fseparator + username;
+	annotationResults.push(annotation);
+	displayResults();
+	blinkButton(this);
+	tempAnnotationSpeaker = "-";
+	tempAnnotationLabel = "-";
+    });
+}
+
+
+function blinkButton(button){
+    button.classList.remove(annotationButtonColor);
+    button.classList.add(annotationButtonBlinkColor);
+    setTimeout(function () {
+	button.classList.remove(annotationButtonBlinkColor);
+	button.classList.add(annotationButtonColor);
+    }, annotationButtonBlinkInterval);
+}
 
 
 function saveSettings(){
