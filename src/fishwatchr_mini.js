@@ -623,7 +623,49 @@ function initializeEvent(){
 	}
 	selectedProcessID = ""; // clear
     });
-
+    
+    //
+    // observation page
+    //
+    //
+    // if detect change of select menu, then update annotation buttons
+    document.querySelector('#selector2-observation-mode').addEventListener("change", function () {
+	annotationMode = document.getElementById("selector2-observation-mode").value;
+	
+	var ca = 1;
+	var cb = 1;
+	
+	for(var i = 1; i <= nBoxes; i++){
+	    var pn = "speaker" + i;
+	    var v = annotatedSpeakers[pn];
+	    
+	    if(v != undefined && v != ""){
+		var targetID = "bt_speaker" + ca;
+		var button = document.getElementById(targetID);
+		
+		if(annotationMode == "mode_label"){
+		    button.setAttribute("disabled", "");
+		} else {
+		    button.removeAttribute("disabled");
+		}
+		ca++;
+	    } 
+	    
+	    pn = "label" + i;
+	    v = annotatedLabels[pn];
+	    if(v != undefined && v != ""){
+		var targetID = "bt_label" + cb;
+		var button = document.getElementById(targetID);
+		
+		if(annotationMode == "mode_speaker"){
+		    button.setAttribute("disabled", "");
+		} else {
+		    button.removeAttribute("disabled");
+		}
+		cb++;
+	    } 
+	}
+    });
 }
 
 
@@ -819,7 +861,7 @@ function processBeforeShow(pageId){
 		panelA.appendChild(newButton);
 
 		if(annotationMode == "mode_label"){
-		    $("#" + newID).prop("disabled", true);
+		    newButton.setAttribute("disabled", "");
 		}
 		shortcut.add(shortcutKeys[ca-1],
 			     shortcutCallback("bt_speaker", ca));
@@ -837,7 +879,7 @@ function processBeforeShow(pageId){
 		newButton.innerText = v;
 		panelB.appendChild(newButton);
 		if(annotationMode == "mode_speaker"){
-		    $("#" + newID).prop("disabled", true);
+		    newButton.setAttribute("disabled", "");
 		}
 		shortcut.add(cb + "", shortcutCallback("bt_label", cb));
 		cb++;
@@ -845,7 +887,7 @@ function processBeforeShow(pageId){
 	}
 
 	// initialize selectmenu
-	//$("#selector2-observation-mode").val(annotationMode).selectmenu("refresh");
+	document.getElementById("selector2-observation-mode").value = annotationMode;
 
 	// update the url of the top page 
 	$("#link_to_top").prop("href", "m.html" + configUrlOption);
@@ -1275,42 +1317,6 @@ function getGroupName(){
     groupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
     $("#groupname").prop("value", groupname);
     groupname = $("#groupname").val().replace(/\$$/, "");
-}
-
-
-function updateAnnotationButtons(){
-
-    annotationMode = $("#selector2-observation-mode").val();
-
-    var ca = 1;
-    var cb = 1;
-    
-    for(var i = 1; i <= nBoxes; i++){
-	var pn = "speaker" + i;
-	var v = annotatedSpeakers[pn];
-	
-	if(v != undefined && v != ""){
-	    var targetID = "#bt_speaker" + ca;
-	    if(annotationMode == "mode_label"){
-		$(targetID).prop("disabled", true);
-	    } else {
-		$(targetID).prop("disabled", false);
-	    }
-	    ca++;
-	} 
-	
-	pn = "label" + i;
-	v = annotatedLabels[pn];
-	if(v != undefined && v != ""){
-	    var targetID = "#bt_label" + cb;
-	    if(annotationMode == "mode_speaker"){
-		$(targetID).prop("disabled", true);
-	    } else {
-		$(targetID).prop("disabled", false);
-	    }
-	    cb++;
-	} 
-    }
 }
 
 
