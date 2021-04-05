@@ -29,7 +29,6 @@ var fn_ctime = 3; // date & time (string)
 var fn_username = 4;
 var fn_ptime = 5; // Date.parsed ctime (number)
 var defaultFilterValue = "__no_filter__";
-var defaultFilterText = $.i18n("fwm-m-graph-attribute-value-selector-default");
 
 var tempAnnotationSpeaker = "";
 var tempAnnotationLabel = "";
@@ -78,8 +77,9 @@ var timeFileElasedType = "elapsed";
 var timeFileAbsoluteType = "absolute";
 var offsetTimeToPlay = 10; // sec  
 
-
 var uiLanguage = 'ja';
+var uiLanguages = {ja: 'Japanese', en: 'English'};
+var i18nUtil = new I18nUtil(uiLanguage);
 var flagi18nLoaded = false;
 
 var toolMenuItemID = "";
@@ -184,7 +184,7 @@ function startClock(){
 
 function loadSettings(groupname){
     if(!checkGroupname(groupname)){
-	showErrorMessage($.i18n("fwm-message-groupname-error"));
+	showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	return null;
     }
     
@@ -226,7 +226,7 @@ function loadSettings(groupname){
 	    .selectmenu('refresh');
 	
 	// set button text
-	$("#btn-load-settings").text($.i18n("fwm-m-tab-user-set-value") + " (" + groupname + ")");
+	$("#btn-load-settings").text(i18nUtil.get("fwm-m-tab-user-set-value") + " (" + groupname + ")");
 
 	// set auto-save option
 	if(data["auto-save"] == "true"){
@@ -265,7 +265,7 @@ function loadSettings(groupname){
     }).fail(function (jqXHR, textStatus, error){
 	unLockScreen("lock");
 	// jqm / Need to test
-	showErrorMessage($.i18n("fwm-message-config-read-error") + "<br />"+ textStatus + ", " + error);
+	showErrorMessage(i18nUtil.get("fwm-message-config-read-error") + "<br />"+ textStatus + ", " + error);
 	console.log("fail!!");
     }).always(function(){
 	var interval = setInterval(function(){
@@ -324,19 +324,13 @@ function initializePage() {
     if(flagi18nLoaded){
 	changeLang();
     } else {
-	$.i18n( {
-	    locale: uiLanguage
-	} );
-	
-	$.i18n().load( {
-	    ja: 'i18n/ja.json',
-	    en: 'i18n/en.json',
-	}).done( function() {
-	    flagi18nLoaded = true;
-	    changeLang();
-	} ).fail(function (jqXHR, textStatus, error){
-	    console.log('fail1!');
-	});
+	i18nUtil.load(Object.keys(uiLanguages))
+	    .then( function() {
+		flagi18nLoaded = true;
+		changeLang();
+	    }).catch(function (jqXHR, textStatus, error){
+		console.log('fail1!');
+	    });
     }
 }
 
@@ -364,15 +358,15 @@ function initializeEvent(){
 	getGroupName();
 
 	if(username == ""){
-	    showErrorMessage($.i18n("fwm-message-username-error"));
+	    showErrorMessage(i18nUtil.get("fwm-message-username-error"));
 	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(username.match(/^[A-Za-z0-9_]+$/) == null){
-	    showErrorMessage($.i18n("fwm-message-invalid-username-error"));
+	    showErrorMessage(i18nUtil.get("fwm-message-invalid-username-error"));
 	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(!checkGroupname(groupname) && groupname != ""){
-	    showErrorMessage($.i18n("fwm-message-groupname-error"));
+	    showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	}
@@ -404,9 +398,9 @@ function initializeEvent(){
 	    $("#popup-show-qrcode").popup("open");
 	} else {
 	    if(groupname != ""){
-		showErrorMessage($.i18n("fwm-message-groupname-error"));
+		showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	    } else {
-		showErrorMessage($.i18n("fwm-message-no-groupname-error"));
+		showErrorMessage(i18nUtil.get("fwm-message-no-groupname-error"));
 	    }
 	}
     });
@@ -444,9 +438,9 @@ function initializeEvent(){
 	    if(inputDate != NaN){
 		saveCurrentTime(new Date(inputDate), fileType);
 	    } else {
-		showErrorMessage($.i18n("fwm-m-record-time-warning")
+		showErrorMessage(i18nUtil.get("fwm-m-record-time-warning")
 				 + " <br />"
-				 + $.i18n("fwm-m-record-time-example"));
+				 + i18nUtil.get("fwm-m-record-time-example"));
 	    }
 	}
     });
@@ -460,11 +454,11 @@ function initializeEvent(){
 	if(thresholdOutlier == ""){
 	    thresholdOutlier = Number.MAX_VALUE;
 	} else if(isNaN(thresholdOutlier) || thresholdOutlier < 0){
-	    showErrorMessage($.i18n("fwm-message-invalid-threshold-error"));
+	    showErrorMessage(i18nUtil.get("fwm-message-invalid-threshold-error"));
 	    $("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(!checkGroupname(groupname)){
-	    showErrorMessage($.i18n("fwm-message-groupname-error"));
+	    showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	    $("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else {
@@ -503,10 +497,10 @@ function initializeEvent(){
 	groupname = $("#groupname").val().replace(/\$$/, "");
 	
 	if(groupname == ""){
-	    showErrorMessage($.i18n("fwm-message-no-groupname-error"));
+	    showErrorMessage(i18nUtil.get("fwm-message-no-groupname-error"));
 	    return false;
 	} else if(groupname.match(/^[A-Za-z0-9_]+$/) == null){
-	    showErrorMessage($.i18n("fwm-message-groupname-error"));
+	    showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	    return false;
 	}
 	
@@ -537,7 +531,7 @@ function initializeEvent(){
 	var modal = bootstrap.Modal.getInstance(document.getElementById('popup-set-url'));
 
 	if($("#urlSettings").val() == ""){
-	    showModalErrorMessage($.i18n("fwm-message-specify-url"));
+	    showModalErrorMessage(i18nUtil.get("fwm-message-specify-url"));
 	} else {
 	    var configName = $("#urlSettings").val();
 	    loadSettings(configName);
@@ -563,8 +557,8 @@ function initializeEvent(){
 	event.preventDefault();
 	
 	if(videoID == ""){
-	    $("#popup-title").text($.i18n("fwm-m-title-error"));
-	    $("#popup-message-body").html("<p>" + $.i18n("fwm-message-no-videoid-error") + "</p>");
+	    $("#popup-title").text(i18nUtil.get("fwm-m-title-error"));
+	    $("#popup-message-body").html("<p>" + i18nUtil.get("fwm-message-no-videoid-error") + "</p>");
 	    $("#popup-message").popup("open");
 	} else {
             initVideoPlayer('video-player1', '#popup-watch-video', 0);
@@ -692,6 +686,8 @@ function showModalErrorMessage(message){
 
 function updateAttributeValueSelector(){
     var categories = selectedAttribute == 'attribute-label' ? labelList : speakerList; 
+    var defaultFilterText = i18nUtil.get("fwm-m-graph-attribute-value-selector-default");
+
     $("#attribute-value-selector > option").remove();
     $("#attribute-value-selector").append(
 	$('<option>', {value: defaultFilterValue, text: defaultFilterText}));
@@ -705,33 +701,31 @@ function updateAttributeValueSelector(){
 
 
 function changeLang(){
-    $.i18n( {
-	locale: uiLanguage
-    } );
-    
-    $('#home').i18n();
-    $('#observation').i18n();
-    $('#graph').i18n();
-    
+    i18nUtil.setLocale(uiLanguage);
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+	element.innerText = i18nUtil.get(element.getAttribute('data-i18n'));
+    });
+
+
     // jqm remove
-    //$("#groupname").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
-    //$("#username").textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
-    $("#username").prop("placeholder", $.i18n("fwm-m-label-placeholder"));
+    //$("#groupname").textinput("option", "clearBtnText", i18nUtil.get("fwm-m-data-clear-btn-text"));
+    //$("#username").textinput("option", "clearBtnText", i18nUtil.get("fwm-m-data-clear-btn-text"));
+    $("#username").prop("placeholder", i18nUtil.get("fwm-m-label-placeholder"));
 
     // refresh load-setting button
     var found = $("#btn-load-settings").text().match(/^.+(\(.+\))$/);
     if(found){
-	$("#btn-load-settings").text($.i18n("fwm-m-tab-user-set-value") + " " + found[1]);
+	$("#btn-load-settings").text(i18nUtil.get("fwm-m-tab-user-set-value") + " " + found[1]);
     } else {
-	$("#btn-load-settings").text($.i18n("fwm-m-tab-user-empty-value"));
+	$("#btn-load-settings").text(i18nUtil.get("fwm-m-tab-user-empty-value"));
     }
 
     for(i = 1; i <= 8; i++){
 	// jqm remove
-	//$("#label" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
-	//$("#speaker" + i).textinput("option", "clearBtnText", $.i18n("fwm-m-data-clear-btn-text"));
-	$("#label" + i).prop("placeholder", $.i18n("fwm-m-button-label"));
-	$("#speaker" + i).prop("placeholder", $.i18n("fwm-m-button-target"));
+	//$("#label" + i).textinput("option", "clearBtnText", i18nUtil.get("fwm-m-data-clear-btn-text"));
+	//$("#speaker" + i).textinput("option", "clearBtnText", i18nUtil.get("fwm-m-data-clear-btn-text"));
+	$("#label" + i).prop("placeholder", i18nUtil.get("fwm-m-button-label"));
+	$("#speaker" + i).prop("placeholder", i18nUtil.get("fwm-m-button-target"));
     }
     // refresh selector
     // jqm remove
@@ -1040,11 +1034,11 @@ function saveSettings(){
 	trueGroupname = trueGroupname.replace(/\$$/, "");
 	
 	if(!checkGroupname(trueGroupname)){
-	    showErrorMessage($.i18n("fwm-message-groupname-error"));
+	    showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	    return false;
 	}
     } else {
-	showErrorMessage($.i18n("fwm-message-permission-error"));
+	showErrorMessage(i18nUtil.get("fwm-message-permission-error"));
 	return false;
     }
 
@@ -1053,7 +1047,7 @@ function saveSettings(){
 	currentVideoId = ""; // save no videoID
     } 
     if($("#video-url").val().match(new RegExp(hiddenVideoIdLabelRegExp))){
-	showErrorMessage($.i18n("fwm-message-invalid-videoid-error"));
+	showErrorMessage(i18nUtil.get("fwm-message-invalid-videoid-error"));
 	return false;
     }
 
@@ -1092,20 +1086,20 @@ function saveSettings(){
 	var error = response.error;
 
 	if(error == "already_exists") {
-	    $("#popup-title").text($.i18n("fwm-m-title-error"));
-	    $("#popup-message-body").html("<p>" + $.i18n("fwm-message-group-already-exist-error") + "</p>");
+	    $("#popup-title").text(i18nUtil.get("fwm-m-title-error"));
+	    $("#popup-message-body").html("<p>" + i18nUtil.get("fwm-message-group-already-exist-error") + "</p>");
 	    $("#popup-message").popup("open");
 	} else if(error == "fail_to_copy" || error == "fail_to_save") {
-	    $("#popup-title").text($.i18n("fwm-m-title-error"));
+	    $("#popup-title").text(i18nUtil.get("fwm-m-title-error"));
 	    $("#popup-message-body").html("<p>"
-		  + $.i18n("fwm-message-server-error")
+		  + i18nUtil.get("fwm-message-server-error")
 		  + "<br />"
 		  + error + "</p>");
 	    $("#popup-message").popup("open");
 	} else {
-	    $("#popup-title").text($.i18n("fwm-js-title-save-complete"));
+	    $("#popup-title").text(i18nUtil.get("fwm-js-title-save-complete"));
 	    $("#popup-message-body").html("<p>"
-		  + $.i18n("fwm-message-config-save-complete")
+		  + i18nUtil.get("fwm-message-config-save-complete")
 		  + "</p>");
 	    $("#popup-message").popup("open");
 	}
@@ -1126,14 +1120,14 @@ function saveCurrentTime(newStartTime, timeFileType){
 	trueGroupname = trueGroupname.replace(/\$$/, "");
 	
 	if(!checkGroupname(trueGroupname)){
-	    showErrorMessage($.i18n("fwm-message-groupname-error"));
+	    showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	    return false;
 	} else {
 	    newname += "_" + cBaseTime + "_" + timeFileType;
 	    cBaseTime++;
 	}
     } else {
-	showErrorMessage($.i18n("fwm-message-permission-error"));
+	showErrorMessage(i18nUtil.get("fwm-message-permission-error"));
 	return false;
     }
 
@@ -1146,9 +1140,9 @@ function saveCurrentTime(newStartTime, timeFileType){
 	saveToServer(saveEventAutoSave);
     } else {
 	// show messsage
-	$("#popup-title").text($.i18n("fwm-title-save-time-info"));
+	$("#popup-title").text(i18nUtil.get("fwm-title-save-time-info"));
 	$("#popup-message-body").html("<p>" +
-				      $.i18n("fwm-message-save-time-info") +
+				      i18nUtil.get("fwm-message-save-time-info") +
 				      "<br />" +
 				      newname + "/" +
 				      date2FormattedDateTime(newStartTime).replace(/-/g, "") +
@@ -1178,7 +1172,7 @@ function saveToServer(event){
     groupname = $("#groupname").val().replace(/\$$/, "");
     
     if(groupname != "" && groupname.match(/^[A-Za-z0-9_]+$/) == null){
-	showErrorMessage($.i18n("fwm-message-groupname-error"));
+	showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	return false;
     }
 
@@ -1569,7 +1563,7 @@ function displayResults(){
 
     for(var i = 1; i <= nDisp; i++){
 	if(p < 0){
-	    $("#disp" + i).text($.i18n("fwm-no-annotation-data"));
+	    $("#disp" + i).text(i18nUtil.get("fwm-no-annotation-data"));
 	} else {
 	    $("#disp" + i).text(annotationResults[p--]);
 	}
@@ -1710,7 +1704,7 @@ function getVideoID(){
 function getCurrentStartRecordingTime(){
     getGroupName();
     if(groupname == ""){
-	$("#currentStartRecordingTime").text($.i18n("fwm-m-record-current-recording-time-undefined"));
+	$("#currentStartRecordingTime").text(i18nUtil.get("fwm-m-record-current-recording-time-undefined"));
 	return;
     }
 
@@ -1719,7 +1713,7 @@ function getCurrentStartRecordingTime(){
 	type: "post",
 	dataType: "text",
 	beforeSend: function(jqXHR, settings) {
-	    $("#currentStartRecordingTime").text($.i18n("fwm-m-record-current-recording-time-loading"));
+	    $("#currentStartRecordingTime").text(i18nUtil.get("fwm-m-record-current-recording-time-loading"));
 	},
 	data: {
 	    groupname: groupname,
@@ -1737,7 +1731,7 @@ function getCurrentStartRecordingTime(){
 	    if(matches != null){
 		// arrayAnnotations[0]: _sys_basetime \t basetime \t filetype
 		if(matches[2] == "elapsed"){
-		    timeFileType = "<br/>(" + $.i18n("fwm-m-record-time-input-option") + ")";
+		    timeFileType = "<br/>(" + i18nUtil.get("fwm-m-record-time-input-option") + ")";
 		}
 		// get and remove a time information record
 		currentStartRecordingTime = parseDate(matches[1]);
@@ -1767,14 +1761,14 @@ function getCurrentStartRecordingTime(){
 	}
 
 	if(currentStartRecordingTime == 0){
-	    $("#currentStartRecordingTime").text($.i18n("fwm-m-record-current-recording-time-undefined"));
+	    $("#currentStartRecordingTime").text(i18nUtil.get("fwm-m-record-current-recording-time-undefined"));
 	} else {
 	    $("#currentStartRecordingTime")
 		.html(date2FormattedDateTime(new Date(currentStartRecordingTime)) + timeFileType);
 	}
     }).fail(function (jqXHR, textStatus){
 	console.log("hey fail");
-	$("#currentStartRecordingTime").text($.i18n("fwm-m-record-current-recording-time-fail"));
+	$("#currentStartRecordingTime").text(i18nUtil.get("fwm-m-record-current-recording-time-fail"));
     });
 }
 
@@ -2467,9 +2461,9 @@ function drawGraph(){
 			// find malformed elapsedTime
 			if(!elapsedTime.match(/^(\d\d)(\d\d)(\d\d)$/)){
 			    $("#popupWarning-message-graph").html(
-				$.i18n("fwm-message-invalid-playback-position-error-1")
+				i18nUtil.get("fwm-message-invalid-playback-position-error-1")
 				    + "<br />"
-				    + $.i18n("fwm-message-invalid-playback-position-error-2")
+				    + i18nUtil.get("fwm-message-invalid-playback-position-error-2")
 				    + "<br />(" + elapsedTime + "sec)");
 			    $("#popupWarningGraph").popup("open");
 			    return false;
@@ -2486,9 +2480,9 @@ function drawGraph(){
 			} else if(timeToPlay > 12 * 60 * 60){
 			    // over 12hours
 			    $("#popupWarning-message-graph").html(
-				$.i18n("fwm-message-invalid-playback-position-error-1")
+				i18nUtil.get("fwm-message-invalid-playback-position-error-1")
 				    + "<br />"
-				    + $.i18n("fwm-message-invalid-playback-position-error-2")
+				    + i18nUtil.get("fwm-message-invalid-playback-position-error-2")
 				    + "<br />(" + timeToPlay + "sec)");
 			    $("#popupWarningGraph").popup("open");
 			    return false;
