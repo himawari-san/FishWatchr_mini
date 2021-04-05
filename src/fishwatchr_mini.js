@@ -77,7 +77,7 @@ var timeFileElasedType = "elapsed";
 var timeFileAbsoluteType = "absolute";
 var offsetTimeToPlay = 10; // sec  
 
-var uiLanguage = 'ja';
+var uiLanguage = window.navigator.language.slice(0, 2);
 var uiLanguages = {ja: 'Japanese', en: 'English'};
 var i18nUtil = new I18nUtil(uiLanguage);
 var flagi18nLoaded = false;
@@ -469,13 +469,10 @@ function initializeEvent(){
     });
 
 
+    // language selector
     document.querySelectorAll('.fw-lang-item').forEach(item => {
 	item.addEventListener('click', function(event) {
 	    uiLanguage = event.target.id.replace(/^lang-item-/, "");
-
-	    // jqm remove
-	    // $("#popupLangMenu").popup("close");
-	    // $("#lang-selector-button").text($("#" + event.target.id).text());
 	    changeLang();
 	});
     });
@@ -701,39 +698,34 @@ function updateAttributeValueSelector(){
 
 
 function changeLang(){
+
     i18nUtil.setLocale(uiLanguage);
+
+    // element with "data-i18n" attribute 
     document.querySelectorAll('[data-i18n]').forEach(element => {
 	element.innerText = i18nUtil.get(element.getAttribute('data-i18n'));
     });
 
+    // label for language selector
+    document.getElementById('navbarDropdownMenuLink').innerText = uiLanguage;
 
-    // jqm remove
-    //$("#groupname").textinput("option", "clearBtnText", i18nUtil.get("fwm-m-data-clear-btn-text"));
-    //$("#username").textinput("option", "clearBtnText", i18nUtil.get("fwm-m-data-clear-btn-text"));
-    $("#username").prop("placeholder", i18nUtil.get("fwm-m-label-placeholder"));
+    // placefolder of username form     
+    document.getElementById("username").setAttribute("placeholder", i18nUtil.get("fwm-m-label-placeholder"));
 
-    // refresh load-setting button
-    var found = $("#btn-load-settings").text().match(/^.+(\(.+\))$/);
+    // load-setting button
+    var buttonLoadSettings = document.getElementById("btn-load-settings");
+    var found = buttonLoadSettings.innerText.match(/^.+(\(.+\))$/);
     if(found){
-	$("#btn-load-settings").text(i18nUtil.get("fwm-m-tab-user-set-value") + " " + found[1]);
+	buttonLoadSettings.innerText = i18nUtil.get("fwm-m-tab-user-set-value") + " " + found[1];
     } else {
-	$("#btn-load-settings").text(i18nUtil.get("fwm-m-tab-user-empty-value"));
+	buttonLoadSettings.innerText = i18nUtil.get("fwm-m-tab-user-empty-value");
     }
 
+    // button setting tab
     for(i = 1; i <= 8; i++){
-	// jqm remove
-	//$("#label" + i).textinput("option", "clearBtnText", i18nUtil.get("fwm-m-data-clear-btn-text"));
-	//$("#speaker" + i).textinput("option", "clearBtnText", i18nUtil.get("fwm-m-data-clear-btn-text"));
-	$("#label" + i).prop("placeholder", i18nUtil.get("fwm-m-button-label"));
-	$("#speaker" + i).prop("placeholder", i18nUtil.get("fwm-m-button-target"));
+	document.getElementById("label" + i).setAttribute("placeholder", i18nUtil.get("fwm-m-button-label"));
+	document.getElementById("speaker" + i).setAttribute("placeholder", i18nUtil.get("fwm-m-button-target"));
     }
-    // refresh selector
-    // jqm remove
-    // $("#selector1-observation-mode").selectmenu('refresh');
-    // $("#selector2-observation-mode").selectmenu('refresh');
-    // $("#select-attribute").selectmenu('refresh');
-    // $("#select-observer").selectmenu('refresh');
-    // $("#attribute-value-selector").selectmenu('refresh');
 }
 
 
