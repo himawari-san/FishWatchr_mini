@@ -184,7 +184,7 @@ function startClock(){
 
 function loadSettings(groupname){
     if(!checkGroupname(groupname)){
-	showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
+	showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	return null;
     }
     
@@ -265,7 +265,7 @@ function loadSettings(groupname){
     }).fail(function (jqXHR, textStatus, error){
 	unLockScreen("lock");
 	// jqm / Need to test
-	showErrorMessage(i18nUtil.get("fwm-message-config-read-error") + "<br />"+ textStatus + ", " + error);
+	showModalErrorMessage(i18nUtil.get("fwm-message-config-read-error") + "<br />"+ textStatus + ", " + error);
 	console.log("fail!!");
     }).always(function(){
 	var interval = setInterval(function(){
@@ -358,15 +358,15 @@ function initializeEvent(){
 	getGroupName();
 
 	if(username == ""){
-	    showErrorMessage(i18nUtil.get("fwm-message-username-error"));
+	    showModalErrorMessage(i18nUtil.get("fwm-message-username-error"));
 	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(username.match(/^[A-Za-z0-9_]+$/) == null){
-	    showErrorMessage(i18nUtil.get("fwm-message-invalid-username-error"));
+	    showModalErrorMessage(i18nUtil.get("fwm-message-invalid-username-error"));
 	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(!checkGroupname(groupname) && groupname != ""){
-	    showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
+	    showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	}
@@ -398,9 +398,9 @@ function initializeEvent(){
 	    $("#popup-show-qrcode").popup("open");
 	} else {
 	    if(groupname != ""){
-		showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
+		showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	    } else {
-		showErrorMessage(i18nUtil.get("fwm-message-no-groupname-error"));
+		showModalErrorMessage(i18nUtil.get("fwm-message-no-groupname-error"));
 	    }
 	}
     });
@@ -438,7 +438,7 @@ function initializeEvent(){
 	    if(inputDate != NaN){
 		saveCurrentTime(new Date(inputDate), fileType);
 	    } else {
-		showErrorMessage(i18nUtil.get("fwm-m-record-time-warning")
+		showModalErrorMessage(i18nUtil.get("fwm-m-record-time-warning")
 				 + " <br />"
 				 + i18nUtil.get("fwm-m-record-time-example"));
 	    }
@@ -454,11 +454,11 @@ function initializeEvent(){
 	if(thresholdOutlier == ""){
 	    thresholdOutlier = Number.MAX_VALUE;
 	} else if(isNaN(thresholdOutlier) || thresholdOutlier < 0){
-	    showErrorMessage(i18nUtil.get("fwm-message-invalid-threshold-error"));
+	    showModalErrorMessage(i18nUtil.get("fwm-message-invalid-threshold-error"));
 	    $("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(!checkGroupname(groupname)){
-	    showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
+	    showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	    $("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else {
@@ -494,10 +494,10 @@ function initializeEvent(){
 	groupname = $("#groupname").val().replace(/\$$/, "");
 	
 	if(groupname == ""){
-	    showErrorMessage(i18nUtil.get("fwm-message-no-groupname-error"));
+	    showModalErrorMessage(i18nUtil.get("fwm-message-no-groupname-error"));
 	    return false;
 	} else if(groupname.match(/^[A-Za-z0-9_]+$/) == null){
-	    showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
+	    showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	    return false;
 	}
 	
@@ -1053,11 +1053,11 @@ function saveSettings(){
 	trueGroupname = trueGroupname.replace(/\$$/, "");
 	
 	if(!checkGroupname(trueGroupname)){
-	    showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
+	    showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	    return false;
 	}
     } else {
-	showErrorMessage(i18nUtil.get("fwm-message-permission-error"));
+	showModalErrorMessage(i18nUtil.get("fwm-message-permission-error"));
 	return false;
     }
 
@@ -1066,7 +1066,7 @@ function saveSettings(){
 	currentVideoId = ""; // save no videoID
     } 
     if($("#video-url").val().match(new RegExp(hiddenVideoIdLabelRegExp))){
-	showErrorMessage(i18nUtil.get("fwm-message-invalid-videoid-error"));
+	showModalErrorMessage(i18nUtil.get("fwm-message-invalid-videoid-error"));
 	return false;
     }
 
@@ -1139,14 +1139,14 @@ function saveCurrentTime(newStartTime, timeFileType){
 	trueGroupname = trueGroupname.replace(/\$$/, "");
 	
 	if(!checkGroupname(trueGroupname)){
-	    showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
+	    showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	    return false;
 	} else {
 	    newname += "_" + cBaseTime + "_" + timeFileType;
 	    cBaseTime++;
 	}
     } else {
-	showErrorMessage(i18nUtil.get("fwm-message-permission-error"));
+	showModalErrorMessage(i18nUtil.get("fwm-message-permission-error"));
 	return false;
     }
 
@@ -1191,7 +1191,7 @@ function saveToServer(event){
     groupname = $("#groupname").val().replace(/\$$/, "");
     
     if(groupname != "" && groupname.match(/^[A-Za-z0-9_]+$/) == null){
-	showErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
+	showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	return false;
     }
 
