@@ -6,7 +6,8 @@ class I18nUtil {
     
     load(languages){
 	return Promise.all(languages.map((language) => {
-	    return fetch('i18n/' + language + '.json')
+	    return fetch('i18n/' + language + '.json',
+			 {cache: 'no-store'})
 		.then((response) => response.json())
 		.then((messages) => {
 		    this.banana.load(messages, language);
