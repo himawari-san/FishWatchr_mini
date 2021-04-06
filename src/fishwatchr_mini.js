@@ -571,15 +571,17 @@ function initializeEvent(){
     });
     
     
-    document.querySelector('#flip-video-file-place').addEventListener('change', function(event) {
-	var videoFilePlaceSwitch = $("#flip-video-file-place").val();
-	
-	if(videoFilePlaceSwitch == "Web"){
-	    $("#video-url").prop("type", "text");
-	} else { // Local
-	    $("#video-url").prop("type", "file");
-	}
-	$("#video-url").textinput("refresh");
+    document.querySelectorAll('[name="radio-video-file-place"]').forEach(radio => {
+	radio.addEventListener('click', function(event) {
+	    var videoFilePlace = event.target.id;
+	    var videoUrlForm = document.getElementById("video-url");
+	    
+	    if(videoFilePlace == "radio-video-file-place-web"){
+		videoUrlForm.setAttribute("type", "text");
+	    } else { // Local
+		videoUrlForm.setAttribute("type", "file");
+	    }
+	});
     });
 
 

@@ -203,12 +203,19 @@
 	      <label for="video-url" class="form-label" data-i18n="fwm-m-tab-analysis-video-id">ビデオID:</label>
 	      <input type="file" id="video-url" class="form-control" value="" placeholder="" />
 	    </div>
-	    <div class="mb-3">
-	      <label for="flip-video-file-place" class="form-label" data-i18n="fwm-m-tab-analysis-file-storage">ファイルの場所:</label>
-	      <select class="form-select" id="flip-video-file-place">
-		<option id="flip-video-file-place-local" value="Local">Local</option>
-		<option id="flip-video-file-place-web" value="Web" selected="">Web</option>
-	      </select>
+
+	    <span class="form-label me-2" data-i18n="fwm-m-tab-analysis-file-storage">ファイルの場所: </span>
+	    <div class="form-check form-check-inline">
+	      <input class="form-check-input" type="radio" name="radio-video-file-place" id="radio-video-file-place-web" checked />
+	      <label class="form-check-label" for="radio-video-file-place-web">
+		Web
+	      </label>
+	    </div>
+	    <div class="form-check form-check-inline">
+	      <input class="form-check-input" type="radio" name="radio-video-file-place" id="radio-video-file-place-local" />
+	      <label class="form-check-label" for="radio-video-file-place-local">
+		Local
+	      </label>
 	    </div>
 	  </div>
 
