@@ -660,6 +660,31 @@ function initializeEvent(){
 	    } 
 	}
     });
+
+    
+    // delete buttons in the annotation list
+    document.querySelectorAll('.disp-button-delete').forEach(button => {
+	button.addEventListener('click', function(event) {
+	    var deletedTargetID = event.target.localName == 'button'
+		? event.target.id // button
+		: event.target.parentNode.id; // img
+	    var iEnd = annotationResults.length - 1;
+
+	    if(deletedTargetID == "disp-button1"){
+		if(iEnd >= 0) {
+		    annotationResults.splice(iEnd, 1);
+		    displayResults();
+		    return;
+		}
+	    } else if(deletedTargetID == "disp-button2"){
+		if(iEnd >= 1) {
+		    annotationResults.splice(iEnd-1, 1);
+		    displayResults();
+		    return;
+		}
+	    }
+	});
+    });
 }
 
 
