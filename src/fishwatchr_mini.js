@@ -230,9 +230,9 @@ function loadSettings(groupname){
 
 	// set auto-save option
 	if(data["auto-save"] == "true"){
-	    $( "#flip-auto-save" ).val("on").flipswitch("refresh");
+	    document.getElementById("flip-auto-save").setAttribute("checked", "");
 	} else {
-	    $( "#flip-auto-save" ).val("off").flipswitch("refresh");
+	    document.getElementById("flip-auto-save").removeAttribute("checked");
 	}
 
 	// set selectedTimeStyle
@@ -791,7 +791,7 @@ function processBeforeHide(pageId){
 	annotationStorage.push(newdata);
 	updateSavenameList();
 
-	if($("#flip-auto-save-on").prop("selected")){
+	if(document.getElementById("flip-auto-save").checked){
 	    saveToServer(saveEventAutoSave);
 	    console.log("auto-save");
 	} else {
@@ -1073,7 +1073,7 @@ function saveSettings(){
     var speakers = [];
     var labels = [];
     var mode = $("#selector1-observation-mode").val();
-    var auto_save = $("#flip-auto-save").val() == "on" ? "true" : "false";
+    var auto_save = document.getElementById("flip-auto-save").checked;
     var currentThresholdOutlier = $("#threshold-outlier").val();
 
     for(var i = 1; i <=8; i++){
@@ -1154,7 +1154,7 @@ function saveCurrentTime(newStartTime, timeFileType){
     annotationStorage.push(newdata);
     updateSavenameList();
 
-    if($("#flip-auto-save-on").prop("selected")){
+    if(document.getElementById("flip-auto-save").checked){
 	// auto-save
 	saveToServer(saveEventAutoSave);
     } else {
