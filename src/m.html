@@ -32,7 +32,10 @@
       <div data-role="header">
 	<nav class="navbar navbar-light bg-light">
 	  <div class="container-fluid d-flex">
-	    <span class="navbar-brand flex-grow-1" href="#">FishWatchr Mini</span>
+	    <a class="navbar-brand flex-grow-1" href="#">
+	      <img src="fw_icon256.png" alt="" width="30" height="30"/>
+	      FishWatchr Mini
+	    </a>
 	    <div class="dropdown">
               <a class="nav-link dropdown-toggle small m-0 p-0" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">ja</a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -60,12 +63,13 @@
 	</div>
       </nav>
       <div class="container-fluid">
-	<div class="time">
+	<div class="mt-2 mb-3">
 	  <span data-i18n="fwm-m-time">現在時刻： </span><span id="current_time_home"><span data-i18n="fwm-m-processing">Processing ...</span></span>
 	</div>
-	<div class="d-grid">
-	  <button type="button" class="btn btn-primary" id="btn-start" data-i18n="fwm-m-start-observation">観察開始！</button>
+	<div class="d-grid mx-3 my-4">
+	  <button type="button" class="btn btn-primary fs-4" id="btn-start" data-i18n="fwm-m-start-observation">観察開始！</button>
 	</div>
+	<div class="card pt-2 pb-2">
 	<div class="home-panel">
 	  <ul class="nav nav-tabs mb-3" role="tablist">
 	    <li class="nav-item" role="presentation"><a class="nav-link active" id="username-tab" data-bs-toggle="tab" href="#username-panel" aria-controls="username-panel" role="tab" aria-selected="true" data-i18n="fwm-m-tab-user">ユーザ名</a></li>
@@ -79,19 +83,17 @@
 	<div class="tab-content">
 	  <!-- username-panel --> 
 	  <div class="tab-pane fade show active" id="username-panel" role="tabpanel">
-	    <div class="container">
-	      <div class="mb-3">
-		<label for="username" class="form-label" data-i18n="fwm-m-tab-user-username">ユーザ名：</label>
-		<input id="username" class="form-control" type="text" placeholder="Your username" value="" />
-	      </div>
-	      <div class="mb-3">
-		<label for="groupname" class="form-label" data-i18n="fwm-m-tab-user-groupname">グループ名：</label>
-		<input id="groupname" class="form-control" type="text" placeholder="" value="" />
-	      </div>
+	    <div class="mb-3 mx-3">
+	      <label for="username" class="form-label" data-i18n="fwm-m-tab-user-username">ユーザ名：</label>
+	      <input id="username" class="form-control" type="text" placeholder="Your username" value="" />
+	    </div>
+	    <div class="m-3">
+	      <label for="groupname" class="form-label" data-i18n="fwm-m-tab-user-groupname">グループ名：</label>
+	      <input id="groupname" class="form-control" type="text" placeholder="" value="" />
+	    </div>
 		
-	      <div class="d-grid mx-auto">
-		<button type="button" id="btn-load-settings" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#popup-set-url">(設定の読込み)</button>
-	      </div>
+	    <div class="d-grid mt-4 mx-4 mb-2">
+	      <button type="button" id="btn-load-settings" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#popup-set-url">(設定の読込み)</button>
 	    </div>
 	  </div>
 
@@ -105,7 +107,7 @@
 		<option value="mode_label_speaker" data-i18n="fwm-m-tab-buttons-mode-label_target">観察モード：ラベル⇒対象</option>
 	      </select>
 	    </div>
-	    <div class="row row-cols-2">
+	    <div class="row row-cols-2 mx-3">
 	      <div class="col">
 		<input id="speaker1" type="text" class="form-control"
 		       value="対象１"
@@ -187,50 +189,50 @@
 	  
 	  <!-- analysis-panel --> 
 	  <div class="tab-pane fade" id="analysis-panel" role="tabpanel">
-	    <div class="mb-3">
-	      <button type="button" id="btn-show-graph" class="btn btn-primary" data-i18n="fwm-m-tab-analysis-display-chart">グラフ表示</button>
+	    <div class="d-grid mt-3 mx-3">
+	      <button type="button" id="btn-show-graph" class="btn btn-secondary" data-i18n="fwm-m-tab-analysis-display-chart">グラフ表示</button>
 	    </div>
-	      
-	    <div class="mb-3">
+	    <div class="mt-1 mb-3 mx-5">
 	      <label for="threshold-outlier" class="form-label" data-i18n="fwm-m-tab-analysis-chart-outlier">外れ値検出(sec)：</label>
 	      <input type="text" class="form-control" name="threshold-outlier" id="threshold-outlier" value="1800" placeholder="(sec)" />
 	    </div>
-	    <div class="mb-3">
-	      <button type="button" id="btn-watch-video" class="btn btn-primary" data-i18n="fwm-m-tab-analysis-watch-video">ビデオ表示</button>
-	    </div>
-	    
-	    <div class="mb-3">
-	      <label for="video-url" class="form-label" data-i18n="fwm-m-tab-analysis-video-id">ビデオID:</label>
+	      
+	    <div class="mx-3 mb-3 mt-5">
+	      <label for="video-url" class="form-label me-3" data-i18n="fwm-m-tab-analysis-video-id">ビデオID:</label>
+	      (
+	      <div class="form-check form-check-inline ms-2">
+		<input class="form-check-input" type="radio" name="radio-video-file-place" id="radio-video-file-place-web" checked />
+		<label class="form-check-label" for="radio-video-file-place-web">
+		  Web
+		</label>
+	      </div>
+	      <div class="form-check form-check-inline">
+		<input class="form-check-input" type="radio" name="radio-video-file-place" id="radio-video-file-place-local" />
+		<label class="form-check-label" for="radio-video-file-place-local">
+		  Local
+		</label>
+	      </div>
+	      )
 	      <input type="file" id="video-url" class="form-control" value="" placeholder="" />
 	    </div>
 
-	    <span class="form-label me-2" data-i18n="fwm-m-tab-analysis-file-storage">ファイルの場所: </span>
-	    <div class="form-check form-check-inline">
-	      <input class="form-check-input" type="radio" name="radio-video-file-place" id="radio-video-file-place-web" checked />
-	      <label class="form-check-label" for="radio-video-file-place-web">
-		Web
-	      </label>
-	    </div>
-	    <div class="form-check form-check-inline">
-	      <input class="form-check-input" type="radio" name="radio-video-file-place" id="radio-video-file-place-local" />
-	      <label class="form-check-label" for="radio-video-file-place-local">
-		Local
-	      </label>
+	    <div class="d-grid m-3">
+	      <button type="button" id="btn-watch-video" class="btn btn-secondary" data-i18n="fwm-m-tab-analysis-watch-video">ビデオ表示</button>
 	    </div>
 	  </div>
 
 	  
 	  <!-- data-panel --> 
 	  <div class="tab-pane fade" id="data-panel" role="tabpanel">
-	    <div class="mb-3">
-	      <button type="button" id="btn-get-archive" class="btn btn-primary" data-i18n="fwm-m-tab-data-group-results">グループ結果のダウンロード</button>
+	    <div class="d-grid mt-3 mx-3">
+	      <button type="button" id="btn-get-archive" class="btn btn-secondary" data-i18n="fwm-m-tab-data-group-results">グループ結果のダウンロード</button>
 	    </div>
 	    <div class="form-check form-switch m-3">
 	      <input class="form-check-input" type="checkbox" id="flip-auto-save" />
 	      <label class="form-check-label" for="flip-auto-save" data-i18n="fwm-m-tab-data-autosave">オートセーブ</label>
 	    </div>
 	    
-	    <div class="mb-3">
+	    <div class="m-3">
 	      <label for="savename-list" class="form-label" data-i18n="fwm-m-tab-data-dataset-list">記録されたデータセットリスト：</label>
 	      <select class="form-select" id="savename-list">
 		<option data-i18n="fwm-no-saved-data">（保存データ - なし）</option>
@@ -238,6 +240,7 @@
 	    </div>
 	  </div>
 	</div>
+      </div>
       </div>
       
 
