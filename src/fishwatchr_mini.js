@@ -1238,12 +1238,12 @@ function store(savename, groupname, fileType, dataBody){
 
 function updateGroupURL(){
     if(groupSiteURL == ""){
-	$("#liShowGroupSite").hide();
+	document.getElementById("liShowGroupSite").setAttribute("hidden", "");
     } else {
-	$("#liShowGroupSite").show();
+	document.getElementById("liShowGroupSite").removeAttribute("hidden");
     }
-    $("#group-site-url").prop("value", groupSiteURL);
-    $("#show-group-site").prop("href", groupSiteURL);
+    document.getElementById("group-site-url").setAttribute("value", groupSiteURL);
+    document.getElementById("show-group-site").setAttribute("href", groupSiteURL);
 }
 
 
