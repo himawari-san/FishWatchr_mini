@@ -107,7 +107,7 @@
     "fwm-m-title-show-qrcode": "QR Code",
     "fwm-m-label-show-qrcode": "Group name:",
     "fwm-m-title-record-time": "Record Time",
-    "fwm-m-record-time-input-option": "Synchronize with Elapsed Time",
+    "fwm-m-record-time-input-option": "(Option) Synchronize with Elapsed Time",
     "fwm-m-record-time-input-current-time": "Current Time",
     "fwm-m-record-time-input-manual-time": "Manual Input",
     "fwm-m-record-time-example": "e.g. 2018-01-11 12:11:30",

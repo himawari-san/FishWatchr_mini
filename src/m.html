@@ -341,7 +341,44 @@
 	</div>
       </div>
 
-      
+
+      <!-- modal dialog for #toolMenuItemRecordCurretTime -->
+      <div class="modal" id="popup-record-time" tabindex="-1">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+	    <div class="modal-header">
+              <strong data-i18n="fwm-m-title-record-time">時刻情報の記録</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	    </div>
+
+	    <div class="modal-body">
+	      <div class="form-check mb-2">
+		<input class="form-check-input" type="radio" name="radio-choice-time-info" id="radio-choice-time-info-manual" checked />
+		<label class="form-check-label" for="radio-choice-time-info-manual" data-i18n="fwm-m-record-time-input-manual-time">手動時刻入力</label>
+		<div class="d-grid">
+		  <input class="form-control" name="textinput-time" id="textinput-time" value="" type="text" />
+		  <span>(<span class="small" data-i18n="fwm-m-record-current-recording-time">現在の設定値:</span><span class="small" id="currentStartRecordingTime">（2021-04-07 11:53:00）</span>)</span>
+		</div>
+	      </div>
+	      <div class="form-check">
+		<input class="form-check-input" type="radio" name="radio-choice-time-info" id="radio-choice-time-info-current" />
+		<label class="form-check-label" for="radio-choice-time-info-current" data-i18n="fwm-m-record-time-input-current-time">現在時刻入力</label>
+	      </div>
+	      <div class="form-check mt-5">
+		<input class="form-check-input" type="checkbox" name="checkbox-input-time-option" id="checkbox-input-time-option" type="checkbox" />
+		<label class="form-check-label" for="checkbox-input-time-option" data-i18n="fwm-m-record-time-input-option">経過時間で同期
+		</label>
+	      </div>
+	    </div>
+
+	    <div class="modal-footer">
+              <button type="button" id="popup-set-url-cancel" class="btn btn-secondary record-time-button" data-bs-dismiss="modal" id="record-time-button-id-cancel" data-i18n="fwm-m-popup-record-time-cancel">Cancel</button>
+              <button type="button" id="popup-set-url-ok" class="btn btn-primary record-time-button" data-bs-dismiss="modal"  id="record-time-button-id-ok" data-i18n="fwm-m-popup-record-time-ok">OK</button>
+	    </div>
+	  </div>
+	</div>
+      </div>
+
       
 	<div data-role="popup" id="popup-select-process" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px;" class="ui-mini" data-history="false">
 	  <div data-role="header" data-theme="a">

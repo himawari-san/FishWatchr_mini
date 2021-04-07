@@ -374,16 +374,23 @@ function initializeEvent(){
 	changePageTo('observation');
     });
 
+    
     // tool menu 
+    // * #toolMenuItemSaveSettings 
     document.querySelector('#toolMenuItemSaveSettings').addEventListener('click', function(event) {
 	saveSettings();
     });
+
+    // * #toolMenuItemRecordCurretTime
     document.querySelector('#toolMenuItemRecordCurretTime').addEventListener('click', function(event) {
 	getCurrentStartRecordingTime();
 	// set default date, that is the current time
-	$("#textinput-time").prop("value", date2FormattedDateTime(new Date(), false));
-	$("#popup-record-time").popup("open");
+	document.getElementById("textinput-time").setAttribute("value", date2FormattedDateTime(new Date(), false));
+	var modalDialog = new bootstrap.Modal(document.getElementById('popup-record-time'));
+	modalDialog.show();
     });
+
+
     document.querySelector('#toolMenuItemShowQrCode').addEventListener('click', function(event) {
 	getGroupName();
 	if(checkGroupname(groupname)){
