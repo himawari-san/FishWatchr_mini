@@ -706,12 +706,19 @@ function showErrorMessage(message){
 }
 
 
-function showModalErrorMessage(message){
-    var modalDialog = new bootstrap.Modal(document.getElementById('modal-error-dialog'));
-    var errorMessage = document.getElementById('modal-error-message');
+function showModalMessage(message, title){
+    var dialog = new bootstrap.Modal(document.getElementById('modal-message-dialog'));
+    var eMessage = document.getElementById('modal-message-dialog-body');
+    var eTitle = document.getElementById('modal-message-dialog-title');
     
-    errorMessage.innerText = message;
-    modalDialog.show();
+    eMessage.innerText = message;
+    eTitle.innerText = title;
+    dialog.show();
+}
+
+
+function showModalErrorMessage(message){
+    showModalMessage(message, i18nUtil.get("fwm-m-title-error"));
 }
 
 
