@@ -710,7 +710,7 @@ function showModalErrorMessage(message){
     var modalDialog = new bootstrap.Modal(document.getElementById('modal-error-dialog'));
     var errorMessage = document.getElementById('modal-error-message');
     
-    errorMessage.textContent = message;
+    errorMessage.innerText = message;
     modalDialog.show();
 }
 
@@ -1053,8 +1053,9 @@ function blinkButton(button){
 
 
 function saveSettings(){
-    var trueGroupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
-    $("#groupname").prop("value", trueGroupname);
+    var elGroupname = document.getElementById("groupname");
+    var trueGroupname = elGroupname.value.replace(/^ +/, "").replace(/ +$/, "");
+    elGroupname.setAttribute("value", trueGroupname);
 
     if(trueGroupname.match(/\$$/)){
 	trueGroupname = trueGroupname.replace(/\$$/, "");
@@ -1072,21 +1073,22 @@ function saveSettings(){
     if(currentVideoId.match(/^blob:/)){
 	currentVideoId = ""; // save no videoID
     } 
-    if($("#video-url").val().match(new RegExp(hiddenVideoIdLabelRegExp))){
+    if(document.getElementById("video-url").value.match(new RegExp(hiddenVideoIdLabelRegExp))){
 	showModalErrorMessage(i18nUtil.get("fwm-message-invalid-videoid-error"));
 	return false;
     }
 
     var speakers = [];
     var labels = [];
-    var mode = $("#selector1-observation-mode").val();
+    var mode = document.getElementById("selector1-observation-mode").querySelector(":checked").value;
     var auto_save = document.getElementById("flip-auto-save").checked;
-    var currentThresholdOutlier = $("#threshold-outlier").val();
+    var currentThresholdOutlier = document.getElementById("threshold-outlier").value;
 
     for(var i = 1; i <=8; i++){
-	speakers.push($("#speaker" + i).val())
-	labels.push($("#label" + i).val())
-    } 
+	speakers.push(document.getElementById("speaker" + i).value);
+	labels.push(document.getElementById("label" + i).value);
+    }
+
 
     var settingsJSON = {
 	"groupname": trueGroupname,
@@ -1099,29 +1101,20 @@ function saveSettings(){
 	"videoid" : currentVideoId,
 	"groupSiteURL" : groupSiteURL
     };
-    
-    var jqXHR = $.ajax({
-	url: "save_settings.php",
-	type: "post",
-	dataType: "json",
-	data: {
+
+    var jqXHR = fetch("save_settings.php", {
+	method: "POST",
+	body: JSON.stringify({
 	    savename: trueGroupname,
 	    databody: settingsJSON
-	}
-    }).done(function (response){
-	var error = response.error;
-
+	})
+    }).then((response) => response.json())
+    .then(data => {
+	var error = data.error;
 	if(error == "already_exists") {
-	    $("#popup-title").text(i18nUtil.get("fwm-m-title-error"));
-	    $("#popup-message-body").html("<p>" + i18nUtil.get("fwm-message-group-already-exist-error") + "</p>");
-	    $("#popup-message").popup("open");
+	    showModalErrorMessage(i18nUtil.get("fwm-message-group-already-exist-error"));
 	} else if(error == "fail_to_copy" || error == "fail_to_save") {
-	    $("#popup-title").text(i18nUtil.get("fwm-m-title-error"));
-	    $("#popup-message-body").html("<p>"
-		  + i18nUtil.get("fwm-message-server-error")
-		  + "<br />"
-		  + error + "</p>");
-	    $("#popup-message").popup("open");
+	    showModalErrorMessage(i18nUtil.get("fwm-message-server-error") + "\n" + error);
 	} else {
 	    $("#popup-title").text(i18nUtil.get("fwm-js-title-save-complete"));
 	    $("#popup-message-body").html("<p>"
@@ -1129,8 +1122,8 @@ function saveSettings(){
 		  + "</p>");
 	    $("#popup-message").popup("open");
 	}
-    }).fail(function (jqXHR, textStatus, error){
-	console.log("store xml data, " + textStatus + ", " + error);
+    }).catch(function (error){
+	console.log("store xml data, " + error);
     });
 }    
 

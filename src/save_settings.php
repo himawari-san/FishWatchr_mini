@@ -3,7 +3,9 @@ require_once(".ht_fw_mini.inc");
 
 header('Content-Type: application/json');
 
-$savename = $_POST['savename'];
+$params = json_decode(file_get_contents('php://input'), true);
+
+$savename = $params['savename'];
 
 $filenameStem = $savename;
 $filename = $savename . ".json";
@@ -17,7 +19,7 @@ if(file_exists($resultFile)){
 }
 
 // write the file to data_dir
-if(file_put_contents($resultFile, json_encode($_POST['databody'], JSON_UNESCAPED_UNICODE)) === false){
+if(file_put_contents($resultFile, json_encode($params['databody'], JSON_UNESCAPED_UNICODE)) === false){
     $error = "fail_to_save";
     echo json_encode(compact('error'));
     exit;
