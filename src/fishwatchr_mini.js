@@ -182,54 +182,51 @@ function startClock(){
     selectedGraph = "selector-summary-graph";
 }
 
+
 function loadSettings(groupname){
     if(!checkGroupname(groupname)){
 	showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	return null;
     }
+
+    var spinner = new bootstrap.Modal(document.getElementById('modal-spinner'));
+    spinner.show();
     
-    return $.ajax({
-	url: "get_config.php",
-	type: "post",
-	dataType: "json",
-	data: {groupname: groupname},
-	beforeSend: function(jqXHR, settings) {
-	    // https://stackoverflow.com/questions/16276753/jquery-mobile-1-3-1-mobile-loading-not-working/16277865
-	    var interval = setInterval(function(){
-		$.mobile.loading('show', {
-		    text: "Now loading",
-		    textVisible: true,
-		    textonly: false
-		});
-		clearInterval(interval);
-	    }, 1);
-	    lockScreen("lock");
-	}
-    }).done(function(data) {
+    return fetch("get_config.php", {
+	method: "POST",
+	body: JSON.stringify({groupname: groupname})
+    }).then((response) => response.json())
+    .then(data => {
+	var error = data.error;
+
 	// read groupname
 	groupname = data["groupname"].replace(/^ +/, "").replace(/ +$/, "");
-	$("#groupname").prop("value", groupname);
+	document.getElementById("groupname").setAttribute("value", groupname);
 	
 	// read labels
-	$.each(data["labels"], function(key, value){
-	    $("#label" + (key+1)).prop("value", sanitizeJ(value));
+	data["labels"].forEach(function(value, index) {
+	    document.getElementById("label" + (index+1)).setAttribute("value", sanitizeJ(value));
 	});
 	
 	// read speakers
-	$.each(data["speakers"], function(key, value){
-	    $("#speaker" + (key+1)).prop("value", sanitizeJ(value));
+	data["speakers"].forEach(function(value, index) {
+	    document.getElementById("speaker" + (index+1)).setAttribute("value", sanitizeJ(value));
 	});
 	
 	/// set selector value
-	$("#selector1-observation-mode")
-	    .val(data["observation-mode"])
-	    .selectmenu('refresh');
+	document.getElementById("selector1-observation-mode")
+	    .querySelector(":checked")
+	    .removeAttribute('selected');
+	document.getElementById("selector1-observation-mode")
+	    .querySelector('[value="' + data["observation-mode"] + '"]')
+	    .setAttribute('selected',"");
 	
 	// set button text
-	$("#btn-load-settings").text(i18nUtil.get("fwm-m-tab-user-set-value") + " (" + groupname + ")");
+	document.getElementById("btn-load-settings")
+	    .innerText = i18nUtil.get("fwm-m-tab-user-set-value") + " (" + groupname + ")";
 
 	// set auto-save option
-	if(data["auto-save"] == "true"){
+	if(data["auto-save"]){
 	    document.getElementById("flip-auto-save").setAttribute("checked", "");
 	} else {
 	    document.getElementById("flip-auto-save").removeAttribute("checked");
@@ -244,15 +241,15 @@ function loadSettings(groupname){
 	if(Number(data["thresholdOutlier"]) != NaN){
 	    thresholdOutlier = data["thresholdOutlier"];
 	}
-	$("#threshold-outlier").prop("value", thresholdOutlier);
+	document.getElementById("threshold-outlier").setAttribute("value", thresholdOutlier);
 
 	// set videoid
 	if(typeof data["videoid"] === 'undefined'){
 	    hiddenVideoId = "";
-	    $("#video-url").prop("value", "");
+	    document.getElementById("video-url").setAttribute("value", "");
 	} else {
 	    hiddenVideoId = data["videoid"];
-	    $("#video-url").prop("value", hiddenVideoIdLabel);
+	    document.getElementById("video-url").setAttribute("value", hiddenVideoIdLabel);
 	}
 
 	// set group site url
@@ -262,17 +259,13 @@ function loadSettings(groupname){
 	    groupSiteURL = sanitize(data["groupSiteURL"]);
 	}
 	updateGroupURL();
-    }).fail(function (jqXHR, textStatus, error){
-	unLockScreen("lock");
+    }).catch(function (error){
 	// jqm / Need to test
-	showModalErrorMessage(i18nUtil.get("fwm-message-config-read-error") + "<br />"+ textStatus + ", " + error);
-	console.log("fail!!");
-    }).always(function(){
-	var interval = setInterval(function(){
-	    $.mobile.loading("hide");
-	    clearInterval(interval);
-	}, 1);
-	unLockScreen("lock");
+	showModalErrorMessage(i18nUtil.get("fwm-message-config-read-error") + "\n"+ error);
+	console.log("loadSettings() failed!");
+    }).finally(function(){
+	spinner.hide();
+	spinner.dispose();
     });
 }
 
@@ -284,10 +277,11 @@ function initializePage() {
 
     // initialize localVideoFile and UI 
     localVideoFile = "";
-    $("#video-url").prop("type", "text"); // Web
-    $("#video-url").prop("value", "");
-    // jqm remove
-    //$("#flip-video-file-place").val("Web").flipswitch("refresh");
+    
+    var eVideoUrl = document.getElementById("video-url");
+    eVideoUrl.setAttribute("type", "text"); // Web
+    eVideoUrl.setAttribute("value", "");
+    document.getElementById("radio-video-file-place-web").setAttribute("checked", "");
     
     updateGroupURL();
     
@@ -313,12 +307,12 @@ function initializePage() {
 	    obj.then(function(){
 		// overwrite hiddenVideoId
 		hiddenVideoId = newVideoID;
-		$("#video-url").prop("value", hiddenVideoIdLabel);
+		eVideoUrl.setAttribute("value", hiddenVideoIdLabel);
 	    });
 	}
     } else if(newVideoID != ""){
 	hiddenVideoId = newVideoID;
-	$("#video-url").prop("value", hiddenVideoIdLabel);
+	eVideoUrl.setAttribute("value", hiddenVideoIdLabel);
     }
     
     if(flagi18nLoaded){
@@ -1396,13 +1390,6 @@ function lockScreen(id){
 	.css("opacity", "0.7");
 
     $('body').append(cover);
-}
-
-
-function unLockScreen(id){
-    if($('#' + id).size() != 0){
-	$('#' + id).remove();
-    }
 }
 
 

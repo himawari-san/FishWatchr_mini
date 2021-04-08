@@ -3,13 +3,15 @@ require_once(".ht_fw_mini.inc");
 
 header('Content-Type: application/json');
 
-if(!isset($_POST['groupname'])){
+$params = json_decode(file_get_contents('php://input'), true);
+
+if(!isset($params['groupname'])){
     // no groupname
     http_response_code(404);
     exit;
 }
 
-$groupname = $_POST['groupname'];
+$groupname = $params['groupname'];
 $configFile = $data_dir . $groupname . ".json";
 
 if(!file_exists($configFile)){
