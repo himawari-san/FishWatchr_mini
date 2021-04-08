@@ -55,7 +55,7 @@
 		<li><span class="dropdown-header">管理用設定</span></li>
 		<li><a class="dropdown-item" href="#" id="toolMenuItemSaveSettings" data-i18n="fwm-nav-option-save-settings">設定保存</a></li>
 		<li><a class="dropdown-item" href="#" id="toolMenuItemRecordCurretTime" data-i18n="fwm-nav-option-record-time">時間記録</a></li>
-		<li><a class="dropdown-item" href="#" id="toolMenuItemSetReferenceURL"  data-i18n="fwm-nav-option-set-group-site-url">グループサイト設定</a></li>
+		<li><a class="dropdown-item" href="#" id="toolMenuItemSetGroupSiteURL"  data-i18n="fwm-nav-option-set-group-site-url">グループサイト設定</a></li>
 		<li><a class="dropdown-item" href="#" id="toolMenuItemShowQrCode" data-i18n="fwm-nav-option-show-qrcode">QRコード表示</a></li>
               </ul>
             </div>
@@ -326,6 +326,27 @@
       </div>
 
       
+      <!-- modal dialog for group-site-url-setting -->
+      <div class="modal" id="popup-set-group-site-url" tabindex="-1">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <h5 data-i18n="fwm-m-title-set-group-site">グループ用サイトの設定</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	    </div>
+	    <div class="modal-body">
+	      <label class="form-label" for="group-site-url">URL:</label>
+	      <input class="form-control" id="group-site-url" value="" type="url" />
+	    </div>
+	    <div class="modal-footer">
+              <button type="button" id="popup-set-group-site-url-cancel" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="fwm-m-config-cancel">キャンセル</button>
+              <button type="button" id="popup-set-group-site-url-ok" class="btn btn-primary" data-bs-dismiss="modal" data-i18n="fwm-m-config-ok">　設　定　</button>
+	    </div>
+	  </div>
+	</div>
+      </div>
+
+      
       <!-- modal dialog for showModalMessage() -->
       <div class="modal" id="modal-message-dialog" tabindex="-1">
 	<div class="modal-dialog">
@@ -479,22 +500,7 @@
 	  </div>
 	</div>
 
-	<div data-role="popup" id="popup-set-group-site-url" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px;" class="ui-mini" data-history="false">
-	  <div data-role="header" data-theme="a">
-	    <h1 data-i18n="fwm-m-title-set-group-site">グループ用サイトの設定</h1>
-	  </div>
-	  <div role="main" class="ui-content">
-	    <div class="ui-field-contain">
-	      <label for="group-site-url">URL:</lable>
-	      <input id="group-site-url" value="" type="text" />
-	    </div>
-	    <div class="ui-content">
-              <a href="#" class="ui-btn ui-shadow ui-btn-inline record-time-button" id="popup-set-group-site-url-ok">OK</a>
-              <a href="#" class="ui-btn ui-shadow ui-btn-inline record-time-button" id="popup-set-group-site-url-cancel">Cancel</a>
-	    </div>
-	  </div>
-	</div>
-
+	
 	<div data-role="popup" id="popup-watch-video" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px" class="ui-mini" data-history="false">
 	  <div data-role="header" data-theme="a">
 	    <h1 data-i18n="fwm-m-title-watch-video">ビデオの表示</h1>

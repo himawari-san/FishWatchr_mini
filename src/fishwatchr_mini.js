@@ -385,6 +385,18 @@ function initializeEvent(){
     });
 
 
+    // * #toolMenuItemSetGroupSiteURL
+    document.querySelector('#toolMenuItemSetGroupSiteURL').addEventListener('click', function(event) {
+	showModalDialog("popup-set-group-site-url");
+    });
+
+    
+    document.querySelector('#popup-set-group-site-url-ok').addEventListener('click', function(event) {
+	groupSiteURL = sanitize(document.getElementById("group-site-url").value);
+	updateGroupURL();
+    });
+    
+    
     document.querySelector('#toolMenuItemShowQrCode').addEventListener('click', function(event) {
 	getGroupName();
 	if(checkGroupname(groupname)){
@@ -405,11 +417,6 @@ function initializeEvent(){
 	    }
 	}
     });
-    document.querySelector('#toolMenuItemSetReferenceURL').addEventListener('click', function(event) {
-	$("#popup-set-group-site-url").popup("open");
-    });
-
-    
     document.querySelectorAll(".record-time-button").forEach(button => {
 	button.addEventListener('tap', function(event) {
 	    event.preventDefault();
@@ -534,17 +541,6 @@ function initializeEvent(){
 	    var configName = $("#urlSettings").val();
 	    loadSettings(configName);
 	}
-    });
-    
-    
-    document.querySelector('#popup-set-group-site-url-ok').addEventListener('tap', function(event) {
-	groupSiteURL = sanitize($("#group-site-url").val());
-	updateGroupURL();
-	$("#popup-set-group-site-url").popup("close");
-    });
-    
-    document.querySelector('#popup-set-group-site-url-cancel').addEventListener('tap', function(event) {
-	$("#popup-set-group-site-url").popup("close");
     });
     
     
@@ -700,14 +696,19 @@ function showErrorMessage(message){
 }
 
 
+function showModalDialog(id){
+    var dialog = new bootstrap.Modal(document.getElementById(id));
+    dialog.show();
+}
+
+
 function showModalMessage(message, title){
-    var dialog = new bootstrap.Modal(document.getElementById('modal-message-dialog'));
     var eMessage = document.getElementById('modal-message-dialog-body');
     var eTitle = document.getElementById('modal-message-dialog-title');
     
     eMessage.innerText = message;
     eTitle.innerText = title;
-    dialog.show();
+    showModalDialog('modal-message-dialog');
 }
 
 
