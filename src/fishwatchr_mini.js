@@ -1096,7 +1096,6 @@ function saveSettings(){
 	labels.push(document.getElementById("label" + i).value);
     }
 
-
     var settingsJSON = {
 	"groupname": trueGroupname,
 	"speakers": speakers,
@@ -1109,7 +1108,7 @@ function saveSettings(){
 	"groupSiteURL" : groupSiteURL
     };
 
-    var jqXHR = fetch("save_settings.php", {
+    fetch("save_settings.php", {
 	method: "POST",
 	body: JSON.stringify({
 	    savename: trueGroupname,
@@ -1123,16 +1122,13 @@ function saveSettings(){
 	} else if(error == "fail_to_copy" || error == "fail_to_save") {
 	    showModalErrorMessage(i18nUtil.get("fwm-message-server-error") + "\n" + error);
 	} else {
-	    $("#popup-title").text(i18nUtil.get("fwm-js-title-save-complete"));
-	    $("#popup-message-body").html("<p>"
-		  + i18nUtil.get("fwm-message-config-save-complete")
-		  + "</p>");
-	    $("#popup-message").popup("open");
+	    showModalMessage(i18nUtil.get("fwm-message-config-save-complete"),
+			     i18nUtil.get("fwm-js-title-save-complete"));
 	}
     }).catch(function (error){
 	console.log("store xml data, " + error);
     });
-}    
+}
 
 
 function saveCurrentTime(newStartTime, timeFileType){
