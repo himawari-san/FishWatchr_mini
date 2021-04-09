@@ -201,35 +201,30 @@ function loadSettings(groupname){
 
 	// read groupname
 	groupname = data["groupname"].replace(/^ +/, "").replace(/ +$/, "");
-	document.getElementById("groupname").setAttribute("value", groupname);
+	setValueToInput("groupname", groupname);
 	
 	// read labels
 	data["labels"].forEach(function(value, index) {
-	    document.getElementById("label" + (index+1)).setAttribute("value", sanitizeJ(value));
+	    setValueToInput("label" + (index+1), sanitizeJ(value));
 	});
 	
 	// read speakers
 	data["speakers"].forEach(function(value, index) {
-	    document.getElementById("speaker" + (index+1)).setAttribute("value", sanitizeJ(value));
+	    setValueToInput("speaker" + (index+1), sanitizeJ(value));
 	});
 	
 	/// set selector value
-	document.getElementById("selector1-observation-mode")
-	    .querySelector(":checked")
-	    .removeAttribute('selected');
-	document.getElementById("selector1-observation-mode")
-	    .querySelector('[value="' + data["observation-mode"] + '"]')
-	    .setAttribute('selected',"");
-	
+	setSelector("selector1-observation-mode", data["observation-mode"]);
+
 	// set button text
-	document.getElementById("btn-load-settings")
-	    .innerText = i18nUtil.get("fwm-m-tab-user-set-value") + " (" + groupname + ")";
+	setInnerText("btn-load-settings",
+		     i18nUtil.get("fwm-m-tab-user-set-value") + " (" + groupname + ")");
 
 	// set auto-save option
 	if(data["auto-save"]){
-	    document.getElementById("flip-auto-save").setAttribute("checked", "");
+	    checkCheckBox("flip-auto-save");
 	} else {
-	    document.getElementById("flip-auto-save").removeAttribute("checked");
+	    unCheckCheckBox("flip-auto-save");
 	}
 
 	// set selectedTimeStyle
@@ -241,15 +236,15 @@ function loadSettings(groupname){
 	if(Number(data["thresholdOutlier"]) != NaN){
 	    thresholdOutlier = data["thresholdOutlier"];
 	}
-	document.getElementById("threshold-outlier").setAttribute("value", thresholdOutlier);
+	setValueToInput("threshold-outlier", thresholdOutlier);
 
 	// set videoid
 	if(typeof data["videoid"] === 'undefined'){
 	    hiddenVideoId = "";
-	    document.getElementById("video-url").setAttribute("value", "");
+	    setValueToInput("video-url", "");
 	} else {
 	    hiddenVideoId = data["videoid"];
-	    document.getElementById("video-url").setAttribute("value", hiddenVideoIdLabel);
+	    setValueToInput("video-url", hiddenVideoIdLabel);
 	}
 
 	// set group site url
@@ -278,10 +273,9 @@ function initializePage() {
     // initialize localVideoFile and UI 
     localVideoFile = "";
     
-    var eVideoUrl = document.getElementById("video-url");
-    eVideoUrl.setAttribute("type", "text"); // Web
-    eVideoUrl.setAttribute("value", "");
-    document.getElementById("radio-video-file-place-web").setAttribute("checked", "");
+    document.getElementById("video-url").setAttribute("type", "text"); // Web
+    setValueToInput("video-url", "");
+    checkRadio("radio-video-file-place-web");
     
     updateGroupURL();
     
@@ -322,8 +316,8 @@ function initializePage() {
 	    .then( function() {
 		flagi18nLoaded = true;
 		changeLang();
-	    }).catch(function (jqXHR, textStatus, error){
-		console.log('fail1!');
+	    }).catch(function (error){
+		console.log("initializePage() failed!\n" + error);
 	    });
     }
 }
@@ -346,13 +340,14 @@ function initializeEvent(){
 	startTime = new Date();
 	
 	// get username
-	username = $("#username").val().replace(/^ +/, "").replace(/ +$/, "");
-	$("#username").prop("value", username);
+	username = getValueFromInput("username").replace(/^ +/, "").replace(/ +$/, "");
+	setValueToInput("username", username);
 	
 	getGroupName();
 
 	if(username == ""){
 	    showModalErrorMessage(i18nUtil.get("fwm-message-username-error"));
+	    // jqm confirm
 	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(username.match(/^[A-Za-z0-9_]+$/) == null){
@@ -379,9 +374,8 @@ function initializeEvent(){
     document.querySelector('#toolMenuItemRecordCurretTime').addEventListener('click', function(event) {
 	getCurrentStartRecordingTime();
 	// set default date, that is the current time
-	document.getElementById("textinput-time").setAttribute("value", date2FormattedDateTime(new Date(), false));
-	var modalDialog = new bootstrap.Modal(document.getElementById('popup-record-time'));
-	modalDialog.show();
+	setValueToInput("textinput-time", date2FormattedDateTime(new Date(), false));
+	showModalDialog('popup-record-time');
     });
 
 
@@ -392,7 +386,7 @@ function initializeEvent(){
 
     
     document.querySelector('#popup-set-group-site-url-ok').addEventListener('click', function(event) {
-	groupSiteURL = sanitize(document.getElementById("group-site-url").value);
+	groupSiteURL = sanitize(getValueFromInput("group-site-url"));
 	updateGroupURL();
     });
     
@@ -417,6 +411,8 @@ function initializeEvent(){
 	    }
 	}
     });
+
+    // jqm confirm
     document.querySelectorAll(".record-time-button").forEach(button => {
 	button.addEventListener('tap', function(event) {
 	    event.preventDefault();
@@ -431,6 +427,7 @@ function initializeEvent(){
 	});
     });
     
+    // jqm confirm
     document.querySelector('#popup-record-time').addEventListener('popupafterclose', function(event) {
 	if(resultDialogRecordTime == "cancel"){
 	    return;
@@ -463,6 +460,7 @@ function initializeEvent(){
 	    thresholdOutlier = Number.MAX_VALUE;
 	} else if(isNaN(thresholdOutlier) || thresholdOutlier < 0){
 	    showModalErrorMessage(i18nUtil.get("fwm-message-invalid-threshold-error"));
+	    // jqm confirm
 	    $("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(!checkGroupname(groupname)){
@@ -495,11 +493,12 @@ function initializeEvent(){
     // });
 
 
+    // jqm confirm
     document.querySelector('#btn-get-archive').addEventListener('tap', function(event) {
 	// get groupname
-	groupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
-	$("#groupname").prop("value", groupname);
-	groupname = $("#groupname").val().replace(/\$$/, "");
+	groupname = getValueFromInput("groupname").replace(/^ +/, "").replace(/ +$/, "");
+	setValueToInput("groupname",  groupname);
+	groupname = groupname.replace(/\$$/, "");
 	
 	if(groupname == ""){
 	    showModalErrorMessage(i18nUtil.get("fwm-message-no-groupname-error"));
@@ -623,7 +622,7 @@ function initializeEvent(){
     //
     // if detect change of select menu, then update annotation buttons
     document.querySelector('#selector2-observation-mode').addEventListener("change", function () {
-	annotationMode = document.getElementById("selector2-observation-mode").value;
+	annotationMode = getValueFromInput("selector2-observation-mode");
 	
 	var ca = 1;
 	var cb = 1;
@@ -743,7 +742,7 @@ function changeLang(){
     });
 
     // label for language selector
-    document.getElementById('navbarDropdownMenuLink').innerText = uiLanguage;
+    setInnerText('navbarDropdownMenuLink', uiLanguage);
 
     // placefolder of username form     
     document.getElementById("username").setAttribute("placeholder", i18nUtil.get("fwm-m-label-placeholder"));
@@ -768,8 +767,8 @@ function changeLang(){
 function processBeforeHide(pageId){
     if(pageId == "home"){
 	// get username
-	username = $("#username").val().replace(/^ +/, "").replace(/ +$/, "");
-	$("#username").prop("value", username);
+	username = getValueFromInput("username").replace(/^ +/, "").replace(/ +$/, "");
+	setValueToInput("username", username);
 	
 	// get groupname
 	getGroupName();
@@ -779,20 +778,20 @@ function processBeforeHide(pageId){
 	labelList = [];
 	for(var i = 1; i <= nBoxes; i++){
 	    var pn = "speaker" + i;
-	    annotatedSpeakers[pn] = sanitizeJ($("#" + pn).val());
+	    annotatedSpeakers[pn] = sanitizeJ(getValueFromInput(pn));
 	    if(annotatedSpeakers[pn] != ""){
 		speakerList.push(annotatedSpeakers[pn]);
 	    }
 
 	    pn = "label" + i;
-	    annotatedLabels[pn] = sanitizeJ($("#" + pn).val());
+	    annotatedLabels[pn] = sanitizeJ(getValueFromInput(pn));
 	    if(annotatedLabels[pn] != ""){
 		labelList.push(annotatedLabels[pn]);
 	    }
 	}
 
 	// get annotation mode
-	annotationMode = $("#selector1-observation-mode").val();
+	annotationMode = getSelectedValue("selector1-observation-mode");
     } else if(pageId == "observation"){
 	console.log("observation page closed!!");
 	// save annotations to annotationStorage
@@ -800,7 +799,7 @@ function processBeforeHide(pageId){
 	annotationStorage.push(newdata);
 	updateSavenameList();
 
-	if(document.getElementById("flip-auto-save").checked){
+	if(isChecked("flip-auto-save")){
 	    saveToServer(saveEventAutoSave);
 	    console.log("auto-save");
 	} else {
@@ -828,7 +827,7 @@ function processBeforeShow(pageId){
 	timerID = setInterval(displayElapsedTime, timerInterval, "#current_time_observation");
 
 	// display username
-	document.getElementById('current_username').innerText = username;
+	setInnerText('current_username', username);
 
 	// panel initialization
 	panelA.textContent = '';
@@ -914,7 +913,7 @@ function processBeforeShow(pageId){
 	}
 
 	// initialize selectmenu
-	document.getElementById("selector2-observation-mode").value = annotationMode;
+	setSelector("selector2-observation-mode", annotationMode);
 
 	// update the url of the top page 
 	$("#link_to_top").prop("href", "m.html" + configUrlOption);
@@ -1055,9 +1054,9 @@ function blinkButton(button){
 
 
 function saveSettings(){
-    var elGroupname = document.getElementById("groupname");
-    var trueGroupname = elGroupname.value.replace(/^ +/, "").replace(/ +$/, "");
-    elGroupname.setAttribute("value", trueGroupname);
+    var eGroupname = document.getElementById("groupname");
+    var trueGroupname = eGroupname.value.replace(/^ +/, "").replace(/ +$/, "");
+    eGroupname.value = trueGroupname;
 
     if(trueGroupname.match(/\$$/)){
 	trueGroupname = trueGroupname.replace(/\$$/, "");
@@ -1075,20 +1074,20 @@ function saveSettings(){
     if(currentVideoId.match(/^blob:/)){
 	currentVideoId = ""; // save no videoID
     } 
-    if(document.getElementById("video-url").value.match(new RegExp(hiddenVideoIdLabelRegExp))){
+    if(getValueFromInput("video-url").match(new RegExp(hiddenVideoIdLabelRegExp))){
 	showModalErrorMessage(i18nUtil.get("fwm-message-invalid-videoid-error"));
 	return false;
     }
 
     var speakers = [];
     var labels = [];
-    var mode = document.getElementById("selector1-observation-mode").querySelector(":checked").value;
-    var auto_save = document.getElementById("flip-auto-save").checked;
-    var currentThresholdOutlier = document.getElementById("threshold-outlier").value;
+    var mode = getSelector("selector1-observation-mode");
+    var auto_save = isChecked("flip-auto-save");
+    var currentThresholdOutlier = getValueFromInput("threshold-outlier");
 
     for(var i = 1; i <=8; i++){
-	speakers.push(document.getElementById("speaker" + i).value);
-	labels.push(document.getElementById("label" + i).value);
+	speakers.push(getValueFromInput("speaker" + i));
+	labels.push(getValueFromInput("label" + i));
     }
 
     var settingsJSON = {
@@ -1121,7 +1120,7 @@ function saveSettings(){
 			     i18nUtil.get("fwm-js-title-save-complete"));
 	}
     }).catch(function (error){
-	console.log("store xml data, " + error);
+	console.log("saveSettings() failed!\n" + error);
     });
 }
 
