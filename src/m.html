@@ -19,7 +19,7 @@
     <script src="d3.min.js" charset="utf-8"></script>
     <script src="c3.min.js"></script>
     <script src="shortcut.js"></script>
-    <script src="jquery.qrcode.min.js"></script>
+    <script src="qrcode.min.js"></script>
 
     <script src="myUtil.js"></script>
     <script src="banana-i18n.js"></script>
@@ -418,6 +418,26 @@
       </div>
 
       
+      <!-- modal dialog for showing qrcode -->
+      <div class="modal" id="popup-show-qrcode" tabindex="-1">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+	    <div class="modal-header">
+              <strong data-i18n="fwm-m-title-show-qrcode">QRコードの表示</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	    </div>
+	    <div class="modal-body d-grid">
+	      <div class="mb-2" style="display: flex; justify-content: center; text-align: center;" id="qrcode-group-url" />
+	      </div>
+	      <div style="text-align:center;">
+		<span data-i18n="fwm-m-label-show-qrcode">グループ名:</span> <a id="url-group-settings" href="#" />
+	      </p> 
+	    </div>
+	  </div>
+	</div>
+      </div>
+
+	
 	<div data-role="popup" id="popup-select-process" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px;" class="ui-mini" data-history="false">
 	  <div data-role="header" data-theme="a">
 	    <h1 data-i18n="fwm-m-title-select-process">処理の選択</h1>
@@ -439,24 +459,6 @@
 	</div>
 
 
-	<div data-role="popup" id="popup-show-qrcode" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px;" class="ui-mini" data-history="false">
-	  <div data-role="header" data-theme="a">
-	    <h1 data-i18n="fwm-m-title-show-qrcode">QRコードの表示</h1>
-	  </div>
-	  <div role="main" class="ui-content">
-	    <div class="ui-content">
-	      <div id="qrcode-group-settings-url" />
-	    </div>
-	    <div class="ui-content">
-	      <p style="text-align:center;">
-		<span data-i18n="fwm-m-label-show-qrcode">グループ名:</span> <a id="url-group-settings" href="#" />
-	      </p> 
-              <a href="#" class="ui-btn ui-shadow" data-rel="back" data-i18n="fwm-m-button-close">閉じる</a>
-	    </div>
-	  </div>
-	</div>
-
-	
 	<div data-role="popup" id="popup-watch-video" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px" class="ui-mini" data-history="false">
 	  <div data-role="header" data-theme="a">
 	    <h1 data-i18n="fwm-m-title-watch-video">ビデオの表示</h1>

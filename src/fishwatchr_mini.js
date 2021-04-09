@@ -398,11 +398,18 @@ function initializeEvent(){
 		+ location.host 
 		+ location.pathname.replace(/\.html.+/, ".html")
 		+ "?config=" + groupname;
-	    $("#qrcode-group-settings-url").html("");
-	    $("#qrcode-group-settings-url").qrcode(groupURL);
-	    $("#url-group-settings").prop("href", groupURL);
-	    $("#url-group-settings").text(groupname);
-	    $("#popup-show-qrcode").popup("open");
+
+	    setInnerText("qrcode-group-url", "");
+	    var qrcode = new QRCode(document.getElementById('qrcode-group-url'),
+				    {width: 256, height: 256});
+	    qrcode.clear();
+	    qrcode.makeCode(groupURL);
+
+	    var link = document.getElementById("url-group-settings");
+	    link.href = groupURL;
+	    link.innerText = groupname;
+
+	    showModalDialog("popup-show-qrcode");
 	} else {
 	    if(groupname != ""){
 		showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
