@@ -686,15 +686,6 @@ function initializeEvent(){
 }
 
 
-function showErrorMessage(message){
-    var errorToast = new bootstrap.Toast(document.querySelector("#popupWarning"));
-    var errorMessage = document.querySelector("#popupWarning-message");
-    
-    errorMessage.textContent = message;
-    errorToast.show();
-}
-
-
 function showModalDialog(id){
     var dialog = new bootstrap.Modal(document.getElementById(id));
     dialog.show();
