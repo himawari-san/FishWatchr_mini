@@ -1509,9 +1509,9 @@ function displayResults(){
 
     for(var i = 1; i <= nDisp; i++){
 	if(p < 0){
-	    $("#disp" + i).text(i18nUtil.get("fwm-no-annotation-data"));
+	    setInnerText("disp" + i, i18nUtil.get("fwm-no-annotation-data"));
 	} else {
-	    $("#disp" + i).text(annotationResults[p--]);
+	    setInnerText("disp" + i, annotationResults[p--]);
 	}
     }
 }
