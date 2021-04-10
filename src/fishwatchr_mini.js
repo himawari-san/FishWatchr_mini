@@ -82,7 +82,6 @@ var i18nUtil = new I18nUtil(uiLanguage);
 var flagi18nLoaded = false;
 
 var toolMenuItemID = "";
-var resultDialogRecordTime = "";
 var groupSiteURL = "";
 
 var startMouseDownY; // for mousedown event
@@ -369,6 +368,7 @@ function initializeEvent(){
 	saveSettings();
     });
 
+    
     // * #toolMenuItemRecordCurretTime
     document.querySelector('#toolMenuItemRecordCurretTime').addEventListener('click', function(event) {
 	getCurrentStartRecordingTime();
@@ -377,6 +377,27 @@ function initializeEvent(){
 	showModalDialog('popup-record-time');
     });
 
+
+    // ** #record-time-button-id-ok in #toolMenuItemRecordCurretTime
+    document.querySelector('#record-time-button-id-ok').addEventListener('click', function(event) {
+	
+	var selectedID = document.querySelector('[name="radio-choice-time-info"]:checked').id;
+	var fileType = isChecked("checkbox-input-time-option") ? timeFileElasedType : timeFileAbsoluteType;
+	
+	if(selectedID == "radio-choice-time-info-current"){
+	    saveCurrentTime(new Date(), fileType);
+	} else if(selectedID == "radio-choice-time-info-manual") {
+	    var inputDate = parseDate(getValueFromInput("textinput-time"));
+	    if(inputDate != NaN){
+		saveCurrentTime(new Date(inputDate), fileType);
+	    } else {
+		showModalErrorMessage(i18nUtil.get("fwm-m-record-time-warning")
+				 + "\n"
+				 + i18nUtil.get("fwm-m-record-time-example"));
+	    }
+	}
+    });
+    
 
     // * #toolMenuItemSetGroupSiteURL
     document.querySelector('#toolMenuItemSetGroupSiteURL').addEventListener('click', function(event) {
@@ -414,44 +435,6 @@ function initializeEvent(){
 		showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	    } else {
 		showModalErrorMessage(i18nUtil.get("fwm-message-no-groupname-error"));
-	    }
-	}
-    });
-
-    // jqm confirm
-    document.querySelectorAll(".record-time-button").forEach(button => {
-	button.addEventListener('tap', function(event) {
-	    event.preventDefault();
-	    
-	    resultDialogRecordTime = "";
-	    
-	    if(event.target.id == "record-time-button-id-cancel"){
-		resultDialogRecordTime = "cancel";
-	    }
-	    
-	    $("#popup-record-time").popup("close");
-	});
-    });
-    
-    // jqm confirm
-    document.querySelector('#popup-record-time').addEventListener('popupafterclose', function(event) {
-	if(resultDialogRecordTime == "cancel"){
-	    return;
-	}
-	
-	var selectedID = $('[name="radio-choice-time-info"]:checked').attr('id');
-	var fileType = $("#checkbox-input-time-option").prop('checked') ? timeFileElasedType : timeFileAbsoluteType;
-	
-	if(selectedID == "radio-choice-time-info-current"){
-	    saveCurrentTime(new Date(), fileType);
-	} else if(selectedID == "radio-choice-time-info-manual") {
-	    var inputDate = parseDate($("#textinput-time").val());
-	    if(inputDate != NaN){
-		saveCurrentTime(new Date(inputDate), fileType);
-	    } else {
-		showModalErrorMessage(i18nUtil.get("fwm-m-record-time-warning")
-				 + " <br />"
-				 + i18nUtil.get("fwm-m-record-time-example"));
 	    }
 	}
     });
@@ -1111,8 +1094,9 @@ function saveCurrentTime(newStartTime, timeFileType){
     var newname = timeFilePrefix;
     var dummyResults = [];
 
-    var trueGroupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
-    $("#groupname").prop("value", trueGroupname);
+    var eGroupname = document.getElementById("groupname");
+    var trueGroupname = eGroupname.value.replace(/^ +/, "").replace(/ +$/, "");
+    eGroupname.value = trueGroupname;
     
     if(trueGroupname.match(/\$$/)){
 	trueGroupname = trueGroupname.replace(/\$$/, "");
@@ -1137,15 +1121,10 @@ function saveCurrentTime(newStartTime, timeFileType){
 	// auto-save
 	saveToServer(saveEventAutoSave);
     } else {
-	// show messsage
-	$("#popup-title").text(i18nUtil.get("fwm-title-save-time-info"));
-	$("#popup-message-body").html("<p>" +
-				      i18nUtil.get("fwm-message-save-time-info") +
-				      "<br />" +
-				      newname + "/" +
-				      date2FormattedDateTime(newStartTime).replace(/-/g, "") +
-				      "</p>");
-	$("#popup-message").popup("open");
+	showModalMessage(i18nUtil.get("fwm-message-save-time-info")
+			 + newname + "/"
+			 + date2FormattedDateTime(newStartTime).replace(/-/g, ""),
+			 i18nUtil.get("fwm-title-save-time-info"));
     }
 };
 
