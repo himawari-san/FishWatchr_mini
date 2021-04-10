@@ -254,20 +254,6 @@
       <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
 	<div class="toast" id="popupURL" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
 	  <div class="toast-header">
-	    <strong data-i18n="fwm-m-title-result-data">結果データ</strong>
-	    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-	  </div>
-	  <div class="toast-body">
-	    <span data-i18n="fwm-m-message-save-to-server1">観察結果は，FishWatchr mini のサイトに保存されました。次のリンクからダウンロードして下さい。リンクの有効期限は，約180日です。</span> (<a href="#" id="resultDataURLText" target="_blank" data-i18n="fwm-m-message-save-to-server2">Text形式</a>, <a href="#" id="resultDataURLXML" target="_blank" data-i18n="fwm-m-message-save-to-server3">XML形式</a>)
-	  </div>
-	</div>
-      </div>
-      
-      
-      <!-- jqm / temporary migration -->
-      <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
-	<div class="toast" id="popupURL" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
-	  <div class="toast-header">
 	    <strong data-i18n="fwm-m-title-group-data">グループ結果データ</strong>
 	    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 	  </div>
@@ -430,6 +416,25 @@
       </div>
       
       
+      <!-- modal dialog for showDataUrl in saveToServer() -->
+      <div class="modal" id="showDataUrl" tabindex="-1">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <strong data-i18n="fwm-m-title-result-data">結果データ</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	    </div>
+	    <div class="modal-body">
+	      <span data-i18n="fwm-m-message-save-to-server1">観察結果は，FishWatchr mini のサイトに保存されました。次のリンクからダウンロードして下さい。リンクの有効期限は，約180日です。</span> (<a href="#" id="resultDataURLText" target="_blank" data-i18n="fwm-m-message-save-to-server2">Text形式</a>, <a href="#" id="resultDataURLXML" target="_blank" data-i18n="fwm-m-message-save-to-server3">XML形式</a>)
+	    </div>
+	    <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+	    </div>
+	  </div>
+	</div>
+      </div>
+      
+
       <div data-role="popup" id="popup-watch-video" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px" class="ui-mini" data-history="false">
 	<div data-role="header" data-theme="a">
 	  <h1 data-i18n="fwm-m-title-watch-video">ビデオの表示</h1>

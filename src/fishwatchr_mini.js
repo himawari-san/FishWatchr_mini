@@ -1150,10 +1150,6 @@ function saveCurrentTime(newStartTime, timeFileType){
 };
 
 
-
-
-
-
 function saveToServer(event){
     if(event == saveEventAutoSave){
 	// when auto-save
@@ -1165,11 +1161,9 @@ function saveToServer(event){
     savename = savename.replace(":", "").replace("/", "_").replace(" ", "_");
 
     // get groupname
-    groupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
-    $("#groupname").prop("value", groupname);
-    groupname = $("#groupname").val().replace(/\$$/, "");
+    getGroupName();
     
-    if(groupname != "" && groupname.match(/^[A-Za-z0-9_]+$/) == null){
+    if(!checkGroupname(groupname)){
 	showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
 	return false;
     }
@@ -1177,39 +1171,37 @@ function saveToServer(event){
     var resultURLText = "#";
     var resultURLXML = "#";
     store(savename, groupname, "txt", getAnnotationsAsText())
-	.done(function (response){
-	    resultURLText = response.result_url;
+	.then((response) => response.json())
+	.then(data => {
+	    resultURLText = data.result_url;
 	})
-	.fail(function (jqXHR, textStatus){
-	    console.log("store text data," + textStatus);
+	.catch(function (error){
+	    console.log("saveToServer() failed!\n" + error);
 	});
     store(savename, groupname, "xml", getAnnotationsAsXML())
-	.done(function (response){
-	    resultURLXML = response.result_url;
-	    $("#resultDataURLText").prop("href", resultURLText);
-	    $("#resultDataURLXML").prop("href", resultURLXML);
-	    $("#popupURL").popup("open");
+	.then((response) => response.json())
+	.then(data => {
+	    resultURLXML = data.result_url;
+	    document.getElementById("resultDataURLText").href = resultURLText;
+	    document.getElementById("resultDataURLXML").href = resultURLXML;
+	    showModalDialog("showDataUrl");
 	})
-	.fail(function (jqXHR, textStatus){
-	    console.log("store xml data," + textStatus);
+	.catch(function (error){
+	    console.log("saveToServer() failed!\n" + error);
 	});
 }
 
 
 function store(savename, groupname, fileType, dataBody){
-    var jqXHR = $.ajax({
-	url: "store.php",
-	type: "post",
-	dataType: "json",
-	data: {
+    return fetch("store.php", {
+	method: "POST",
+	body: JSON.stringify({
 	    savename: savename,
 	    groupname: groupname,
 	    fileType: fileType,
 	    databody: dataBody
-	}
+	})
     });
-
-    return jqXHR;
 }
 
 
