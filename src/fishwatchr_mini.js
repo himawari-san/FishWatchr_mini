@@ -43,7 +43,6 @@ var cRead = 0;
 var annotationStorage = [];
 
 var iAnnotationStorage = -1; 
-var selectedProcessID = "";
 
 var mergedAnnotations = [];
 var mergedAnnotationsCurrent = [];
@@ -587,41 +586,26 @@ function initializeEvent(){
 	});
     });
 
-
-    document.querySelectorAll('.process-selection-item').forEach(item => {
-	item.addEventListener('tap', function(event) {
-	    selectedProcessID = event.target.id;
-	    
-	    event.stopImmediatePropagation();
+    
+    // * .process-selection-item
+    document.querySelectorAll('.process-selection-item').forEach(anchor => {
+	anchor.addEventListener('click', function(event) {
+	    var selectedProcessID = event.target.id;
 	    
 	    if(selectedProcessID == "save-as-tsv" || selectedProcessID == "save-as-xml"){
-		// wait to close popups until starting to download data
-		// for firefox on android
-		setTimeout(function(){
-		    $("#popup-select-process").popup("close");
-		}, 1000);
-	    } else {
-		$("#popup-select-process").popup("close");
+		event.target.click();
+	    } else if(selectedProcessID == "print-as-tsv"){
+		showModalMessage(getAnnotationsAsText(),
+				 i18nUtil.get("fwm-m-title-observation-data"));
+	    } else if(selectedProcessID == "print-as-xml"){
+		showModalMessage(getAnnotationsAsXML(),
+				 i18nUtil.get("fwm-m-title-observation-data"));
+	    } else if(selectedProcessID != ""){
+		saveToServer(selectedProcessID);
 	    }
 	});
     });
-
-
-    document.querySelector('#popup-select-process').addEventListener('popupafterclose', function(event) {
-	if(selectedProcessID == "save-as-tsv" || selectedProcessID == "save-as-xml"){
-	} else if(selectedProcessID == "print-as-tsv"){
-	    $("#print-annatations").empty();
-	    $("#print-annatations").append(sanitize(getAnnotationsAsText()).replace(/\n/g, "<br />\n"));
-	    $("#popup-print-annatations").popup("open");
-	} else if(selectedProcessID == "print-as-xml"){
-	    $("#print-annatations").empty();
-	    $("#print-annatations").append(sanitize(getAnnotationsAsXML()).replace(/\n/g, "<br />\n"));
-	    $("#popup-print-annatations").popup("open");
-	} else if(selectedProcessID != ""){
-	    saveToServer(selectedProcessID);
-	}
-	selectedProcessID = ""; // clear
-    });
+    
     
     //
     // observation page

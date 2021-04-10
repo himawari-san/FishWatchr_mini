@@ -278,25 +278,6 @@
       </div>
       
       
-      <!-- jqm / temporary migration -->
-      <div class="modal" id="popup-print-annatations" tabindex="-1">
-	<div class="modal-dialog">
-	  <div class="modal-content">
-	    <div class="modal-header">
-              <h1 data-i18n="fwm-m-title-observation-data">観察結果の表示</h1>	      
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-	    </div>
-	    <div class="modal-body">
-	      <div id="print-annatations"></div>
-	    </div>
-	    <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-i18n="fwm-m-button-close">閉じる</button>
-	    </div>
-	  </div>
-	</div>
-      </div>
-      
-      
       <!-- modal dialog for load-setting -->
       <div class="modal" id="popup-set-url" tabindex="-1">
 	<div class="modal-dialog">
@@ -453,11 +434,11 @@
 	    </div>
 	    <div class="modal-body">
 	      <div class="btn-group-vertical gap-1 d-flex w-75 mx-auto" id="process-name-list">
-		<button class="btn btn-outline-secondary process-selection-item" id="print-as-tsv" data-i18n="fwm-m-print-in-text-style">表示(Text)</button>
-		<button class="btn btn-outline-secondary process-selection-item" id="print-as-xml" data-i18n="fwm-m-print-in-xml-style">表示(XML)</a></button>
-		<button class="btn btn-outline-secondary process-selection-item" id="save-as-tsv" data-i18n="fwm-m-download-in-text-style">ダウンロード(Text)</a></button>
-		<button class="btn btn-outline-secondary process-selection-item" id="save-as-xml" data-i18n="fwm-m-download-in-xml-style">ダウンロード(XML)</a></button>
-		<button class="btn btn-outline-secondary process-selection-item" id="save-to-server" data-i18n="fwm-m-save-to-server">サーバ保存</a></button>
+		<a class="btn btn-outline-secondary process-selection-item" id="print-as-tsv" data-bs-dismiss="modal" data-i18n="fwm-m-print-in-text-style">表示(Text)</a>
+		<a class="btn btn-outline-secondary process-selection-item" id="print-as-xml" data-bs-dismiss="modal" data-i18n="fwm-m-print-in-xml-style">表示(XML)</a>
+		<a class="btn btn-outline-secondary process-selection-item" id="save-as-tsv" data-bs-dismiss="modal" data-i18n="fwm-m-download-in-text-style">ダウンロード(Text)</a>
+		<a class="btn btn-outline-secondary process-selection-item" id="save-as-xml" data-bs-dismiss="modal" data-i18n="fwm-m-download-in-xml-style">ダウンロード(XML)</a>
+		<a class="btn btn-outline-secondary process-selection-item" id="save-to-server" data-bs-dismiss="modal" data-i18n="fwm-m-save-to-server">サーバ保存</a>
 	      </div>
 	    </div>
 	  </div>
