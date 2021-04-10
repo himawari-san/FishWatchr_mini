@@ -1406,44 +1406,47 @@ function removeShortcutAll(){
 
 
 function updateSavenameList(){
-    $("#savename-list").empty();
-    for(i = annotationStorage.length-1; i >= 0; i--){
-	var newUsername = annotationStorage[i].username == "" ?
-	    "noname" :
-	    annotationStorage[i].username;
+    var nMax = 5;
+    var savenameList = document.getElementById("savename-list");
+    // clear
+    savenameList.innerText = "";
 
-	$("#savename-list").append(
-	    "<li>" +
-		"<a href=\"#\" class=\"ui-btn ui-btn-inline savename-button\" id=\"savename_" + i + "\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"dialog\">" +
-		newUsername + "/" +
-		date2FormattedDateTime(annotationStorage[i].starttime).replace(/-/g, "") +
-		"</a>" +
-		"</li>");
+    for(var i = 0; i < nMax; i++){
+	var j = annotationStorage.length - i;
+	
+	var newItem = document.createElement("button");
+	newItem.classList.add("list-group-item");
+	newItem.classList.add("list-group-item-action");
+	newItem.classList.add("py-2");
+
+	if(j > 0){
+	    var newUsername = annotationStorage[i].username == "" ?
+		"noname" :
+		annotationStorage[i].username;
+	    newItem.innerText = newUsername + "/" +
+		date2FormattedDateTime(annotationStorage[i].starttime).replace(/-/g, "");
+	    newItem.id = "savename_" + i;
+	    newItem.addEventListener('click', function(event) {
+		iAnnotationStorage = event.target.id.match(/\d+$/)[0];
+		
+		// txt
+		var blobTxt = getAnnotationsAsBlob ("text/plain");
+		eSetAttribute("save-as-tsv", "download", "fw_mini_" + username + ".txt");
+		eSetAttribute("save-as-tsv", "href", URL.createObjectURL(blobTxt));
+		
+		// xml
+		var blobXML = getAnnotationsAsBlob ("text/xml");
+		eSetAttribute("save-as-xml", "download", "fw_mini_" + username +  ".xml");
+		eSetAttribute("save-as-xml", "href", URL.createObjectURL(blobXML));
+
+		showModalDialog("popup-select-process");
+	    });
+	} else {
+	    newItem.innerText = i18nUtil.get("fwm-no-saved-data");
+	}
+
+	savenameList.appendChild(newItem);
     }
-    // jqm, remove 
-    //$("#savename-list").listview("refresh");
-
-
-    document.querySelectorAll('.savename-button').forEach(button => {
-	button.addEventListener('tap', function(event) {
-	    iAnnotationStorage = event.target.id.match(/\d+$/)[0];
-	    
-	    // txt
-	    var blobTxt = getAnnotationsAsBlob ("text/plain");
-	    $("#save-as-tsv").prop("download", "fw_mini_" + username + ".txt");
-	    $("#save-as-tsv").prop("href", URL.createObjectURL(blobTxt));
-	    
-	    // xml
-	    var blobXML = getAnnotationsAsBlob ("text/xml");
-	    $("#save-as-xml").prop("download", "fw_mini_" + username +  ".xml");
-	    $("#save-as-xml").prop("href", URL.createObjectURL(blobXML));
-	    
-	    event.preventDefault();
-	    event.stopImmediatePropagation();
-	    
-	    $("#popup-select-process").popup("open");
-	});
-    });
 }
 
 

@@ -236,9 +236,13 @@
 	      
 	      <div class="m-3">
 		<label for="savename-list" class="form-label" data-i18n="fwm-m-tab-data-dataset-list">記録されたデータセットリスト：</label>
-		<select class="form-select" id="savename-list">
-		  <option data-i18n="fwm-no-saved-data">（保存データ - なし）</option>
-		</select>
+		<div class="list-group" id="savename-list">
+		  <a class="list-group-item list-group-item-action py-2" data-i18n="fwm-no-saved-data">（保存データ - なし）</a>
+		  <a class="list-group-item list-group-item-action py-2" data-i18n="fwm-no-saved-data">（保存データ - なし）</a>
+		  <a class="list-group-item list-group-item-action py-2" data-i18n="fwm-no-saved-data">（保存データ - なし）</a>
+		  <a class="list-group-item list-group-item-action py-2" data-i18n="fwm-no-saved-data">（保存データ - なし）</a>
+		  <a class="list-group-item list-group-item-action py-2" data-i18n="fwm-no-saved-data">（保存データ - なし）</a>
+		</div>
 	      </div>
 	    </div>
 	  </div>
@@ -439,22 +443,23 @@
       </div>
       
       
-      <div data-role="popup" id="popup-select-process" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px;" class="ui-mini" data-history="false">
-	<div data-role="header" data-theme="a">
-	  <h1 data-i18n="fwm-m-title-select-process">処理の選択</h1>
-	</div>
-	<div role="main" class="ui-content">
-	  <p data-i18n="fwm-m-message-select-process">処理方法を選択して下さい。</p>
-	  
-	  <ul id="process-name-list" data-role="listview" data-split-icon="action" data-split-theme="a" data-inset="true">
-	    <li data-icon="action"><a class="process-selection-item" id="print-as-tsv" data-i18n="fwm-m-print-in-text-style">表示(Text)</a></li>
-	    <li data-icon="action"><a class="process-selection-item" id="print-as-xml" data-i18n="fwm-m-print-in-xml-style">表示(XML)</a></li>
-	    <li data-icon="action"><a class="process-selection-item" id="save-as-tsv" data-i18n="fwm-m-download-in-text-style">ダウンロード(Text)</a></li>
-	    <li data-icon="action"><a class="process-selection-item" id="save-as-xml" data-i18n="fwm-m-download-in-xml-style">ダウンロード(XML)</a></li>
-	    <li data-icon="action"><a class="process-selection-item" id="save-to-server" data-i18n="fwm-m-save-to-server">サーバ保存</a></li>
-	  </ul>
-	  <div class="ui-content">
-            <a href="#" class="ui-btn ui-shadow" data-rel="back" data-i18n="fwm-m-button-close">閉じる</a>
+      <!-- modal dialog for #popup-select-process -->
+      <div class="modal" id="popup-select-process" tabindex="-1">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+	    <div class="modal-header">
+              <strong  data-i18n="fwm-m-title-select-process">処理の選択</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	    </div>
+	    <div class="modal-body">
+	      <div class="btn-group-vertical gap-1 d-flex w-75 mx-auto" id="process-name-list">
+		<button class="btn btn-outline-secondary process-selection-item" id="print-as-tsv" data-i18n="fwm-m-print-in-text-style">表示(Text)</button>
+		<button class="btn btn-outline-secondary process-selection-item" id="print-as-xml" data-i18n="fwm-m-print-in-xml-style">表示(XML)</a></button>
+		<button class="btn btn-outline-secondary process-selection-item" id="save-as-tsv" data-i18n="fwm-m-download-in-text-style">ダウンロード(Text)</a></button>
+		<button class="btn btn-outline-secondary process-selection-item" id="save-as-xml" data-i18n="fwm-m-download-in-xml-style">ダウンロード(XML)</a></button>
+		<button class="btn btn-outline-secondary process-selection-item" id="save-to-server" data-i18n="fwm-m-save-to-server">サーバ保存</a></button>
+	      </div>
+	    </div>
 	  </div>
 	</div>
       </div>
