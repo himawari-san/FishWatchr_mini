@@ -193,8 +193,7 @@ function loadSettings(groupname){
     return fetch("get_config.php", {
 	method: "POST",
 	body: JSON.stringify({groupname: groupname})
-    }).then((response) => response.json())
-    .then(data => {
+    }).then((response) => response.json()).then(data => {
 	var error = data.error;
 
 	// read groupname
@@ -1069,8 +1068,7 @@ function saveSettings(){
 	    savename: trueGroupname,
 	    databody: settingsJSON
 	})
-    }).then((response) => response.json())
-    .then(data => {
+    }).then((response) => response.json()).then(data => {
 	var error = data.error;
 	if(error == "already_exists") {
 	    showModalErrorMessage(i18nUtil.get("fwm-message-group-already-exist-error"));
@@ -1081,6 +1079,7 @@ function saveSettings(){
 			     i18nUtil.get("fwm-js-title-save-complete"));
 	}
     }).catch(function (error){
+	showModalErrorMessage("saveSettings() failed!\n" + error);
 	console.log("saveSettings() failed!\n" + error);
     });
 }
