@@ -250,20 +250,6 @@
       </div>
       
       
-      <!-- jqm / temporary migration -->
-      <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
-	<div class="toast" id="popupURL" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
-	  <div class="toast-header">
-	    <strong data-i18n="fwm-m-title-group-data">グループ結果データ</strong>
-	    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-	  </div>
-	  <div class="toast-body">
-	    <span data-i18n="fwm-m-message-group-data1">指定されたグループの結果をFishWatchr Miniのサイトからダウンロードします。このリンクは，約180日有効です。</span> (<a href="#" id="resultDataURLZIP" target="_blank" data-i18n="fwm-m-message-group-data2">zip形式</a>)
-	  </div>
-	</div>
-      </div>
-      
-      
       <!-- modal dialog for load-setting -->
       <div class="modal" id="popup-set-url" tabindex="-1">
 	<div class="modal-dialog">
@@ -279,6 +265,25 @@
 	    <div class="modal-footer">
               <button type="button" id="popup-set-url-cancel" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="fwm-m-config-cancel">キャンセル</button>
               <button type="button" id="popup-set-url-ok" class="btn btn-primary" data-bs-dismiss="modal" data-i18n="fwm-m-config-ok">　設　定　</button>
+	    </div>
+	  </div>
+	</div>
+      </div>
+
+
+      <!-- modal dialog for showGroupDataUrl -->
+      <div class="modal" id="showGroupDataUrl" tabindex="-1">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <strong data-i18n="fwm-m-title-group-data">グループ結果データ</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	    </div>
+	    <div class="modal-body">
+	      <span data-i18n="fwm-m-message-group-data1">指定されたグループの結果をFishWatchr Miniのサイトからダウンロードします。このリンクは，約180日有効です。</span> (<a href="#" id="resultDataURLZIP" target="_blank" data-i18n="fwm-m-message-group-data2">zip形式</a>)
+	    </div>
+	    <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
 	    </div>
 	  </div>
 	</div>

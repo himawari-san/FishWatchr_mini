@@ -361,6 +361,39 @@ function initializeEvent(){
 	changePageTo('observation');
     });
 
+
+    // push #btn-get-archive
+    document.querySelector('#btn-get-archive').addEventListener('click', function(event) {
+	// get groupname
+	groupname = getValueFromInput("groupname").replace(/^ +/, "").replace(/ +$/, "");
+	setValueToInput("groupname",  groupname);
+	groupname = groupname.replace(/\$$/, "");
+	
+	if(groupname == ""){
+	    showModalErrorMessage(i18nUtil.get("fwm-message-no-groupname-error"));
+	    return false;
+	} else if(groupname.match(/^[A-Za-z0-9_]+$/) == null){
+	    showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
+	    return false;
+	}
+	
+	var dataBody = "";
+	var fileType = "";
+	
+	fetch("archive.php", {
+	    method: "POST",
+	    body: JSON.stringify({
+		groupname: groupname
+	    })
+	}).then((response) => response.json()).then(data => {
+	    document.getElementById("resultDataURLZIP").href = data.result_url;
+	    showModalDialog("showGroupDataUrl");
+	}).catch(function (error){
+	    showModalErrorMessage("archive.php failed!\n" + error);
+	    console.log("archive.php failed!\n" + error);
+	});
+    });
+    
     
     // tool menu 
     // * #toolMenuItemSaveSettings 
@@ -482,43 +515,6 @@ function initializeEvent(){
     // });
 
 
-    // jqm confirm
-    document.querySelector('#btn-get-archive').addEventListener('tap', function(event) {
-	// get groupname
-	groupname = getValueFromInput("groupname").replace(/^ +/, "").replace(/ +$/, "");
-	setValueToInput("groupname",  groupname);
-	groupname = groupname.replace(/\$$/, "");
-	
-	if(groupname == ""){
-	    showModalErrorMessage(i18nUtil.get("fwm-message-no-groupname-error"));
-	    return false;
-	} else if(groupname.match(/^[A-Za-z0-9_]+$/) == null){
-	    showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
-	    return false;
-	}
-	
-	var dataBody = "";
-	var fileType = "";
-	
-	$.ajax({
-	    url: "archive.php",
-	    type: "post",
-	    dataType: "json",
-	    data: {
-		groupname: groupname
-	    }
-	})
-	    .done(function (response){
-		$("#resultDataURLZIP").prop("href", response.result_url);
-		$("#popupGetZipURL").popup("open");
-		console.log(response.result_url);
-	    })
-	    .fail(function (jqXHR, textStatus){
-		console.log("ajax fail!!," + textStatus);
-	    });
-    });
-    
-    
     document.querySelector('#popup-set-url-ok').addEventListener('click', function(event) {
 	var modalElement = document.getElementById('popup-set-url');
 	var modal = bootstrap.Modal.getInstance(document.getElementById('popup-set-url'));

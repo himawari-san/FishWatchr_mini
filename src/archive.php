@@ -3,19 +3,21 @@ require_once(".ht_fw_mini.inc");
 
 header('Content-Type: application/json');
 
+$params = json_decode(file_get_contents('php://input'), true);
+
 setlocale(LC_ALL, 'ja_JP.UTF-8');
 
 $txt_dir = "txt/";
 $xml_dir = "xml/";
 
-if(!isset($_POST['groupname'])){
+if(!isset($params['groupname'])){
   $error = "can not create a zip file";
   http_response_code(404);
   echo json_encode(compact('error'));
   exit;
 }
 
-$groupname = $_POST['groupname'];
+$groupname = $params['groupname'];
 $timestamp = md5(microtime(true));
 
 $publishedFilename = $groupname . "_" . $timestamp . ".zip";
