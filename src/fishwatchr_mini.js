@@ -505,15 +505,6 @@ function initializeEvent(){
     });
 
 
-    // jqm remove
-    // document.querySelectorAll('.fw-option-item').forEach(item => {
-    // 	    item.addEventListener('tap', function(event) {
-    // 		toolMenuItemID = event.target.id; // for popupafterclose
-    // 		$("#popupToolMenu").popup("close");
-    // 	    });
-    // });
-
-
     document.querySelector('#popup-set-url-ok').addEventListener('click', function(event) {
 	var modalElement = document.getElementById('popup-set-url');
 	var modal = bootstrap.Modal.getInstance(document.getElementById('popup-set-url'));
@@ -874,9 +865,6 @@ function processBeforeShow(pageId){
 
 	// initialize selectmenu
 	setSelector("selector2-observation-mode", annotationMode);
-
-	// update the url of the top page 
-	$("#link_to_top").prop("href", "m.html" + configUrlOption);
     } else if(pageId == "home"){
 	timerID = setInterval(displayTime, timerInterval, "#current_time_home");
 	console.log("new timer:" + timerID);
@@ -884,8 +872,6 @@ function processBeforeShow(pageId){
 	selectedAttribute = "attribute-label";
 	selectedGraph = "selector-summary-graph";
     } else if(pageId == "graph"){
-	$("#link_to_top_graph").prop("href", "m.html" + configUrlOption);
-
 	histgramInterval = $("#slider-1").val();
 	$("#slider-1").on("slidestop", function(e){
 	    histgramInterval = $(this).val();
