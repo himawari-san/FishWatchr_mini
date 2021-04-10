@@ -863,6 +863,9 @@ function processBeforeShow(pageId){
 	    } 
 	}
 
+	// update ui of annotation list
+	displayResults();
+	
 	// initialize selectmenu
 	setSelector("selector2-observation-mode", annotationMode);
     } else if(pageId == "home"){
