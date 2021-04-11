@@ -518,19 +518,15 @@ function initializeEvent(){
     });
     
     
-    document.querySelector('#btn-watch-video').addEventListener('tap', function(event) {
+    document.querySelector('#btn-watch-video').addEventListener('click', function(event) {
 	var videoID = getVideoID();
 	
-	// prevent popup windows from closing immediately
-	event.preventDefault();
-	
 	if(videoID == ""){
-	    $("#popup-title").text(i18nUtil.get("fwm-m-title-error"));
-	    $("#popup-message-body").html("<p>" + i18nUtil.get("fwm-message-no-videoid-error") + "</p>");
-	    $("#popup-message").popup("open");
+	    showModalMessage(i18nUtil.get("fwm-message-no-videoid-error"),
+			     i18nUtil.get("fwm-m-title-error"));
 	} else {
-            initVideoPlayer('video-player1', '#popup-watch-video', 0);
-	    $("#popup-watch-video").popup("open");
+            initVideoPlayer('video-player1', '#close-video', 0);
+	    showModalDialog("watch-video");
 	}
     });
     
@@ -540,8 +536,8 @@ function initializeEvent(){
 	    localVideoFile = URL.createObjectURL(this.files[0]);
 	}
     });
-    
-    
+
+
     document.querySelectorAll('[name="radio-video-file-place"]').forEach(radio => {
 	radio.addEventListener('click', function(event) {
 	    var videoFilePlace = event.target.id;
@@ -1030,7 +1026,7 @@ function saveSettings(){
 
     var speakers = [];
     var labels = [];
-    var mode = getSelector("selector1-observation-mode");
+    var mode = getSelectedValue("selector1-observation-mode");
     var auto_save = isChecked("flip-auto-save");
     var currentThresholdOutlier = getValueFromInput("threshold-outlier");
 
@@ -1195,8 +1191,9 @@ class YouTubeVideoPlayer extends VideoPlayer {
 	super(name, videoID, startSeconds);
 	this.type = "youtube";
 	this.player = new YT.Player(this.name, {
-	    height: 'auto',
-	    width: 'auto',
+	    height: '100%',
+	    width: '100%',
+	    playerVars: {'playsinline':1}, // prevent from becoming fullscreen 
 	    videoId: '',
 	    //	playerVar: 'origin=http://localhost',
 	    events: {
@@ -1265,10 +1262,10 @@ function initYoutubePlayer() {
 }
 
 
-function initVideoPlayer(playerName, popupId, startSeconds){
+function initVideoPlayer(playerName, closeButtonId, startSeconds){
     var player = null;
     var videoID = getVideoID();
-    
+
     if(!isVideoID()) {
 	player = new HTML5VideoPlayer(playerName, videoID, startSeconds);
     } // youtube
@@ -1277,12 +1274,9 @@ function initVideoPlayer(playerName, popupId, startSeconds){
     }
     player.init();
 
-    $(popupId).on({
-    	    popupafterclose: function(){
-		player.stop();
-    	    }
-    	}
-    );
+    document.querySelector(closeButtonId).addEventListener('click', function(event){
+	player.stop();
+    });
 }
 
 

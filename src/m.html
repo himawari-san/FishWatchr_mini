@@ -271,6 +271,21 @@
       </div>
 
 
+      <!-- modal dialog for #popup-watch-video -->
+      <div class="modal" id="watch-video" tabindex="-1">
+	<div class="modal-dialog modal-fullscreen">
+	  <div class="modal-content">
+	    <div class="modal-body w-100 h-100 d-grid">
+	      <div id="video-player1"></div>
+	    </div>
+	    <div class="modal-footer">
+              <button type="button" id="close-video" class="btn btn-primary" data-bs-dismiss="modal" data-i18n="fwm-m-button-close">閉じる</button>
+	    </div>
+	  </div>
+	</div>
+      </div>
+
+      
       <!-- modal dialog for showGroupDataUrl -->
       <div class="modal" id="showGroupDataUrl" tabindex="-1">
 	<div class="modal-dialog">
@@ -436,17 +451,6 @@
               <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
 	    </div>
 	  </div>
-	</div>
-      </div>
-      
-
-      <div data-role="popup" id="popup-watch-video" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px" class="ui-mini" data-history="false">
-	<div data-role="header" data-theme="a">
-	  <h1 data-i18n="fwm-m-title-watch-video">ビデオの表示</h1>
-	</div>
-	<div role="main" class="ui-content">
-	  <div id="video-player1"></div>
-          <a href="#" class="ui-btn ui-shadow" data-rel="back" data-i18n="fwm-m-button-close">閉じる</a>
 	</div>
       </div>
     </div>
