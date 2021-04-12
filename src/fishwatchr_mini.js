@@ -132,6 +132,7 @@ window.addEventListener('pageshow', () => {
     // case 3: $('#data-tab').trigger('click');
     // }
     
+    // jqm confirm
     if(osname == "iOS"){
 	$('#save-as-tsv').addClass("ui-state-disabled");
 	$('#save-as-xml').addClass("ui-state-disabled");
@@ -474,7 +475,7 @@ function initializeEvent(){
 
     // draw charts
     document.querySelector('#btn-show-graph').addEventListener('click', function(event) {
-	thresholdOutlier = $("#threshold-outlier").val();
+	thresholdOutlier = getValueFromInput("threshold-outlier");
 	getGroupName();
 	
 	if(thresholdOutlier == ""){
@@ -482,11 +483,12 @@ function initializeEvent(){
 	} else if(isNaN(thresholdOutlier) || thresholdOutlier < 0){
 	    showModalErrorMessage(i18nUtil.get("fwm-message-invalid-threshold-error"));
 	    // jqm confirm
-	    $("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
+	    //$("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(!checkGroupname(groupname)){
 	    showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
-	    $("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
+	    // jqm confirm
+	    //$("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else {
 	    thresholdOutlier *= 1000; // milisec
@@ -496,6 +498,31 @@ function initializeEvent(){
     });
 
 
+    document.querySelector('#summary-graph-attribute-selector').addEventListener('change', function(event) {
+	selectedAttribute = event.target.value;
+	console.log("change:" + selectedAttribute);
+	
+	// jqm confirm
+	// change the value of attribute-selector-timeline
+	// if(selectedAttribute == "attribute-label"){
+	//     $("#attribute-observation-target")
+	// 	.prop("checked", false)
+	// 	.checkboxradio("refresh");
+	//     $("#attribute-label")
+	// 	.prop("checked", true)
+	// 	.checkboxradio("refresh");
+	// } else {
+	//     $("#attribute-observation-target")
+	// 	.prop("checked", true)
+	// 	.checkboxradio("refresh");
+	//     $("#attribute-label")
+	// 	.prop("checked", false)
+	// 	.checkboxradio("refresh");
+	// }
+	drawGraph();
+    });
+
+    
     // language selector
     document.querySelectorAll('.fw-lang-item').forEach(item => {
 	item.addEventListener('click', function(event) {
@@ -674,7 +701,7 @@ function updateAttributeValueSelector(){
 	$("#attribute-value-selector").append(
 	    $('<option>', {value: categories[i], text: categories[i]}));
     }
-    $("#attribute-value-selector").selectmenu('refresh');
+    //$("#attribute-value-selector").selectmenu('refresh');
     selectedFilterValue = defaultFilterValue;
 }
 
@@ -871,6 +898,22 @@ function processBeforeShow(pageId){
 	selectedAttribute = "attribute-label";
 	selectedGraph = "selector-summary-graph";
     } else if(pageId == "graph"){
+	// jqm confirm pagecreage
+	defaultFilterText = i18nUtil.get("fwm-m-graph-attribute-value-selector-default");
+
+	// jqm confirm pagenontainershow
+	generateGraph();
+	// jqm confirm
+//	$("#" + selectedGraph).trigger("click");
+//	$("#" + selectedAttribute).prop("checked", true).checkboxradio("refresh");
+//	$("#" + selectedTimeStyle).prop("checked", true).checkboxradio("refresh");
+
+	// jqm confirm
+	// $("#" + selectedGraph).trigger("click");
+	// $("#" + selectedAttribute).prop("checked", true).checkboxradio("refresh");
+	// $("#" + selectedTimeStyle).prop("checked", true).checkboxradio("refresh");
+
+	
 	histgramInterval = $("#slider-1").val();
 	$("#slider-1").on("slidestop", function(e){
 	    histgramInterval = $(this).val();
@@ -915,13 +958,17 @@ function processBeforeShow(pageId){
 
 	updateAttributeValueSelector();
 	
+	// jqm confirm remove
 	// draw an empty chart to avoid UI collapse
-	var chart = c3.generate({
-	    bindto: '#graph_body',
-	    data: {
-		columns: []
-	    }
-	});
+	// var chart = c3.generate({
+	//     bindto: '#graph_body',
+	//     data: {
+	// 	columns: []
+	//     }
+	// });
+
+	drawGraph();
+
     }
 };
 
@@ -1651,6 +1698,7 @@ function getCurrentStartRecordingTime(){
 	return;
     }
 
+    // jqm confirm
     $.ajax({
 	url: "get_merged_data.php",
 	type: "post",
@@ -1927,19 +1975,20 @@ function drawGraph(){
 	buttonList = speakerList;
 	buttonList2 = labelList;
     }
-    var observerType = $("#select-observer").find('option:selected').val();
+    var observerType = getSelectedValue("observer-selector");
     var maxEvaluationGrade = undefined;
     var typesJSON = {};
     
     if(selectedGraph == 'selector-summary-graph'|| selectedGraph == ""){
+	// jqm confirm
 	// change ui
-	$("#range-slider").hide();
-	$("#timedisplay-type-selector").hide();
-	$("#label-timeRangeSlider").show();
-	$("#observer-selector").show();
-	$("#attribute-selector-summary").show();
-	$("#attribute-selector-timeline").hide();
-	$("#attribute-value-fillter").hide();
+	// $("#range-slider").hide();
+	// $("#timedisplay-type-selector").hide();
+	// $("#label-timeRangeSlider").show();
+	// $("#observer-selector").show();
+	// $("#attribute-selector-summary").show();
+	// $("#attribute-selector-timeline").hide();
+	// $("#attribute-value-fillter").hide();
 
 	// initialize typeNames and maxEvaluationGrade
 	for(var i = 0; i < mergedAnnotations.length; i++){
@@ -2002,6 +2051,7 @@ function drawGraph(){
 	}
 
 	// count frequency
+	console.log("ma:" + mergedAnnotationsCurrent.length);
 	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
 	    var value = mergedAnnotationsCurrent[i][iAttribute];
 	    var value2 = mergedAnnotationsCurrent[i][iAttribute2];
