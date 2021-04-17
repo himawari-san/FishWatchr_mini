@@ -63,7 +63,7 @@
     "fwm-observation-button-finish": "終了",
     "fwm-m-graph-tab-style-attribute": "属性別",
     "fwm-m-graph-tab-style-time": "時間",
-    "fwm-m-graph-interval-range": "区間幅(sec)／表示範囲",
+    "fwm-m-graph-interval-range": "区間幅(sec)",
     "fwm-m-graph-time-range": "表示範囲",
     "fwm-m-graph-attributes": "属性：",
     "fwm-m-graph-attribute-label": "ラベル",

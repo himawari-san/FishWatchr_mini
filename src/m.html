@@ -29,7 +29,7 @@
     <script src="c3.min.js"></script>
     <link href="c3.min.css" rel="stylesheet" />
   </head>
-  <body>
+  <body style="touch-action: manipulation;">
     <div id="home">
       <div data-role="header">
 	<nav class="navbar navbar-light bg-light">
@@ -69,7 +69,7 @@
 	  <span data-i18n="fwm-m-time">現在時刻： </span><span id="current_time_home"><span data-i18n="fwm-m-processing">Processing ...</span></span>
 	</div>
 	<div class="d-grid mx-3 my-4">
-	  <button type="button" class="btn btn-primary fs-4" id="btn-start" data-i18n="fwm-m-start-observation">観察開始！</button>
+	  <button type="button" class="btn btn-primary" id="btn-start" data-i18n="fwm-m-start-observation">観察開始！</button>
 	</div>
 	<div class="card pt-2 pb-2">
 	  <div class="home-panel">
@@ -501,19 +501,23 @@
 
     <!-- graph page -->
     <div id="graph">
-      <div id="graph-home-panel">
+      <div class="home-panel">
 	<ul class="nav nav-tabs" role="tablist">
-	  <li class="nav-item" role="presentation"><a class="nav-link active" id="selector-summary-graph" data-bs-toggle="tab" href="#summary-graph-panel" aria-controls="summary-graph-panel" role="tab" aria-selected="true" data-i18n="fwm-m-graph-tab-style-attribute">属性別</a></li>
-	  <li class="nav-item" role="presentation"><a class="nav-link" id="selector-timeline-graph" ata-bs-toggle="tab" href="#timeline-graph-panel" aria-controls="timeline-graph-panel" role="tab" aria-selected="false" data-i18n="fwm-m-graph-tab-style-time">時間</a></li>
+	  <li class="nav-item" role="presentation">
+	    <a class="nav-link graph-selector active" id="selector-summary-graph" data-bs-toggle="tab" href="#summary-graph-panel" aria-controls="summary-graph-panel" role="tab" aria-selected="true" data-i18n="fwm-m-graph-tab-style-attribute">属性別</a>
+	  </li>
+	  <li class="nav-item" role="presentation">
+	    <a class="nav-link graph-selector" id="selector-timeline-graph" data-bs-toggle="tab" href="#timeline-graph-panel" aria-controls="timeline-graph-panel" role="tab" aria-selected="false" data-i18n="fwm-m-graph-tab-style-time">時間</a>
+	  </li>
 	</ul>
 	<!-- graph -->
-	<div class="d-grid">
+	<div class="d-grid mx-0 px-0 my-0 py-0">
 	  <div id="graph_body"></div>
 	</div>
       </div>
 
       <div class="tab-content">
-	<!-- summary-graph-panel --> 
+      <!-- summary-graph-panel --> 
 	<div class="tab-pane fade show active" id="summary-graph-panel" role="tabpanel">
 	  <!-- attribute selector -->
 	  <div class="m-3 d-grid">
@@ -534,71 +538,61 @@
 	      <option value="all-comparison" data-i18n="fwm-graph-observers-every-observer">全観察者（比較）</option>
 	    </select>
 	  </div>
-
 	</div>
-
+	
 	<!-- timeline-graph-panel --> 
-	<div class="tab-pane fade show" id="timeline-graph-panel" role="tabpanel">
-	  <div class="mb-3 mx-3">
-
-	    <div class="d-grid">
-	      <canvas id="time-range-selector">hey</canvas>
+	<div class="tab-pane fade" id="timeline-graph-panel" role="tabpanel">
+	  <div class="row mx-3 mb-1" id="range-slider">
+	    <label class="col-3 col-form-label col-form-label-sm" for="slider-2" data-i18n="fwm-m-graph-interval-range">区間幅:</label>
+	    <div class="col-8">
+	      <select  class="form-select form-control-sm" id="slider-2">
+		<option>15</option>
+		<option>30</option>
+		<option>45</option>
+		<option>60</option>
+		<option>75</option>
+		<option>90</option>
+		<option>105</option>
+		<option>120</option>
+		<option>135</option>
+		<option>150</option>
+		<option>165</option>
+		<option>180</option>
+	      </select>
 	    </div>
-	    
-	    <!-- this div is based on http://jsfiddle.net/ezanker/fu26u/204/ -->
-	    <div id="label-timeRangeSlider" data-i18n="fwm-m-graph-time-range">表示範囲</div>  <!-- summary-graph only -->
-            <div class="timeRangeSlider" style="position:relative">
-              <div id="theTimeRange" class="time-slider" data-role="rangeslider" style="position:relative;">
-		<label for="time1" style="display:none">Time Range:</label>
-		<input type="range" name="time1" id="time1" min="0" max="100" value="0" step="60" />
-		<label for="time2">Time Range:</label>
-		<input type="range" name="time2" id="time2" min="0" max="100" value="100" step="60" />
-              </div>
-              <input type="text" data-role="none" id="time1label" class="timeLabel ui-shadow-inset ui-body-inherit ui-corner-all ui-slider-input" value="" readonly="true" />
-              <input type="text" data-role="none" id="time2label" class="timeLabel2 ui-body-inherit ui-corner-all ui-slider-input" value="" readonly="true" />
-            </div>
-	    
-	    
-	    <div id="range-slider">
-	      <label class="form-label" for="slider-1" data-i18n="fwm-m-graph-interval-range">区間幅(sec)／表示範囲</label>
-	      <input class="form-range" type="range" name="slider-1" id="slider-1" value="60" min="15" max="300" step="5" readonly="true" />
-	    </div>
-
-	    <div>
-	      <!-- timeline-graph only -->
-
-
-	      <!-- attribute value selector in summary-graph only -->
-	      <div id="attribute-value-fillter" class=" ui-mini">
-		<label for="attribute-value-selector" class="select" data-i18n="fwm-m-graph-attribute-value-filter">フィルタ：</label>
-		<select name="attribute-value-selector" id="attribute-value-selector">
-		</select>
-	      </div>
-
-	      <fieldset id="attribute-selector-timeline" data-role="controlgroup" data-type="horizontal">
-		<legend data-i18n="fwm-m-graph-attributes">属性：</legend>
-		<input class="attribute-selector" id="attribute-label" name="attribute" type="radio" value="label" />
-		<label for="attribute-label" data-i18n="fwm-m-graph-attribute-label">ラベル</label>
-		<input class="attribute-selector" id="attribute-observation-target" name="attribute" type="radio" value="speaker" />
-		<label for="attribute-observation-target" data-i18n="fwm-m-graph-attribute-target">対象</label>
-	      </fieldset>
-	    </div>
-	    
-	    <div>
-	      <!-- timeline-graph only -->
-	      <fieldset id="timedisplay-type-selector" data-role="controlgroup" data-type="horizontal">
-		<legend data-i18n="fwm-m-tab-chart-time-style">時間表示：</legend>
-		<input class="time-style-selector" id="real-time-style" name="time-style" type="radio" value="real-time-style" />
-		<label for="real-time-style" data-i18n="fwm-button-time-style-clock">　時刻　</label>
-		<input class="time-style-selector" id="elapsed-time-style" name="time-style" type="radio" value="elapsed-time-style" />
-		<label for="elapsed-time-style" data-i18n="fwm-button-time-style-elapsed">経過時間</label>
-	      </fieldset>
-	    </div>
-
 	  </div>
-	</div>
 
+	  <div id="attribute-value-fillter" class="row mx-3 mb-1">
+	    <label for="attribute-value-selector" class="col-3 col-form-label col-form-label-sm" data-i18n="fwm-m-graph-attribute-value-filter">フィルタ：</label>
+	    <div class="col-8">
+	      <select class="form-select form-control-sm" name="attribute-value-selector" id="attribute-value-selector">
+	      </select>
+	    </div>
+	  </div>
+
+	  <div class="row mx-2">
+	    <div class="col-6">
+	      <label class="form-label form-label-sm" for="attribute-selector-timeline" data-i18n="fwm-m-graph-attributes">属性：</label>
+	      <div class="btn-group btn-group-sm" role="group" id="attribute-selector-timeline">
+		<input type="radio" class="btn-check" id="attribute-label" name="attribute" value="label" autocomplete="off" checked />
+		<label class="btn btn-outline-info" for="attribute-label" data-i18n="fwm-m-graph-attribute-label">ラベル</label>
+		<input type="radio" class="btn-check" id="attribute-observation-target" name="attribute" value="speaker" autocomplete="off" />
+		<label class="btn btn-outline-info" for="attribute-observation-target" data-i18n="fwm-m-graph-attribute-target">対象</label>
+	      </div>
+	    </div>
+	    <div class="col-6">
+	      <label class="form-label form-label-sm" for="timedisplay-type-selector" data-i18n="fwm-m-tab-chart-time-style">時間表示：</label>
+	      <div class="btn-group btn-group-sm" role="group" id="timedisplay-type-selector">
+		<input type="radio" class="btn-check" id="real-time-style" name="time-style" value="real-time-style" autocomplete="off" checked />
+		<label class="btn btn-outline-info" for="real-time-style" data-i18n="fwm-button-time-style-clock">　時刻　</label>
+		<input type="radio" class="btn-check" id="elapsed-time-style" name="time-style" value="elapsed-time-style" autocomplete="off" />
+		<label class="btn btn-outline-info" for="elapsed-time-style" data-i18n="fwm-button-time-style-elapsed">経過時間</label>
+	      </div>
+	    </div>
+	  </div>
+	</div> <!-- end of timeline-graph-panel -->
       </div>
+	
       <div class="m-3 d-grid w-75 mx-auto">
 	<button class="btn btn-secondary" id="back_from_graph_to_home" type="button" data-i18n="fwm-graph-button-back">戻る</button>
       </div>
