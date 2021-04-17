@@ -498,6 +498,14 @@ function initializeEvent(){
     });
 
 
+    document.querySelectorAll('.graph-selector').forEach(selector => {
+	selector.addEventListener('click', function(event) {
+	    selectedGraph = event.target.id;
+	    drawGraph();
+	});
+    });
+
+
     document.querySelector('#summary-graph-attribute-selector').addEventListener('change', function(event) {
 	selectedAttribute = event.target.value;
 	console.log("change:" + selectedAttribute);
@@ -2147,14 +2155,15 @@ function drawGraph(){
 	flagLegend = false;
 	chartType = "bar";
     } else {
+	// jqm, remove
 	// change ui, selector-timeline-graph'
-	$("#range-slider").show();
-	$("#label-timeRangeSlider").hide();
-	$("#timedisplay-type-selector").show();
-	$("#observer-selector").hide();
-	$("#attribute-selector-summary").hide();
-	$("#attribute-selector-timeline").show();
-	$("#attribute-value-fillter").show();
+	// $("#range-slider").show();
+	// $("#label-timeRangeSlider").hide();
+	// $("#timedisplay-type-selector").show();
+	// $("#observer-selector").hide();
+	// $("#attribute-selector-summary").hide();
+	// $("#attribute-selector-timeline").show();
+	// $("#attribute-value-fillter").show();
 
 	var x = ['x'];
 	var y = ['freq'];
