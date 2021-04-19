@@ -106,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
     
     startClock();
     initYoutubePlayer();
-
     
     console.log("document ready!!");
 });
@@ -118,32 +117,6 @@ window.addEventListener('pageshow', () => {
     initializeEvent();
 
     console.log("osname:" + osname);
-
-    // activate the selected tab's navi
-    // jqm remove
-    // var activeTag = $('#tabs').tabs("option", "active");
-    // switch(activeTag){
-    // case 0: $('#username-tab').trigger('click');
-    // 	break;
-    // case 1: $('#annotation-tab').trigger('click');
-    // 	break;
-    // case 2: $('#analysis-tab').trigger('click');
-    // 	break;
-    // case 3: $('#data-tab').trigger('click');
-    // }
-    
-    // jqm confirm
-    if(osname == "iOS"){
-	$('#save-as-tsv').addClass("ui-state-disabled");
-	$('#save-as-xml').addClass("ui-state-disabled");
-    } else {
-	$('#save-as-tsv').removeClass("ui-state-disabled");
-	$('#save-as-xml').removeClass("ui-state-disabled");
-    }
-    
-    // jqm remove
-    //$("#" + selectedTimeStyle + "-home").trigger("click"); // tricky code. no click, no refresh.
-    // $("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio("refresh");
 });
 
 
@@ -345,16 +318,12 @@ function initializeEvent(){
 
 	if(username == ""){
 	    showModalErrorMessage(i18nUtil.get("fwm-message-username-error"));
-	    // jqm confirm
-	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(username.match(/^[A-Za-z0-9_]+$/) == null){
 	    showModalErrorMessage(i18nUtil.get("fwm-message-invalid-username-error"));
-	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(!checkGroupname(groupname) && groupname != ""){
 	    showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
-	    $("#btn-start").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	}
 
@@ -482,13 +451,9 @@ function initializeEvent(){
 	    thresholdOutlier = Number.MAX_VALUE;
 	} else if(isNaN(thresholdOutlier) || thresholdOutlier < 0){
 	    showModalErrorMessage(i18nUtil.get("fwm-message-invalid-threshold-error"));
-	    // jqm confirm
-	    //$("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else if(!checkGroupname(groupname)){
 	    showModalErrorMessage(i18nUtil.get("fwm-message-groupname-error"));
-	    // jqm confirm
-	    //$("#btn-show-graph").removeClass("ui-btn-active"); // deactivate mannually
 	    return false;
 	} else {
 	    thresholdOutlier *= 1000; // milisec
@@ -1387,23 +1352,6 @@ function sanitizeJ(str){
 	replace(/</g, "＜").
 	replace(/>/g, "＞").
 	replace(/"/g, "”");
-}
-
-
-function lockScreen(id){
-    // based on http://hensa40.cutegirl.jp/archives/1165
-    var cover = $('<div />');
-    cover.prop('id', id);
-    cover.css("z-index", "9999")
-	.css("position", "absolute")
-	.css("top", "0")
-	.css("left", "0")
-	.css("right", "0")
-	.css("bottom", "0")
-	.css("background-color", "gray")
-	.css("opacity", "0.7");
-
-    $('body').append(cover);
 }
 
 
