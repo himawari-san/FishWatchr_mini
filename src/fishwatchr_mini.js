@@ -535,11 +535,10 @@ function initializeEvent(){
     document.querySelector('#popup-set-url-ok').addEventListener('click', function(event) {
 	var modalElement = document.getElementById('popup-set-url');
 	var modal = bootstrap.Modal.getInstance(document.getElementById('popup-set-url'));
-
-	if($("#urlSettings").val() == ""){
+	var configName = getValueFromInput("urlSettings");
+	if(configName == ""){
 	    showModalErrorMessage(i18nUtil.get("fwm-message-specify-url"));
 	} else {
-	    var configName = $("#urlSettings").val();
 	    loadSettings(configName);
 	}
     });
@@ -559,7 +558,7 @@ function initializeEvent(){
     
     
     document.querySelector('#video-url').addEventListener('change', function(event) {
-	if($("#video-url").attr("type") == "file"){
+	if(eGeAttribute("video-url", "type") == "file"){
 	    localVideoFile = URL.createObjectURL(this.files[0]);
 	}
     });
@@ -1164,7 +1163,7 @@ function saveToServer(event){
     }
     
     // get savename
-    var savename = $("#savename_" + iAnnotationStorage).text();
+    var savename = document.getElementById("savename_" + iAnnotationStorage).innerText;
     savename = savename.replace(":", "").replace("/", "_").replace(" ", "_");
 
     // get groupname
@@ -1356,9 +1355,10 @@ function sanitizeJ(str){
 
 
 function getGroupName(){
-    groupname = $("#groupname").val().replace(/^ +/, "").replace(/ +$/, "");
-    $("#groupname").prop("value", groupname);
-    groupname = $("#groupname").val().replace(/\$$/, "");
+    var eGroupname = document.getElementById("groupname");
+    groupname = eGroupname.value.replace(/^ +/, "").replace(/ +$/, "");
+    eGroupname.value =  groupname;
+    groupname = groupname.replace(/\$$/, "");
 }
 
 
