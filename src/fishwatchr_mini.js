@@ -7,7 +7,8 @@ var buttonAreaRatio1 = "300px";
 var buttonAreaRatio2 = "450px";
 var buttonAreaRatioChange = 5; // if <=5 ratio1, otherwise ratio2 
 var annotationButtonColor = "btn-outline-primary";
-var annotationButtonBlinkColor = "btn-dark";
+var annotationButtonBlinkColorDark = "btn-dark";
+var annotationButtonBlinkColorLight = "btn-primary";
 var annotationButtonBlinkInterval = 150;
 var annotatedSpeakers = {};
 var annotatedLabels = {};
@@ -618,9 +619,9 @@ function initializeEvent(){
 		var button = document.getElementById(targetID);
 		
 		if(annotationMode == "mode_label"){
-		    button.setAttribute("disabled", "");
+		    button.disabled = true;
 		} else {
-		    button.removeAttribute("disabled");
+		    button.disabled = false;
 		}
 		ca++;
 	    } 
@@ -632,9 +633,9 @@ function initializeEvent(){
 		var button = document.getElementById(targetID);
 		
 		if(annotationMode == "mode_speaker"){
-		    button.setAttribute("disabled", "");
+		    button.disabled = true;
 		} else {
-		    button.removeAttribute("disabled");
+		    button.disabled = false;
 		}
 		cb++;
 	    } 
@@ -839,10 +840,14 @@ function processBeforeShow(pageId){
 	var ca = 1;
 	var cb = 1;
 
-	var shortcutCallback = (function (target, num) {
+	var shortcutCallback = (function (button) {
 	    return function () {
-		if(!$("#" + target + num).prop("disabled")){
-		    $("#" + target + num).trigger('tap');
+		if(!button.disabled){
+		    blinkButtonLightly(button);
+		    // Dispatch a mousedown and mouseup event, 
+		    // because click() doesn't.
+		    button.dispatchEvent(new MouseEvent("mousedown"));
+		    button.dispatchEvent(new MouseEvent("mouseup"));
 		}
 	    };
 	});
@@ -857,15 +862,15 @@ function processBeforeShow(pageId){
 		var newButton = document.createElement("button");
 		newButton.setAttribute("class", "btn btn-annotation w-100 m-1 " + annotationButtonColor);
 		newButton.setAttribute("id", newID);
+		newButton.setAttribute("type", "button");
 		newButton.setAttribute("style", "height:" + buttonHeightRatio[na-1]);
 		newButton.innerText = v;
 		panelA.appendChild(newButton);
 
 		if(annotationMode == "mode_label"){
-		    newButton.setAttribute("disabled", "");
+		    newButton.disabled = true;
 		}
-		shortcut.add(shortcutKeys[ca-1],
-			     shortcutCallback("bt_speaker", ca));
+		shortcut.add(shortcutKeys[ca-1], shortcutCallback(newButton));
 		addEventListerToAnnotationButton(newButton);
 		ca++;
 	    } 
@@ -877,13 +882,14 @@ function processBeforeShow(pageId){
 		var newButton = document.createElement("button");
 		newButton.setAttribute("class", "btn btn-annotation w-100 m-1 " + annotationButtonColor);
 		newButton.setAttribute("id", newID);
+		newButton.setAttribute("type", "button");
 		newButton.setAttribute("style", "height:" + buttonHeightRatio[nb-1]);
 		newButton.innerText = v;
 		panelB.appendChild(newButton);
 		if(annotationMode == "mode_speaker"){
-		    newButton.setAttribute("disabled", "");
+		    newButton.disabled = true;
 		}
-		shortcut.add(cb + "", shortcutCallback("bt_label", cb));
+		shortcut.add(cb + "", shortcutCallback(newButton));
 		addEventListerToAnnotationButton(newButton);
 		cb++;
 	    } 
@@ -1028,21 +1034,32 @@ function addEventListerToAnnotationButton(button) {
 	annotation = tempAnnotationSpeaker + fseparator + tempAnnotationLabel + fseparator + elapsedTime + fseparator + currentTime + fseparator + username;
 	annotationResults.push(annotation);
 	displayResults();
-	blinkButton(this);
+	blinkButtonDarkly(this);
 	tempAnnotationSpeaker = "-";
 	tempAnnotationLabel = "-";
     });
 }
 
 
-function blinkButton(button){
-    button.classList.remove(annotationButtonColor);
-    button.classList.add(annotationButtonBlinkColor);
+function blinkButton(button, normalColor, blinkColor){
+    button.classList.remove(normalColor);
+    button.classList.add(blinkColor);
     setTimeout(function () {
-	button.classList.remove(annotationButtonBlinkColor);
-	button.classList.add(annotationButtonColor);
+	button.classList.remove(blinkColor);
+	button.classList.add(normalColor);
     }, annotationButtonBlinkInterval);
 }
+
+
+function blinkButtonDarkly(button){
+    blinkButton(button, annotationButtonColor, annotationButtonBlinkColorDark);
+}
+
+function blinkButtonLightly(button){
+    blinkButton(button, annotationButtonColor, annotationButtonBlinkColorLight);
+}
+
+
 
 
 function saveSettings(){
