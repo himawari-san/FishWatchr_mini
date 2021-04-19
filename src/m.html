@@ -543,9 +543,9 @@
 	<!-- timeline-graph-panel --> 
 	<div class="tab-pane fade" id="timeline-graph-panel" role="tabpanel">
 	  <div class="row mx-3 mb-1" id="range-slider">
-	    <label class="col-3 col-form-label col-form-label-sm" for="slider-2" data-i18n="fwm-m-graph-interval-range">区間幅:</label>
+	    <label class="col-3 col-form-label col-form-label-sm" for="time-interval-selector" data-i18n="fwm-m-graph-interval-range">区間幅(sec)</label>
 	    <div class="col-8">
-	      <select  class="form-select form-control-sm" id="slider-2">
+	      <select  class="form-select form-control-sm" id="time-interval-selector">
 		<option>15</option>
 		<option>30</option>
 		<option>45</option>
@@ -574,18 +574,18 @@
 	    <div class="col-6">
 	      <label class="form-label form-label-sm" for="attribute-selector-timeline" data-i18n="fwm-m-graph-attributes">属性：</label>
 	      <div class="btn-group btn-group-sm" role="group" id="attribute-selector-timeline">
-		<input type="radio" class="btn-check" id="attribute-label" name="attribute" value="label" autocomplete="off" checked />
-		<label class="btn btn-outline-info" for="attribute-label" data-i18n="fwm-m-graph-attribute-label">ラベル</label>
-		<input type="radio" class="btn-check" id="attribute-observation-target" name="attribute" value="speaker" autocomplete="off" />
-		<label class="btn btn-outline-info" for="attribute-observation-target" data-i18n="fwm-m-graph-attribute-target">対象</label>
+		<input type="radio" class="btn-check time-line-attribute-selector" id="time-line-attribute-label" name="attribute" value="attribute-label" autocomplete="off" checked />
+		<label class="btn btn-outline-info" for="time-line-attribute-label" data-i18n="fwm-m-graph-attribute-label">ラベル</label>
+		<input type="radio" class="btn-check time-line-attribute-selector" id="time-line-attribute-observation-target" name="attribute" value="attribute-observation-target" autocomplete="off" />
+		<label class="btn btn-outline-info" for="time-line-attribute-observation-target" data-i18n="fwm-m-graph-attribute-target">対象</label>
 	      </div>
 	    </div>
 	    <div class="col-6">
 	      <label class="form-label form-label-sm" for="timedisplay-type-selector" data-i18n="fwm-m-tab-chart-time-style">時間表示：</label>
 	      <div class="btn-group btn-group-sm" role="group" id="timedisplay-type-selector">
-		<input type="radio" class="btn-check" id="real-time-style" name="time-style" value="real-time-style" autocomplete="off" checked />
+		<input type="radio" class="btn-check time-style-selector" id="real-time-style" name="time-style" value="real-time-style" autocomplete="off" checked />
 		<label class="btn btn-outline-info" for="real-time-style" data-i18n="fwm-button-time-style-clock">　時刻　</label>
-		<input type="radio" class="btn-check" id="elapsed-time-style" name="time-style" value="elapsed-time-style" autocomplete="off" />
+		<input type="radio" class="btn-check time-style-selector" id="elapsed-time-style" name="time-style" value="elapsed-time-style" autocomplete="off" />
 		<label class="btn btn-outline-info" for="elapsed-time-style" data-i18n="fwm-button-time-style-elapsed">経過時間</label>
 	      </div>
 	    </div>

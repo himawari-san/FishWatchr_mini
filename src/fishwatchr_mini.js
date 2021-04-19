@@ -141,8 +141,8 @@ window.addEventListener('pageshow', () => {
 	$('#save-as-xml').removeClass("ui-state-disabled");
     }
     
-    $("#" + selectedTimeStyle + "-home").trigger("click"); // tricky code. no click, no refresh.
     // jqm remove
+    //$("#" + selectedTimeStyle + "-home").trigger("click"); // tricky code. no click, no refresh.
     // $("#" + selectedTimeStyle + "-home").prop("checked", true).checkboxradio("refresh");
 });
 
@@ -506,27 +506,54 @@ function initializeEvent(){
     });
 
 
+    // selectors in summary-graph-panel
     document.querySelector('#summary-graph-attribute-selector').addEventListener('change', function(event) {
 	selectedAttribute = event.target.value;
-	console.log("change:" + selectedAttribute);
-	
-	// jqm confirm
-	// change the value of attribute-selector-timeline
-	// if(selectedAttribute == "attribute-label"){
-	//     $("#attribute-observation-target")
-	// 	.prop("checked", false)
-	// 	.checkboxradio("refresh");
-	//     $("#attribute-label")
-	// 	.prop("checked", true)
-	// 	.checkboxradio("refresh");
-	// } else {
-	//     $("#attribute-observation-target")
-	// 	.prop("checked", true)
-	// 	.checkboxradio("refresh");
-	//     $("#attribute-label")
-	// 	.prop("checked", false)
-	// 	.checkboxradio("refresh");
-	// }
+	drawGraph();
+	// update timeline-graph-panel
+	if(selectedAttribute == 'attribute-observation-target'){
+	    document.getElementById('time-line-attribute-observation-target').click();
+	} else {
+	    document.getElementById('time-line-attribute-label').click();
+	}
+    });
+
+    document.querySelector('#observer-selector').addEventListener('change', function(event) {
+	selectedObserver = event.target.value;
+	drawGraph();
+    });
+
+
+    // selectors in timeline-graph-panel
+    document.querySelectorAll('.time-line-attribute-selector').forEach(selector => {
+	selector.addEventListener('click', function(event) {
+	    selectedAttribute = event.target.value;
+	    updateAttributeFilter();
+	    drawGraph();
+	    // update summary-graph-panel
+	    setSelector("summary-graph-attribute-selector", selectedAttribute);
+	});
+    });
+
+    
+    document.querySelectorAll('.time-style-selector').forEach(selector => {
+	selector.addEventListener('click', function(event) {
+	    selectedTimeStyle = event.target.value;
+	    changeTimeStyle();
+	    drawGraph();
+	});
+    });
+
+
+    document.querySelector('#time-interval-selector').addEventListener('change', function(event) {
+	histgramInterval = event.target.value;
+	yMaxTimeLineChart = 0;
+	drawGraph();
+    });
+
+
+    document.querySelector('#attribute-value-selector').addEventListener('change', function(event) {
+	selectedFilterValue = event.target.value;
 	drawGraph();
     });
 
@@ -698,18 +725,22 @@ function showModalErrorMessage(message){
 }
 
 
-function updateAttributeValueSelector(){
+function updateAttributeFilter(){
     var categories = selectedAttribute == 'attribute-label' ? labelList : speakerList; 
     var defaultFilterText = i18nUtil.get("fwm-m-graph-attribute-value-selector-default");
 
-    $("#attribute-value-selector > option").remove();
-    $("#attribute-value-selector").append(
-	$('<option>', {value: defaultFilterValue, text: defaultFilterText}));
+    var avs = document.getElementById("attribute-value-selector");
+    var newItem = document.createElement("option");
+    avs.innerText = "";
+    newItem.value = defaultFilterValue;
+    newItem.innerText = defaultFilterText;
+    avs.appendChild(newItem);
     for(var i = 0; i < categories.length; i++){
-	$("#attribute-value-selector").append(
-	    $('<option>', {value: categories[i], text: categories[i]}));
+	newItem = document.createElement("option");
+	newItem.value = categories[i];
+	newItem.innerText = categories[i];
+	avs.appendChild(newItem);
     }
-    //$("#attribute-value-selector").selectmenu('refresh');
     selectedFilterValue = defaultFilterValue;
 }
 
@@ -905,30 +936,39 @@ function processBeforeShow(pageId){
 	annotationResults = [];
 	selectedAttribute = "attribute-label";
 	selectedGraph = "selector-summary-graph";
+	selectedObserver = "all";
+	histgramInterval = 60;
+	selectedTimeStyle = 'real-time-style';
     } else if(pageId == "graph"){
-	// jqm confirm pagecreage
-	defaultFilterText = i18nUtil.get("fwm-m-graph-attribute-value-selector-default");
-
 	// jqm confirm pagenontainershow
 	generateGraph();
-	// jqm confirm
-//	$("#" + selectedGraph).trigger("click");
-//	$("#" + selectedAttribute).prop("checked", true).checkboxradio("refresh");
-//	$("#" + selectedTimeStyle).prop("checked", true).checkboxradio("refresh");
 
-	// jqm confirm
-	// $("#" + selectedGraph).trigger("click");
-	// $("#" + selectedAttribute).prop("checked", true).checkboxradio("refresh");
-	// $("#" + selectedTimeStyle).prop("checked", true).checkboxradio("refresh");
+	// click a tab to select summary-graph or timeline-graph
+	document.getElementById(selectedGraph).click();
 
+	//
+	// #summary-graph-panel
+	//
+	setSelector("summary-graph-attribute-selector", selectedAttribute);
+	setSelector("observer-selector", selectedObserver);
+
+	//
+	// # time-line-panel
+	//
+	setSelector("time-interval-selector", histgramInterval);
+
+	if(selectedAttribute == 'attribute-observation-target'){
+	    document.querySelector('#time-line-attribute-observation-target').checked = 'true';
+	} else {
+	    document.querySelector('#time-line-attribute-label').checked = 'true';
+	}
+	if(selectedTimeStyle == 'real-time-style'){
+	    document.querySelector('#real-time-style').checked = 'true';    
+	} else {
+	    document.querySelector('#elapsed-time-style').checked = 'true';    
+	}
+	updateAttributeFilter();
 	
-	histgramInterval = $("#slider-1").val();
-	$("#slider-1").on("slidestop", function(e){
-	    histgramInterval = $(this).val();
-	    yMaxTimeLineChart = 0;
-	    drawGraph();
-	});
-
 	// The following change event handlers are based on http://jsfiddle.net/ezanker/fu26u/204/
 	$("#time1").on("change", function(){
 	    var time = selectedTimeStyle == "elapsed-time-style"
@@ -964,19 +1004,7 @@ function processBeforeShow(pageId){
 	    drawGraph();
 	});
 
-	updateAttributeValueSelector();
-	
-	// jqm confirm remove
-	// draw an empty chart to avoid UI collapse
-	// var chart = c3.generate({
-	//     bindto: '#graph_body',
-	//     data: {
-	// 	columns: []
-	//     }
-	// });
-
 	drawGraph();
-
     }
 };
 
@@ -1988,16 +2016,6 @@ function drawGraph(){
     var typesJSON = {};
     
     if(selectedGraph == 'selector-summary-graph'|| selectedGraph == ""){
-	// jqm confirm
-	// change ui
-	// $("#range-slider").hide();
-	// $("#timedisplay-type-selector").hide();
-	// $("#label-timeRangeSlider").show();
-	// $("#observer-selector").show();
-	// $("#attribute-selector-summary").show();
-	// $("#attribute-selector-timeline").hide();
-	// $("#attribute-value-fillter").hide();
-
 	// initialize typeNames and maxEvaluationGrade
 	for(var i = 0; i < mergedAnnotations.length; i++){
 	    var value = mergedAnnotations[i][iAttribute];
@@ -2155,16 +2173,6 @@ function drawGraph(){
 	flagLegend = false;
 	chartType = "bar";
     } else {
-	// jqm, remove
-	// change ui, selector-timeline-graph'
-	// $("#range-slider").show();
-	// $("#label-timeRangeSlider").hide();
-	// $("#timedisplay-type-selector").show();
-	// $("#observer-selector").hide();
-	// $("#attribute-selector-summary").hide();
-	// $("#attribute-selector-timeline").show();
-	// $("#attribute-value-fillter").show();
-
 	var x = ['x'];
 	var y = ['freq'];
 	var temp = {};
