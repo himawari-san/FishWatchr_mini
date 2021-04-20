@@ -526,7 +526,10 @@
 	</div>
 	
 	<!-- timeline-graph-panel --> 
-	<div class="tab-pane fade" id="timeline-graph-panel" role="tabpanel">
+	<div class="tab-pane fade mt-3" id="timeline-graph-panel" role="tabpanel">
+	  <div class="mx-3" id="time-range" data-time-min="" data-time-max="">
+	    <span>表示範囲：</span><span id="start-time"></span> - <span id="end-time"></span>
+	  </div>
 	  <div class="row mx-3 mb-1" id="range-slider">
 	    <label class="col-3 col-form-label col-form-label-sm" for="time-interval-selector" data-i18n="fwm-m-graph-interval-range">区間幅(sec)</label>
 	    <div class="col-8">
