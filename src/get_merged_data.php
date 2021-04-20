@@ -8,16 +8,17 @@ setlocale(LC_ALL, 'ja_JP.UTF-8');
 $time_file_type_elapsed = "elapsed";
 $time_file_type_absolute = "absolute";
 
+$params = json_decode(file_get_contents('php://input'), true);
 
-if(!isset($_POST['groupname'])){
+if(!isset($params['groupname'])){
   $error = "no groupname";
   http_response_code(404);
   echo json_encode(compact('error'));
   exit;
 }
 
-$groupname = $_POST['groupname'];
-$time_file_prefix = $_POST['timefile'];
+$groupname = $params['groupname'];
+$time_file_prefix = $params['timefile'];
 
 $annotations = "";
 

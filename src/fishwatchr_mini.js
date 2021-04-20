@@ -1708,23 +1708,21 @@ function getVideoID(){
 function getCurrentStartRecordingTime(){
     getGroupName();
     if(groupname == ""){
-	$("#currentStartRecordingTime").text(i18nUtil.get("fwm-m-record-current-recording-time-undefined"));
+	setInnerText("currentStartRecordingTime",
+		     i18nUtil.get("fwm-m-record-current-recording-time-undefined"));
 	return;
     }
 
-    // jqm confirm
-    $.ajax({
-	url: "get_merged_data.php",
-	type: "post",
-	dataType: "text",
-	beforeSend: function(jqXHR, settings) {
-	    $("#currentStartRecordingTime").text(i18nUtil.get("fwm-m-record-current-recording-time-loading"));
-	},
-	data: {
+    var spinner = new bootstrap.Modal(document.getElementById('modal-spinner'));
+    spinner.show();
+
+    fetch("get_merged_data.php", {
+	method: "POST",
+	body: JSON.stringify({
 	    groupname: groupname,
 	    timefile: timeFilePrefix
-	},
-    }).done(function(data) {
+	})
+    }).then((response) => response.text()).then(data => {
 	var arrayAnnotations = data.split("\n");
 	var currentStartRecordingTime = 0;
 	var annotations = new Array();
@@ -1736,7 +1734,7 @@ function getCurrentStartRecordingTime(){
 	    if(matches != null){
 		// arrayAnnotations[0]: _sys_basetime \t basetime \t filetype
 		if(matches[2] == "elapsed"){
-		    timeFileType = "<br/>(" + i18nUtil.get("fwm-m-record-time-input-option") + ")";
+		    timeFileType = "\n(" + i18nUtil.get("fwm-m-record-time-input-option") + ")";
 		}
 		// get and remove a time information record
 		currentStartRecordingTime = parseDate(matches[1]);
@@ -1766,14 +1764,16 @@ function getCurrentStartRecordingTime(){
 	}
 
 	if(currentStartRecordingTime == 0){
-	    $("#currentStartRecordingTime").text(i18nUtil.get("fwm-m-record-current-recording-time-undefined"));
+	    setInnerText("currentStartRecordingTime",
+			 i18nUtil.get("fwm-m-record-current-recording-time-undefined"));
 	} else {
-	    $("#currentStartRecordingTime")
-		.html(date2FormattedDateTime(new Date(currentStartRecordingTime)) + timeFileType);
+	    setInnerText("currentStartRecordingTime",
+			 date2FormattedDateTime(new Date(currentStartRecordingTime)) + timeFileType);
 	}
-    }).fail(function (jqXHR, textStatus){
-	console.log("hey fail");
-	$("#currentStartRecordingTime").text(i18nUtil.get("fwm-m-record-current-recording-time-fail"));
+    }).catch(function (error){
+	console.log("get_merged_data.php failed!\n" + error);
+	setInnerText("currentStartRecordingTime",
+		     i18nUtil.get("fwm-m-record-current-recording-time-fail"));
     });
 }
 
