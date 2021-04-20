@@ -148,7 +148,7 @@ function changePageTo(id){
 
 
 function startClock(){
-    timerID = setInterval(displayTime, timerInterval, "#current_time_home");
+    timerID = setInterval(displayTime, timerInterval, "current_time_home");
     console.log("new timer:" + timerID);
     annotationResults = [];
     selectedAttribute = "attribute-label";
@@ -802,7 +802,7 @@ function processBeforeShow(pageId){
 	var panelB = document.getElementById('panel-b');
 
 	// start new timer
-	timerID = setInterval(displayElapsedTime, timerInterval, "#current_time_observation");
+	timerID = setInterval(displayElapsedTime, timerInterval, "current_time_observation");
 
 	// display username
 	setInnerText('current_username', username);
@@ -901,7 +901,7 @@ function processBeforeShow(pageId){
 	// initialize selectmenu
 	setSelector("selector2-observation-mode", annotationMode);
     } else if(pageId == "home"){
-	timerID = setInterval(displayTime, timerInterval, "#current_time_home");
+	timerID = setInterval(displayTime, timerInterval, "current_time_home");
 	console.log("new timer:" + timerID);
 	annotationResults = [];
 	selectedAttribute = "attribute-label";
@@ -1550,13 +1550,14 @@ function parseDate(strDate){
 
 function displayTime(elementId){
     var now = date2FormattedTime(new Date());
-    $(elementId).text(now);
+    setInnerText(elementId, now);
 }
 
 
 function displayElapsedTime(elementId){
     var now = new Date();
-    $(elementId).text(time2FormattedTime(now.getTime() - startTime.getTime()));
+    setInnerText(elementId,
+		 time2FormattedTime(now.getTime() - startTime.getTime()));
 }
 
 
