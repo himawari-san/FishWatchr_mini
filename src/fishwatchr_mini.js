@@ -1798,17 +1798,14 @@ function generateGraph(){
     mergedAnnotations = [];
     mergedAnnotationsCurrent = [];
     yMaxTimeLineChart = 0;
-    
-    $.ajax({
-	url: "get_merged_data.php",
-	type: "post",
-	dataType: "text",
-	data: {
+
+    fetch("get_merged_data.php", {
+	method: "POST",
+	body: JSON.stringify({
 	    groupname: groupname,
 	    timefile: timeFilePrefix
-	},
-	//async: false
-    }).done(function(data) {
+	})
+    }).then((response) => response.text()).then(data => {
 	var arrayAnnotations = data.split("\n");
 	var flagElapsedTimeFile = false;
 
@@ -2055,7 +2052,6 @@ function drawGraph(){
 	}
 
 	// count frequency
-	console.log("ma:" + mergedAnnotationsCurrent.length);
 	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
 	    var value = mergedAnnotationsCurrent[i][iAttribute];
 	    var value2 = mergedAnnotationsCurrent[i][iAttribute2];
