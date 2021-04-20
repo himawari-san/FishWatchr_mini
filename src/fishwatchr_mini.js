@@ -1291,9 +1291,20 @@ class HTML5VideoPlayer extends VideoPlayer {
     constructor(name, videoID, startSeconds){
 	super(name, videoID, startSeconds);
 	this.type = "html5";
-	$("#" + this.name).empty(); // remove div
-	$("#" + this.name).append('<video id="' + this.name + this.type + '" preload="auto" width="100%" height="auto" controls src="' + this.videoID + '"/>');
-	this.player = $("#" + this.name + this.type)[0];
+	var eDiv = document.getElementById(this.name);
+	eDiv.innerText = ""; // remove div
+
+	var eVideo = document.createElement('video');
+	eVideo.id = this.name + this.type;
+	eVideo.preload = "auto";
+	// use setAttribute instead of property. I don't know why
+	eVideo.setAttribute("width", "100%"); 
+	eVideo.setAttribute("height", "auto");
+	eVideo.src = this.videoID;
+	eVideo.controls = true;
+
+	eDiv.appendChild(eVideo);
+	this.player = document.getElementById(this.name + this.type);
     }
 
     init(){
@@ -1310,7 +1321,7 @@ class HTML5VideoPlayer extends VideoPlayer {
     stop(){
 	if(this.player != null){
 	    this.player.pause();
-	    $("#" + this.name).empty();
+	    document.getElementById(this.name).innerText = "";
 	}
     }
 }
