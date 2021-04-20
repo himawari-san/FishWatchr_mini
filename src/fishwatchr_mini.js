@@ -1694,7 +1694,8 @@ function checkGroupname(groupname){
 
 
 function getVideoID(){
-    var videoID = $('#video-url').attr('type') == "file" ?  localVideoFile : sanitize($("#video-url").val());
+    var eVideoURL = document.getElementById("video-url");
+    var videoID = eVideoURL.type == "file" ?  localVideoFile : sanitize(eVideoURL.value);
     if(videoID.match(new RegExp(hiddenVideoIdLabelRegExp))){
 	return hiddenVideoId;
     } else {
