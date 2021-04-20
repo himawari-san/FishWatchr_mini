@@ -271,21 +271,6 @@
       </div>
 
 
-      <!-- modal dialog for #popup-watch-video -->
-      <div class="modal" id="watch-video" tabindex="-1">
-	<div class="modal-dialog modal-fullscreen">
-	  <div class="modal-content">
-	    <div class="modal-body w-100 h-100 d-grid">
-	      <div id="video-player1"></div>
-	    </div>
-	    <div class="modal-footer">
-              <button type="button" id="close-video" class="btn btn-primary" data-bs-dismiss="modal" data-i18n="fwm-m-button-close">閉じる</button>
-	    </div>
-	  </div>
-	</div>
-      </div>
-
-      
       <!-- modal dialog for showGroupDataUrl -->
       <div class="modal" id="showGroupDataUrl" tabindex="-1">
 	<div class="modal-dialog">
@@ -596,31 +581,24 @@
       <div class="m-3 d-grid w-75 mx-auto">
 	<button class="btn btn-secondary" id="back_from_graph_to_home" type="button" data-i18n="fwm-graph-button-back">戻る</button>
       </div>
-
-	<div data-role="popup" id="popupWarningGraph" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="max-width:400px;" data-history="false">
-	  <div data-role="header">
-	    <h3 data-i18n="fwm-m-title-error">エラー</h3>
-	    <a href="#" data-rel="back" data-history="false" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" data-i18n="fwm-m-button-close">閉じる</a>
-	  </div>
-	  <div role="main" class="ui-content">
-	    <p id="popupWarning-message-graph"></p>
-	  </div>
-	</div>
-
-	<div data-role="popup" id="popup-watch-video2" data-overlay-theme="b" data-theme="a" data-dismissible="false" style="min-width:280px; max-width:400px" class="ui-mini" data-history="false">
-	  <div data-role="header" data-theme="a">
-	    <h1 data-i18n="fwm-m-title-watch-video">ビデオの表示</h1>
-	  </div>
-	  <div role="main" class="ui-content">
-	    <div id="video-player2"></div>
-            <a href="#" class="ui-btn ui-shadow" data-rel="back" data-i18n="fwm-m-button-close">閉じる</a>
-	  </div>
-	</div>
-      </div>
     </div>
 
     <footer class="footer text-center py-3 bg-light">
       Copyright 2016-2021 Masaya YAMAGUCHI
     </footer>
+
+    <!-- modal dialog for #watch-video -->
+    <div class="modal" id="watch-video" tabindex="-1">
+      <div class="modal-dialog modal-fullscreen">
+	<div class="modal-content">
+	  <div class="modal-body w-100 h-100 d-grid">
+	    <div id="video-player1"></div>
+	  </div>
+	  <div class="modal-footer">
+            <button type="button" id="close-video" class="btn btn-primary" data-bs-dismiss="modal" data-i18n="fwm-m-button-close">閉じる</button>
+	  </div>
+	</div>
+      </div>
+    </div>
   </body>
 </html>

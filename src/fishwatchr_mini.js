@@ -2423,17 +2423,18 @@ function drawGraph(){
 	}
     });
 
-    // play video by clicking ticks
+    // play video by clicking a tick
     var videoID = getVideoID();
     if(videoID != ""){
-	$(".c3-axis-x .tick")
-	    .on('click', function(d){
+	var eTicks = document.querySelectorAll(".c3-axis-x .tick");
+	eTicks.forEach(item => {
+	    item.addEventListener('click', function(d){
 		if(selectedGraph != 'selector-timeline-graph'){
 		    return false;
 		}
 		
 		var label = d3.select(this).text();
-		$(".c3-axis-x .tick").each(function(i, element){
+		eTicks.forEach((element, i) => {
 		    if(d3.select(element).text() == label){
 			var elapsedTime;
 			if(selectedTimeStyle == "real-time-style"){
@@ -2444,12 +2445,11 @@ function drawGraph(){
 
 			// find malformed elapsedTime
 			if(!elapsedTime.match(/^(\d\d)(\d\d)(\d\d)$/)){
-			    $("#popupWarning-message-graph").html(
+			    showModalErrorMessage(
 				i18nUtil.get("fwm-message-invalid-playback-position-error-1")
-				    + "<br />"
+				    + "\n"
 				    + i18nUtil.get("fwm-message-invalid-playback-position-error-2")
-				    + "<br />(" + elapsedTime + "sec)");
-			    $("#popupWarningGraph").popup("open");
+				    + "\n(" + elapsedTime + "sec)");
 			    return false;
 			}
 
@@ -2463,24 +2463,23 @@ function drawGraph(){
 			    timeToPlay = 0;
 			} else if(timeToPlay > 12 * 60 * 60){
 			    // over 12hours
-			    $("#popupWarning-message-graph").html(
+			    showModalErrorMessage(
 				i18nUtil.get("fwm-message-invalid-playback-position-error-1")
-				    + "<br />"
+				    + "\n"
 				    + i18nUtil.get("fwm-message-invalid-playback-position-error-2")
-				    + "<br />(" + timeToPlay + "sec)");
-			    $("#popupWarningGraph").popup("open");
+				    + "\n(" + timeToPlay + "sec)");
 			    return false;
 			}
 		    
-			initVideoPlayer('video-player2', '#popup-watch-video2', timeToPlay);
-			$("#popup-watch-video2").popup("open");
-			
+			initVideoPlayer('video-player1', '#close-video', timeToPlay);
+			showModalDialog("watch-video");
 			// return after matching the first element.
 			// i don't know why the label is matched twice.
-			return false;
+			return true;
 		    }
 		});
 	    });
+	});
     }
 }
 
