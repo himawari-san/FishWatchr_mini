@@ -98,9 +98,9 @@ var localVideoFile = "";
 var saveEventAutoSave = "auto-save";
 
 document.addEventListener("DOMContentLoaded", () => {
-    window.addEventListener("beforeunload", function(event){
-	return "unload this page?";
-    });
+    window.onbeforeunload = function() {
+	return "You are leaving FishWathcr Mini. Your data on the browser will be lost."; 
+    };
 
     // show home page
     changePageTo('home');
