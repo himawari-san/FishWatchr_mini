@@ -2431,58 +2431,52 @@ function drawGraph(){
     // play video by clicking a tick
     var videoID = getVideoID();
     if(videoID != ""){
-	var eTicks = document.querySelectorAll(".c3-axis-x .tick");
+	let eTicks = Array.from(document.querySelectorAll(".c3-axis-x .tick"));
 	eTicks.forEach(item => {
 	    item.addEventListener('click', function(d){
 		if(selectedGraph != 'selector-timeline-graph'){
 		    return false;
 		}
 		
-		var label = d3.select(this).text();
-		eTicks.forEach((element, i) => {
-		    if(d3.select(element).text() == label){
-			var elapsedTime;
-			if(selectedTimeStyle == "real-time-style"){
-			    elapsedTime = xTimes[i];
-			} else {
-			    elapsedTime = x[i+1];
-			}
+		const label = d3.select(this).text();
+		const iSelectedTick = eTicks.findIndex(tick => d3.select(tick).text() == label);
+		let elapsedTime;
+		if(selectedTimeStyle == "real-time-style"){
+		    elapsedTime = xTimes[iSelectedTick];
+		} else {
+		    elapsedTime = x[iSelectedTick+1];
+		}
 
-			// find malformed elapsedTime
-			if(!elapsedTime.match(/^(\d\d)(\d\d)(\d\d)$/)){
-			    showModalErrorMessage(
-				i18nUtil.get("fwm-message-invalid-playback-position-error-1")
-				    + "\n"
-				    + i18nUtil.get("fwm-message-invalid-playback-position-error-2")
-				    + "\n(" + elapsedTime + "sec)");
-			    return false;
-			}
+		// find malformed elapsedTime
+		if(!elapsedTime.match(/^(\d\d)(\d\d)(\d\d)$/)){
+		    showModalErrorMessage(
+			i18nUtil.get("fwm-message-invalid-playback-position-error-1")
+			    + "\n"
+			    + i18nUtil.get("fwm-message-invalid-playback-position-error-2")
+			    + "\n(" + elapsedTime + "sec)");
+		    return false;
+		}
 
-			var hms = elapsedTime.match(/^(\d\d)(\d\d)(\d\d)$/);
-			var timeToPlay =
-			    parseInt(hms[1], 10) * 3600
-			    + parseInt(hms[2], 10) * 60
-			    + parseInt(hms[3], 10) - offsetTimeToPlay;
-
-			if(timeToPlay < 0){
-			    timeToPlay = 0;
-			} else if(timeToPlay > 12 * 60 * 60){
-			    // over 12hours
-			    showModalErrorMessage(
-				i18nUtil.get("fwm-message-invalid-playback-position-error-1")
-				    + "\n"
-				    + i18nUtil.get("fwm-message-invalid-playback-position-error-2")
-				    + "\n(" + timeToPlay + "sec)");
-			    return false;
-			}
+		var hms = elapsedTime.match(/^(\d\d)(\d\d)(\d\d)$/);
+		var timeToPlay =
+		    parseInt(hms[1], 10) * 3600
+		    + parseInt(hms[2], 10) * 60
+		    + parseInt(hms[3], 10) - offsetTimeToPlay;
+		
+		if(timeToPlay < 0){
+		    timeToPlay = 0;
+		} else if(timeToPlay > 12 * 60 * 60){
+		    // over 12hours
+		    showModalErrorMessage(
+			i18nUtil.get("fwm-message-invalid-playback-position-error-1")
+			    + "\n"
+			    + i18nUtil.get("fwm-message-invalid-playback-position-error-2")
+			    + "\n(" + timeToPlay + "sec)");
+		    return false;
+		}
 		    
-			initVideoPlayer('video-player1', '#close-video', timeToPlay);
-			showModalDialog("watch-video");
-			// return after matching the first element.
-			// i don't know why the label is matched twice.
-			return true;
-		    }
-		});
+		initVideoPlayer('video-player1', '#close-video', timeToPlay);
+		showModalDialog("watch-video");
 	    });
 	});
     }
