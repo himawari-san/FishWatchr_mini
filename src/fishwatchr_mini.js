@@ -909,7 +909,6 @@ function processBeforeShow(pageId){
 	histgramInterval = 60;
 	selectedTimeStyle = 'real-time-style';
     } else if(pageId == "graph"){
-	// jqm confirm pagenontainershow
 	generateGraph();
 
 	// click a tab to select summary-graph or timeline-graph
@@ -937,43 +936,6 @@ function processBeforeShow(pageId){
 	    document.querySelector('#elapsed-time-style').checked = 'true';    
 	}
 	updateAttributeFilter();
-	
-	// jqm, temporary removed
-	// The following change event handlers are based on http://jsfiddle.net/ezanker/fu26u/204/
-	// $("#time1").on("change", function(){
-	//     var time = selectedTimeStyle == "elapsed-time-style"
-	// 	? time2FormattedTime(Number($(this).val())).replace(/:..$/, "")
-	// 	: date2FormattedDateTime(new Date(Number($(this).val()))).replace(/^.+ /, "").replace(/:..$/, "");
-        //     $(this).closest(".timeRangeSlider").find(".timeLabel").val(time);
-        //     $(this).closest(".timeRangeSlider").find(".ui-slider-handle").eq(0).prop("title", time);
-	// });
-	// $("#time1").on("slidestop", function(e){
-	//     $("#time1").trigger("change"); // update title
-	//     var offset = selectedTimeStyle == "elapsed-time-style"
-	// 	? startRecordingTime : 0;
-	//     updateMergedAnnotationsCurrent(
-	// 	Number($("#time1").val()) + offset,
-	// 	Number($("#time2").val()) + offset);
-	//     drawGraph();
-	// });
-	
-	// $("#time2").on("change", function(){
-	//     var time = selectedTimeStyle == "elapsed-time-style"
-	// 	? time2FormattedTime(Number($(this).val())).replace(/:..$/, "")
-	// 	: date2FormattedDateTime(new Date(Number($(this).val()))).replace(/^.+ /, "").replace(/:..$/, "");
-        //     $(this).closest(".timeRangeSlider").find(".timeLabel2").val(time);
-        //     $(this).closest(".timeRangeSlider").find(".ui-slider-handle").eq(1).prop("title", time);
-	// });
-	// $("#time2").on("slidestop", function(e){
-	//     $("#time2").trigger("change"); // update title
-	//     var offset = selectedTimeStyle == "elapsed-time-style"
-	// 	? startRecordingTime : 0;
-	//     updateMergedAnnotationsCurrent(
-	// 	Number($("#time1").val()) + offset,
-	// 	Number($("#time2").val()) + offset);
-	//     drawGraph();
-	// });
-
 	drawGraph();
     }
 };
