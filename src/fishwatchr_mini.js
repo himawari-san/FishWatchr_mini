@@ -793,8 +793,6 @@ function processBeforeShow(pageId){
 	console.log("timer cleared:" + timerID);
     }
 
-    removeShortcutAll();
-    
     // observation page
     if(pageId == "observation"){
 	var panelA = document.getElementById('panel-a');
@@ -869,7 +867,7 @@ function processBeforeShow(pageId){
 		if(annotationMode == "mode_label"){
 		    newButton.disabled = true;
 		}
-		shortcut.add(shortcutKeys[ca-1], shortcutCallback(newButton));
+		hotkeys(shortcutKeys[ca-1], shortcutCallback(newButton));
 		addEventListerToAnnotationButton(newButton);
 		ca++;
 	    } 
@@ -888,7 +886,7 @@ function processBeforeShow(pageId){
 		if(annotationMode == "mode_speaker"){
 		    newButton.disabled = true;
 		}
-		shortcut.add(cb + "", shortcutCallback(newButton));
+		hotkeys(cb + "", shortcutCallback(newButton));
 		addEventListerToAnnotationButton(newButton);
 		cb++;
 	    } 
@@ -1349,13 +1347,6 @@ function getGroupName(){
     groupname = eGroupname.value.replace(/^ +/, "").replace(/ +$/, "");
     eGroupname.value =  groupname;
     groupname = groupname.replace(/\$$/, "");
-}
-
-
-function removeShortcutAll(){
-    for(var sc in shortcut.all_shortcuts){
-	shortcut.remove(sc);
-    }
 }
 
 
