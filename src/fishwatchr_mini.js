@@ -505,7 +505,6 @@ function initializeEvent(){
     document.querySelectorAll('.time-style-selector').forEach(selector => {
 	selector.addEventListener('click', function(event) {
 	    selectedTimeStyle = event.target.value;
-	    changeTimeStyle();
 	    drawGraph();
 	});
     });
@@ -1900,71 +1899,8 @@ function generateGraph(){
 	    lastAnnotationTime = new Date(2000, 1, 1, 1, 0, 0).getTime();
 	}
 
-	initSlider();
 	drawGraph();
     });
-}
-
-function initSlider(){
-    var timeMin = 0;
-    var timeMax = 0;
-    
-    if(selectedTimeStyle == "elapsed-time-style"){
-	timeMin = firstAnnotationTime-startRecordingTime;
-	timeMax = lastAnnotationTime-startRecordingTime;
-	setInnerText("start-time",
-		     time2FormattedTime(timeMin).replace(/:..$/, ""));
-	setInnerText("end-time",
-		     time2FormattedTime(timeMax).replace(/:..$/, ""));
-    } else {
-	timeMin = firstAnnotationTime;
-	timeMax = lastAnnotationTime;
-	setInnerText("start-time",
-		     date2FormattedDateTime(new Date(timeMin))
-		     .replace(/^.+ /, "").replace(/:..$/, ""));
-	setInnerText("end-time",
-		     date2FormattedDateTime(new Date(timeMax))
-		     .replace(/^.+ /, "").replace(/:..$/, ""));
-    }
-
-    eSetAttribute("time-range", "data-time-min", timeMin);
-    eSetAttribute("time-range", "data-time-max", timeMax);
-}
-
-
-
-function changeTimeStyle(){
-    var startTime = Number(eGeAttribute("time-range", "data-time-min"));
-    var endTime = Number(eGeAttribute("time-range", "data-time-max"));
-
-    var currentTime = 0;
-    var timeMin = 0;
-    var timeMax = 0;
-    
-    if(selectedTimeStyle == "elapsed-time-style"){
-	startTime = startTime-startRecordingTime;
-	endTime = endTime-startRecordingTime;
-	timeMin = firstAnnotationTime-startRecordingTime;
-	timeMax = lastAnnotationTime-startRecordingTime;
-	setInnerText("start-time",
-		     time2FormattedTime(startTime).replace(/:..$/, ""));
-	setInnerText("end-time",
-		     time2FormattedTime(endTime).replace(/:..$/, ""));
-    } else {
-	startTime = startTime+startRecordingTime;
-	endTime = endTime+startRecordingTime;
-	timeMin = firstAnnotationTime;
-	timeMax = lastAnnotationTime;
-	setInnerText("start-time",
-		     date2FormattedDateTime(new Date(startTime))
-		     .replace(/^.+ /, "").replace(/:..$/, ""));
-	setInnerText("end-time",
-		     date2FormattedDateTime(new Date(endTime))
-		     .replace(/^.+ /, "").replace(/:..$/, ""));
-    }
-	
-    eSetAttribute("time-range", "data-time-min", timeMin);
-    eSetAttribute("time-range", "data-time-max", timeMax);
 }
 
 
