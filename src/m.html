@@ -518,13 +518,13 @@
 	
 	<!-- timeline-graph-panel --> 
 	<div class="tab-pane fade mt-3" id="timeline-graph-panel" role="tabpanel">
-	  <div class="mx-3" id="time-range" data-time-min="" data-time-max="">
+	  <div class="mx-3 mb-md-2" id="time-range" data-time-min="" data-time-max="">
 	    <span>表示範囲：</span><span id="start-time"></span> - <span id="end-time"></span>
 	  </div>
-	  <div class="row mx-3 mb-1" id="range-slider">
-	    <label class="col-3 col-form-label col-form-label-sm" for="time-interval-selector" data-i18n="fwm-m-graph-interval-range">区間幅(sec)</label>
-	    <div class="col-8">
-	      <select  class="form-select form-control-sm" id="time-interval-selector">
+	  <div class="row mx-2 mb-1" id="range-slider">
+	    <div class="col-6 mb-md-2">
+	      <label class="form-label form-label-sm" for="time-interval-selector" data-i18n="fwm-m-graph-interval-range">区間幅(sec)</label>
+	      <select  class="form-select form-select-sm" id="time-interval-selector">
 		<option>15</option>
 		<option>30</option>
 		<option>45</option>
@@ -539,28 +539,26 @@
 		<option>180</option>
 	      </select>
 	    </div>
-	  </div>
 
-	  <div id="attribute-value-fillter" class="row mx-3 mb-1">
-	    <label for="attribute-value-selector" class="col-3 col-form-label col-form-label-sm" data-i18n="fwm-m-graph-attribute-value-filter">フィルタ：</label>
-	    <div class="col-8">
-	      <select class="form-select form-control-sm" name="attribute-value-selector" id="attribute-value-selector">
+	    <div id="attribute-value-fillter" class="col-6">
+	      <label for="attribute-value-selector" class="form-label form-label-sm" data-i18n="fwm-m-graph-attribute-value-filter">フィルタ：</label>
+	      <select class="form-select form-select-sm" name="attribute-value-selector" id="attribute-value-selector">
 	      </select>
 	    </div>
 	  </div>
 
 	  <div class="row mx-2">
 	    <div class="col-6">
-	      <label class="form-label form-label-sm" for="attribute-selector-timeline" data-i18n="fwm-m-graph-attributes">属性：</label>
+	      <label class="form-label col-form-label text-end" for="attribute-selector-timeline" data-i18n="fwm-m-graph-attributes">属性：</label>
 	      <div class="btn-group btn-group-sm" role="group" id="attribute-selector-timeline">
 		<input type="radio" class="btn-check time-line-attribute-selector" id="time-line-attribute-label" name="attribute" value="attribute-label" autocomplete="off" checked />
-		<label class="btn btn-outline-info" for="time-line-attribute-label" data-i18n="fwm-m-graph-attribute-label">ラベル</label>
+		<label class="btn btn-outline-info form-label-sm" for="time-line-attribute-label" data-i18n="fwm-m-graph-attribute-label">ラベル</label>
 		<input type="radio" class="btn-check time-line-attribute-selector" id="time-line-attribute-observation-target" name="attribute" value="attribute-observation-target" autocomplete="off" />
 		<label class="btn btn-outline-info" for="time-line-attribute-observation-target" data-i18n="fwm-m-graph-attribute-target">対象</label>
 	      </div>
 	    </div>
 	    <div class="col-6">
-	      <label class="form-label form-label-sm" for="timedisplay-type-selector" data-i18n="fwm-m-tab-chart-time-style">時間表示：</label>
+	      <label class="form-label col-form-label" for="timedisplay-type-selector" data-i18n="fwm-m-tab-chart-time-style">時間表示：</label>
 	      <div class="btn-group btn-group-sm" role="group" id="timedisplay-type-selector">
 		<input type="radio" class="btn-check time-style-selector" id="real-time-style" name="time-style" value="real-time-style" autocomplete="off" checked />
 		<label class="btn btn-outline-info" for="real-time-style" data-i18n="fwm-button-time-style-clock">　時刻　</label>
