@@ -2424,7 +2424,7 @@ function drawGraph(){
 	    }
 	},
 	zoom: {
-	    enabled: false
+	    enabled: true,
 	}
     });
 
