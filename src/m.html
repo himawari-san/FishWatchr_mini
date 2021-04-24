@@ -495,24 +495,26 @@
       <div class="tab-content">
       <!-- summary-graph-panel --> 
 	<div class="tab-pane fade show active" id="summary-graph-panel" role="tabpanel">
-	  <!-- attribute selector -->
-	  <div class="m-3 d-grid">
-	    <label for="select-attribute" class="form-label" data-i18n="fwm-m-graph-attributes">属性：</label>
-	    <select class="form-select" name="select-attribute" id="summary-graph-attribute-selector">
-	      <option value="attribute-label" data-i18n="fwm-m-graph-attribute-label">ラベル</option>
-	      <option value="attribute-observation-target" data-i18n="fwm-m-graph-attribute-target">対象</option>
-	      <option value="attribute-eval-average" data-i18n="fwm-m-graph-attribute-evaluation">評価（平均）</option>
-	    </select>
-	  </div>
+	  <div class="row mx-2 mb-3">
+	    <!-- attribute selector -->
+	    <div class="col-6 mb-md-2">
+	      <label for="select-attribute" class="form-label" data-i18n="fwm-m-graph-attributes">属性：</label>
+	      <select class="form-select" name="select-attribute" id="summary-graph-attribute-selector">
+		<option value="attribute-label" data-i18n="fwm-m-graph-attribute-label">ラベル</option>
+		<option value="attribute-observation-target" data-i18n="fwm-m-graph-attribute-target">対象</option>
+		<option value="attribute-eval-average" data-i18n="fwm-m-graph-attribute-evaluation">評価（平均）</option>
+	      </select>
+	    </div>
 	  <!-- observer selector -->
-	  <div class="m-3 d-grid">
-	    <label for="observer-selector" class="form-label" data-i18n="fwm-graph-observers">観察者：</label>
-	    <select class="form-select"  name="observer-selector" id="observer-selector">
-	      <option value="all" data-i18n="fwm-graph-observers-all-sum">全観察者（合計）</option>
-	      <option value="user-only" data-i18n="fwm-graph-observers-self">本人</option>
-	      <option value="user-comparison" data-i18n="fwm-graph-observers-self-others">本人／他の観察者</option>
-	      <option value="all-comparison" data-i18n="fwm-graph-observers-every-observer">全観察者（比較）</option>
-	    </select>
+	    <div class="col-6 mb-md-2">
+	      <label for="observer-selector" class="form-label" data-i18n="fwm-graph-observers">観察者：</label>
+	      <select class="form-select"  name="observer-selector" id="observer-selector">
+		<option value="all" data-i18n="fwm-graph-observers-all-sum">全観察者（合計）</option>
+		<option value="user-only" data-i18n="fwm-graph-observers-self">本人</option>
+		<option value="user-comparison" data-i18n="fwm-graph-observers-self-others">本人／他の観察者</option>
+		<option value="all-comparison" data-i18n="fwm-graph-observers-every-observer">全観察者（比較）</option>
+	      </select>
+	    </div>
 	  </div>
 	</div>
 	
