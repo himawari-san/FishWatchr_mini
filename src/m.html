@@ -182,15 +182,19 @@
 	    
 	    <!-- analysis-panel --> 
 	    <div class="tab-pane fade" id="analysis-panel" role="tabpanel">
-	      <div class="d-grid mt-3 mx-3">
+	      <div class="d-grid mt-3 mb-2 mx-3">
 		<button type="button" id="btn-show-graph" class="btn btn-secondary" data-i18n="fwm-m-tab-analysis-display-chart">グラフ表示</button>
 	      </div>
-	      <div class="mt-sm-2 mt-md-3 mb-5 mx-4">
+	      <div class="mb-4 mx-4">
 		<label for="threshold-outlier" class="form-label" data-i18n="fwm-m-tab-analysis-chart-outlier">外れ値検出(sec)：</label>
 		<input type="text" class="form-control" name="threshold-outlier" id="threshold-outlier" value="1800" placeholder="(sec)" />
 	      </div>
 	      
-	      <div class="mx-3 mb-3">
+	      <div class="d-grid mb-2 mx-3">
+		<button type="button" id="btn-watch-video" class="btn btn-secondary" data-i18n="fwm-m-tab-analysis-watch-video">ビデオ表示</button>
+	      </div>
+
+	      <div class="mx-4 mb-3">
 		<label for="video-url" class="form-label me-3" data-i18n="fwm-m-tab-analysis-video-id">ビデオID:</label>
 		(
 		<div class="form-check form-check-inline ms-2">
@@ -209,9 +213,6 @@
 		<input type="file" id="video-url" class="form-control" value="" placeholder="" />
 	      </div>
 	      
-	      <div class="d-grid m-3">
-		<button type="button" id="btn-watch-video" class="btn btn-secondary" data-i18n="fwm-m-tab-analysis-watch-video">ビデオ表示</button>
-	      </div>
 	    </div>
 	    
 	    

@@ -17,7 +17,7 @@
     "fwm-m-tab-user-empty-value": "(設定の読み込み)",
     "fwm-m-tab-user-set-value": "設定の読み込み",
     "fwm-m-data-clear-btn-text": "クリア",
-    "fwm-m-label-placeholder": "あなたの名前を入力して下さい",
+    "fwm-m-label-placeholder": "半角の英数字が使えます",
     "fwm-m-tab-buttons-mode-target": "観察モード：対象",
     "fwm-m-tab-buttons-mode-label": "観察モード：ラベル",
     "fwm-m-tab-buttons-mode-target_label": "観察モード：対象 → ラベル",

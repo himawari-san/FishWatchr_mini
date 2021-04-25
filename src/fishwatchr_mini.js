@@ -724,8 +724,9 @@ function changeLang(){
     // label for language selector
     setInnerText('navbarDropdownMenuLink', uiLanguage);
 
-    // placefolder of username form     
+    // placefolder of username and groupname forms
     document.getElementById("username").setAttribute("placeholder", i18nUtil.get("fwm-m-label-placeholder"));
+    document.getElementById("groupname").setAttribute("placeholder", i18nUtil.get("fwm-m-label-placeholder"));
 
     // load-setting button
     var buttonLoadSettings = document.getElementById("btn-load-settings");
