@@ -2296,24 +2296,6 @@ function drawGraph(){
 		    }
 		}
 	    },
-	    position: function(data, width, height, thisElement){
-		// based on https://github.com/c3js/c3/issues/1107
-		var containerWidth, tooltipWidth, x;
-		var element = document.getElementById("graph_body");
-		containerWidth = element.clientWidth;
-		tooltipWidth = element.querySelector('.c3-tooltip-container').clientWidth;
-		x = parseInt(thisElement.getAttribute('x'));
-
-		if (x > containerWidth / 2) {
-		    x = x - tooltipWidth;
-		} else  {
-		    x = x + tooltipWidth/2;
-		}
-		return {
-		    top: parseInt(thisElement.getAttribute('y')),
-		    left: x
-		};		
-	    }
 	},
 	zoom: {
 	    enabled: true,
