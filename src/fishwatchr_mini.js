@@ -102,6 +102,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	return "You are leaving FishWathcr Mini. Your data on the browser will be lost."; 
     };
 
+    // stop the browser back button
+    history.pushState(null, null, null);
+    
     // show home page
     changePageTo('home');
     
