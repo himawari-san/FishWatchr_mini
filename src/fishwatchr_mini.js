@@ -51,6 +51,7 @@ var firstAnnotationTime = 0;
 var lastAnnotationTime = 0;
 
 var histgramInterval = 60; // sec
+var zoomDomain = [];
 
 var selectedGraph = 'selector-summary-graph'; // default graph
 var selectedAttribute = 'attribute-label';
@@ -1485,6 +1486,12 @@ function formattedTime2Sec(ftime){
 }
 
 
+// 012300 => 01:23:00
+function label2Time(str){
+    return str.replace(/(..)(..)(..)/,"$1:$2:$3");
+}
+
+
 function parseDate(strDate){
     var matches = strDate.match(/^(\d\d\d\d)-(\d\d)-(\d\d)\s+(\d\d):(\d\d):(\d\d)(\.(\d\d\d))?/);
     var time = NaN;
@@ -1734,6 +1741,7 @@ function getCurrentStartRecordingTime(){
     });
 }
 
+//aa
 function updateMergedAnnotationsCurrent(begin, end){
     mergedAnnotationsCurrent = new Array();
 
@@ -1755,6 +1763,7 @@ function generateGraph(){
     mergedAnnotations = [];
     mergedAnnotationsCurrent = [];
     yMaxTimeLineChart = 0;
+    zoomDomain = [];
 
     fetch("get_merged_data.php", {
 	method: "POST",
@@ -2055,15 +2064,15 @@ function drawGraph(){
 	var categories2 = {};
 	var prevTime = 0;
 
-	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
-	    var ptime = mergedAnnotationsCurrent[i][fn_ptime];
+	for(var i = 0; i < mergedAnnotations.length; i++){
+	    var ptime = mergedAnnotations[i][fn_ptime];
 	    // remove annotations that are made before recording the video
 	    if(ptime - startRecordingTime < 0){
 		continue;
 	    }
 
 	    var time = Math.floor(ptime/histgramInterval/1000);
-	    var category = mergedAnnotationsCurrent[i][iAttribute];
+	    var category = mergedAnnotations[i][iAttribute];
 
 	    // insert axises whose frequency is 0
 	    if(time - prevTime > 1 && prevTime != 0){
@@ -2087,20 +2096,20 @@ function drawGraph(){
 		    }
 		}
 	    }
-	    if(mergedAnnotationsCurrent[i][iAttribute2] == '-' && buttonList2.indexOf('-') == -1) {
+	    if(mergedAnnotations[i][iAttribute2] == '-' && buttonList2.indexOf('-') == -1) {
 		buttonList2.push('-');
 	    }
 	    
 
 	    // filter
-	    if(selectedFilterValue != defaultFilterValue && selectedFilterValue != mergedAnnotationsCurrent[i][iAttribute]){
+	    if(selectedFilterValue != defaultFilterValue && selectedFilterValue != mergedAnnotations[i][iAttribute]){
 		if(type[time] == undefined) type[time] = 0;
 		if(temp[category + "\t" + time] == undefined) temp[category + "\t" + time] = 0;
-		if(username == mergedAnnotationsCurrent[i][fn_username] && temp[categoryYours + "\t" + time] == undefined){
+		if(username == mergedAnnotations[i][fn_username] && temp[categoryYours + "\t" + time] == undefined){
 		    temp[categoryYours + "\t" + time] = 0;
 		}
-		if(temp2[mergedAnnotationsCurrent[i][iAttribute2] + "\t" + time] == undefined){
-		    temp2[mergedAnnotationsCurrent[i][iAttribute2] + "\t" + time] = 0;
+		if(temp2[mergedAnnotations[i][iAttribute2] + "\t" + time] == undefined){
+		    temp2[mergedAnnotations[i][iAttribute2] + "\t" + time] = 0;
 		}
 		if(!(category in categories)){
 		    categories[category] = 0;
@@ -2127,7 +2136,7 @@ function drawGraph(){
 
 	    // your annotations
 	    key = categoryYours + "\t" + time;
-	    if(username == mergedAnnotationsCurrent[i][fn_username]){
+	    if(username == mergedAnnotations[i][fn_username]){
 		if(key in temp){
 		    temp[key]++;
 		} else {
@@ -2136,7 +2145,7 @@ function drawGraph(){
 	    }
 
 	    // freq
-	    key = mergedAnnotationsCurrent[i][iAttribute2] + "\t" + time;
+	    key = mergedAnnotations[i][iAttribute2] + "\t" + time;
 	    if(key in temp2){
 		temp2[key]++;
 	    } else {
@@ -2250,6 +2259,7 @@ function drawGraph(){
     }
     
     var yMax = selectedGraph == 'selector-timeline-graph' ? yMaxTimeLineChart : evaluationGrade;
+    let isZoomEnabled = selectedGraph != 'selector-summary-graph' ? true : false;
     var chart = c3.generate({
 	bindto: '#graph_body',
 	data: {
@@ -2258,7 +2268,7 @@ function drawGraph(){
 	    type: chartType,
 	    types: typesJSON,
 	    groups: [typeNames2],
-	    order: null
+	    order: null,
 	},
 	axis: {
 	    x: {
@@ -2299,9 +2309,30 @@ function drawGraph(){
 	    },
 	},
 	zoom: {
-	    enabled: true,
+	    enabled: isZoomEnabled,
+	    type: 'drag',
+	    onzoom: function(domain){
+		zoomDomain = domain;
+		
+		let flooredstartRecordingTime = Math.floor(startRecordingTime / (histgramInterval * 1000)) * histgramInterval * 1000;
+		let begin = flooredstartRecordingTime
+		    + formattedTime2Sec(label2Time(xTimes[Math.trunc(domain[0])]));
+		
+		let end = flooredstartRecordingTime
+		    + formattedTime2Sec(label2Time(xTimes[Math.ceil(domain[1])-1]))
+		    + histgramInterval * 1000;
+
+		updateMergedAnnotationsCurrent(begin, end);
+	    },
 	}
+	
     });
+
+    if(zoomDomain.length != 0 && selectedGraph != 'selector-summary-graph'){
+	chart.zoom(zoomDomain);
+	chart.flush();
+    }
+    
 
     // play video by clicking a tick
     var videoID = getVideoID();
