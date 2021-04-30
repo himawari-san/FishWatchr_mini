@@ -64,6 +64,8 @@
     "fwm-m-graph-tab-style-attribute": "Attribute",
     "fwm-m-graph-tab-style-time": "Time",
     "fwm-m-graph-interval-range": "Interval(sec)",
+    "fwm-m-graph-zoom-label": "Zoom",
+    "fwm-m-graph-unzoom-label": "Unzoom",
     "fwm-m-graph-time-range": "Time Range",
     "fwm-m-graph-attributes": "Attributes:",
     "fwm-m-graph-attribute-label": "Label",

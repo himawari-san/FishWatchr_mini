@@ -52,6 +52,8 @@ var lastAnnotationTime = 0;
 
 var histgramInterval = 60; // sec
 var zoomDomain = [];
+var zoomDomainFull = []; 
+var zoomType = 'scroll';
 
 var selectedGraph = 'selector-summary-graph'; // default graph
 var selectedAttribute = 'attribute-label';
@@ -526,6 +528,28 @@ function initializeEvent(){
 	drawGraph();
     });
 
+
+    document.querySelector('#graph-zoom-button').addEventListener('click', function(event) {
+	let zoomButton = document.getElementById("graph-zoom-button");
+
+	// zoom -> unzoom
+	if(event.target.classList.contains('btn-info')){
+	    zoomButton.innerText = i18nUtil.get("fwm-m-graph-unzoom-label");
+	    zoomButton.classList.remove('btn-info');
+	    zoomButton.classList.add('btn-warning');
+	    zoomType = 'drag';
+	}
+	// unzoom -> zoom
+	else {
+	    zoomButton.innerText = i18nUtil.get("fwm-m-graph-zoom-label");
+	    zoomButton.classList.add('btn-info');
+	    zoomButton.classList.remove('btn-warning');
+	    zoomType = 'scroll';
+	    zoomDomain = [];
+	    updateMergedAnnotationsCurrent(0, Number.MAX_SAFE_INTEGER);
+	}
+	drawGraph();
+    });
     
     // language selector
     document.querySelectorAll('.fw-lang-item').forEach(item => {
@@ -1741,7 +1765,7 @@ function getCurrentStartRecordingTime(){
     });
 }
 
-//aa
+
 function updateMergedAnnotationsCurrent(begin, end){
     mergedAnnotationsCurrent = new Array();
 
@@ -2260,6 +2284,7 @@ function drawGraph(){
     
     var yMax = selectedGraph == 'selector-timeline-graph' ? yMaxTimeLineChart : evaluationGrade;
     let isZoomEnabled = selectedGraph != 'selector-summary-graph' ? true : false;
+    setInnerText("graph_body", "");
     var chart = c3.generate({
 	bindto: '#graph_body',
 	data: {
@@ -2268,18 +2293,22 @@ function drawGraph(){
 	    type: chartType,
 	    types: typesJSON,
 	    groups: [typeNames2],
-	    order: null,
+	    order: null
 	},
 	axis: {
 	    x: {
 		type: 'category',
+		tick: {
+		    rotate: 90,
+		    multiline: false,
+		},
 	    },
 	    y: {
 		max: yMax,
 	    }
 	},
 	padding: {
-	    bottom: 60
+	    bottom: 20
 	},
 	legend: {
 	    show: flagLegend,
@@ -2310,30 +2339,59 @@ function drawGraph(){
 	},
 	zoom: {
 	    enabled: isZoomEnabled,
-	    type: 'drag',
-	    onzoom: function(domain){
-		zoomDomain = domain;
-		
+	    type: zoomType,
+	    disableDefaultBehavior: true,
+	    onzoomend: function(domain){
+		zoomDomain[0] = Math.trunc(domain[0]); // begin
+		zoomDomain[1] = Math.ceil(domain[1]); // end
+
+		if(zoomDomain[1] - zoomDomain[0] <= 0){
+		    // invalid domain
+		    return;
+		}
+
+		let zoomButton = document.getElementById("graph-zoom-button");
+		if(JSON.stringify(zoomDomain) == JSON.stringify(zoomDomainFull)){
+		    zoomButton.innerText = i18nUtil.get("fwm-m-graph-zoom-label");
+		    zoomButton.classList.add('btn-info');
+		    zoomButton.classList.remove('btn-warning');
+		    console.log("zoom");
+		} else {
+		    zoomButton.innerText = i18nUtil.get("fwm-m-graph-unzoom-label");
+		    zoomButton.classList.remove('btn-info');
+		    zoomButton.classList.add('btn-warning');
+		    console.log("unzoom");
+		}
+
 		let flooredstartRecordingTime = Math.floor(startRecordingTime / (histgramInterval * 1000)) * histgramInterval * 1000;
 		let begin = flooredstartRecordingTime
-		    + formattedTime2Sec(label2Time(xTimes[Math.trunc(domain[0])]));
+		    + formattedTime2Sec(label2Time(xTimes[zoomDomain[0]]));
 		
 		let end = flooredstartRecordingTime
-		    + formattedTime2Sec(label2Time(xTimes[Math.ceil(domain[1])-1]))
+		    + formattedTime2Sec(label2Time(xTimes[zoomDomain[1]-1]))
 		    + histgramInterval * 1000;
 
 		updateMergedAnnotationsCurrent(begin, end);
+		
+		if(zoomType == 'scroll'){
+		    chart.zoom(zoomDomain);
+		} else {
+		    zoomType = 'scroll';
+		    replaceGraph(chart);
+		}
 	    },
 	}
 	
     });
 
+    console.log("ffsda");
+    zoomDomainFull[0] = 0;
+    zoomDomainFull[1] = xTimes.length;
     if(zoomDomain.length != 0 && selectedGraph != 'selector-summary-graph'){
+	console.log("zd2:" + zoomDomain);
 	chart.zoom(zoomDomain);
-	chart.flush();
     }
     
-
     // play video by clicking a tick
     var videoID = getVideoID();
     if(videoID != ""){
@@ -2387,6 +2445,12 @@ function drawGraph(){
 	});
     }
 }
+
+
+function replaceGraph(chart){
+    chart.destroy();
+    drawGraph();
+}  
 
 
 function accumulate(array, p1, p2, val, nArray){
