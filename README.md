@@ -5,9 +5,12 @@ FishWatchr Mini is an educational observation support tool for mobile devices. S
 # Requirements
 * HTML5 + JavaScript (client)
 * PHP (server)
-* [JQuery Mobile (ver.1.4.5 or later)](https://jquerymobile.com/)
-* [C3.js (ver.0.4.14 or later)](http://c3js.org/)
-* [shortcut.js](http://www.openjs.com/scripts/events/keyboard_shortcuts/)
+* [Bootstrap (ver.1.5 or later)](https://getbootstrap.jp/)
+* [C3 (ver.0.7.20 or later)](http://c3js.org/)
+* [D3 (ver.6.7.0 or later)](https://github.com/d3/d3)
+* [Hotkeys](https://github.com/jaywcjlove/hotkeys)
+* [QRCode.js](https://github.com/davidshimjs/qrcodejs)
+* [banana-i18n](https://github.com/wikimedia/banana-i18n)
 
 
 # Demo and User Manual
@@ -16,11 +19,13 @@ FishWatchr Mini is an educational observation support tool for mobile devices. S
 
 # Install
 1. Put files included in the src directory to a directory (FWM_DIR) in a Web server.
-2. Install JQuery Mobile, C3.js in FWM_DIR
-    * jquery.mobile.min.js, jquery.mobile.min.css
-    * jquery.min.js (for JQuery Mobile)
+2. Install Bootstrap, C3, D3, Hotkeys, QRCode.js and banana-i18n into jss directory.
+    * bootstrap.bundle.min.js, bootstrap.min.css
     * c3.min.js, c3.min.css
-    * d3.min.js (for C3.js)
+    * d3.min.js
+	* banana-i18n.js
+	* hotkeys.min.js
+	* qrcode.min.js
 3. Write .ht_fw_mini.inc based on sample.ht_fw_mini.inc, and put it in FWM_DIR.
 4. Set up directories in the Web server based on the .ht_fw_mini.inc.
 
