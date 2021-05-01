@@ -172,7 +172,7 @@ function loadSettings(groupname){
     var spinner = new bootstrap.Modal(document.getElementById('modal-spinner'));
     spinner.show();
     
-    return fetch("get_config.php", {
+    return fetch("phps/get_config.php", {
 	method: "POST",
 	body: JSON.stringify({groupname: groupname})
     }).then((response) => response.json()).then(data => {
@@ -357,7 +357,7 @@ function initializeEvent(){
 	var dataBody = "";
 	var fileType = "";
 	
-	fetch("archive.php", {
+	fetch("phps/archive.php", {
 	    method: "POST",
 	    body: JSON.stringify({
 		groupname: groupname
@@ -447,6 +447,11 @@ function initializeEvent(){
 		showModalErrorMessage(i18nUtil.get("fwm-message-no-groupname-error"));
 	    }
 	}
+    });
+
+
+    document.querySelector('#toolMenuItemShowVersion').addEventListener('click', function(event) {
+	showModalMessage("FishWatchr Mini\nver.2.0", "Verion");
     });
 
 
@@ -1130,7 +1135,7 @@ function saveSettings(){
 	"groupSiteURL" : groupSiteURL
     };
 
-    fetch("save_settings.php", {
+    fetch("phps/save_settings.php", {
 	method: "POST",
 	body: JSON.stringify({
 	    savename: trueGroupname,
@@ -1235,7 +1240,7 @@ function saveToServer(event){
 
 
 function store(savename, groupname, fileType, dataBody){
-    return fetch("store.php", {
+    return fetch("phps/store.php", {
 	method: "POST",
 	body: JSON.stringify({
 	    savename: savename,
@@ -1734,7 +1739,7 @@ function getCurrentStartRecordingTime(){
     var spinner = new bootstrap.Modal(document.getElementById('modal-spinner'));
     spinner.show();
 
-    fetch("get_merged_data.php", {
+    fetch("phps/get_merged_data.php", {
 	method: "POST",
 	body: JSON.stringify({
 	    groupname: groupname,
@@ -1819,7 +1824,7 @@ function generateGraph(){
     yMaxTimeLineChart = 0;
     zoomDomain = [];
 
-    fetch("get_merged_data.php", {
+    fetch("phps/get_merged_data.php", {
 	method: "POST",
 	body: JSON.stringify({
 	    groupname: groupname,
