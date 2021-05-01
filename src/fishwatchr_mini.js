@@ -965,6 +965,15 @@ function processBeforeShow(pageId){
 	//
 	// #summary-graph-panel
 	//
+
+	// initialize the zoom button 
+	var zoomButton = document.getElementById("graph-zoom-button");
+	zoomButton.innerText = i18nUtil.get("fwm-m-graph-zoom-label");
+	zoomButton.classList.add('btn-info');
+	zoomButton.classList.remove('btn-warning');
+	zoomButton.hidden = true;
+	zoomButton.disable = false;
+
 	setSelector("summary-graph-attribute-selector", selectedAttribute);
 	setSelector("observer-selector", selectedObserver);
 
