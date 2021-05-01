@@ -54,6 +54,7 @@ var histgramInterval = 60; // sec
 var zoomDomain = [];
 var zoomDomainFull = []; 
 var zoomType = 'scroll';
+var isFirstZoomButtonCall = true;
 
 var selectedGraph = 'selector-summary-graph'; // default graph
 var selectedAttribute = 'attribute-label';
@@ -543,8 +544,15 @@ function initializeEvent(){
 
 
     document.querySelector('#graph-zoom-button').addEventListener('click', function(event) {
-	let zoomButton = document.getElementById("graph-zoom-button");
+	let zoomButton = event.target;
 
+	if(isFirstZoomButtonCall){
+	    showModalMessage(
+		i18nUtil.get("fwm-m-graph-zoom-message"),
+		"Information",);
+	    isFirstZoomButtonCall = false;
+	}
+	
 	// zoom -> unzoom
 	if(event.target.classList.contains('btn-info')){
 	    zoomButton.innerText = i18nUtil.get("fwm-m-graph-unzoom-label");

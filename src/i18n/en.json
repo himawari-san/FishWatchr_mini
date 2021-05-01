@@ -66,6 +66,7 @@
     "fwm-m-graph-interval-range": "Interval(sec)",
     "fwm-m-graph-zoom-label": "Zoom",
     "fwm-m-graph-unzoom-label": "Unzoom",
+    "fwm-m-graph-zoom-message": "Please click the inside of the chart once before selecting a zoom range so that you can select the range precisely.",
     "fwm-m-graph-time-range": "Time Range",
     "fwm-m-graph-attributes": "Attributes:",
     "fwm-m-graph-attribute-label": "Label",
