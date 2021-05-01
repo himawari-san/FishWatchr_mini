@@ -473,6 +473,19 @@ function initializeEvent(){
     document.querySelectorAll('.graph-selector').forEach(selector => {
 	selector.addEventListener('click', function(event) {
 	    selectedGraph = event.target.id;
+
+	    let zoomButton = document.getElementById("graph-zoom-button");
+	    if(selectedGraph == 'selector-summary-graph') {
+		if(zoomButton.classList.contains('btn-warning')){ // in zoom
+		    zoomButton.disabled = true;
+		} else {
+		    zoomButton.hidden = true;
+		}
+	    } else {
+		zoomButton.disabled = false;
+		zoomButton.hidden = false;
+	    }
+
 	    drawGraph();
 	});
     });
@@ -2282,9 +2295,22 @@ function drawGraph(){
 	chartType = "line";
     }
     
-    var yMax = selectedGraph == 'selector-timeline-graph' ? yMaxTimeLineChart : evaluationGrade;
-    let isZoomEnabled = selectedGraph != 'selector-summary-graph' ? true : false;
+
+    // initialize graph settings
+    let yMax;
+    let isZoomEnabled;
+    let xTickRotate;
+    if(selectedGraph == 'selector-timeline-graph'){
+	yMax = yMaxTimeLineChart;
+	isZoomEnabled = true;
+	xTickRotate = 90;
+    } else {
+	yMax = evaluationGrade;
+	isZoomEnabled = false;
+	xTickRotate = 0;
+    }
     setInnerText("graph_body", "");
+
     var chart = c3.generate({
 	bindto: '#graph_body',
 	data: {
@@ -2299,7 +2325,7 @@ function drawGraph(){
 	    x: {
 		type: 'category',
 		tick: {
-		    rotate: 90,
+		    rotate: xTickRotate,
 		    multiline: false,
 		},
 	    },
