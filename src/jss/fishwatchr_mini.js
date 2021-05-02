@@ -1,3 +1,4 @@
+const systemInfo = "FishWatchr Mini ver.2.0b01" + "\n" + "2021-05-02";
 var now = "";
 var nBoxes = 8;
 var currentPageId = "home";
@@ -451,7 +452,7 @@ function initializeEvent(){
 
 
     document.querySelector('#toolMenuItemShowVersion').addEventListener('click', function(event) {
-	showModalMessage("FishWatchr Mini\nver.2.0", "Verion");
+	showModalMessage(systemInfo, "Version");
     });
 
 
