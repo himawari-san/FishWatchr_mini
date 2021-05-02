@@ -66,7 +66,7 @@
     "fwm-m-graph-interval-range": "区間幅(sec)",
     "fwm-m-graph-zoom-label": "ズーム設定",
     "fwm-m-graph-unzoom-label": "ズーム解除",
-    "fwm-m-graph-zoom-message": "ズーム範囲を選択する前にグラフ内のどこかを一度クリックしてください。正確に選択できるようになります。",
+    "fwm-m-graph-zoom-message": "ズームの範囲をドラッグしてください。ズーム範囲を選択する前にグラフ内のどこかを一度クリックすると，正確に選択できるようになります。",
     "fwm-m-graph-time-range": "表示範囲",
     "fwm-m-graph-attributes": "属　性：",
     "fwm-m-graph-attribute-label": "ラベル",
