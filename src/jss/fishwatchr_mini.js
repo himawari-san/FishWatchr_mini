@@ -565,6 +565,7 @@ function initializeEvent(){
 	    zoomButton.classList.remove('btn-info');
 	    zoomButton.classList.add('btn-warning');
 	    zoomType = 'drag';
+	    isZoomEnabled = true;
 	}
 	// unzoom -> zoom
 	else {
@@ -574,6 +575,7 @@ function initializeEvent(){
 	    zoomType = 'scroll';
 	    zoomDomain = [];
 	    updateMergedAnnotationsCurrent(0, Number.MAX_SAFE_INTEGER);
+	    isZoomEnabled = false;
 	}
 	drawGraph();
     });
@@ -2124,15 +2126,15 @@ function drawGraph(){
 	var categories2 = {};
 	var prevTime = 0;
 
-	for(var i = 0; i < mergedAnnotations.length; i++){
-	    var ptime = mergedAnnotations[i][fn_ptime];
+	for(var i = 0; i < mergedAnnotationsCurrent.length; i++){
+	    var ptime = mergedAnnotationsCurrent[i][fn_ptime];
 	    // remove annotations that are made before recording the video
 	    if(ptime - startRecordingTime < 0){
 		continue;
 	    }
 
 	    var time = Math.floor(ptime/histgramInterval/1000);
-	    var category = mergedAnnotations[i][iAttribute];
+	    var category = mergedAnnotationsCurrent[i][iAttribute];
 
 	    // insert axises whose frequency is 0
 	    if(time - prevTime > 1 && prevTime != 0){
@@ -2156,20 +2158,20 @@ function drawGraph(){
 		    }
 		}
 	    }
-	    if(mergedAnnotations[i][iAttribute2] == '-' && buttonList2.indexOf('-') == -1) {
+	    if(mergedAnnotationsCurrent[i][iAttribute2] == '-' && buttonList2.indexOf('-') == -1) {
 		buttonList2.push('-');
 	    }
 	    
 
 	    // filter
-	    if(selectedFilterValue != defaultFilterValue && selectedFilterValue != mergedAnnotations[i][iAttribute]){
+	    if(selectedFilterValue != defaultFilterValue && selectedFilterValue != mergedAnnotationsCurrent[i][iAttribute]){
 		if(type[time] == undefined) type[time] = 0;
 		if(temp[category + "\t" + time] == undefined) temp[category + "\t" + time] = 0;
-		if(username == mergedAnnotations[i][fn_username] && temp[categoryYours + "\t" + time] == undefined){
+		if(username == mergedAnnotationsCurrent[i][fn_username] && temp[categoryYours + "\t" + time] == undefined){
 		    temp[categoryYours + "\t" + time] = 0;
 		}
-		if(temp2[mergedAnnotations[i][iAttribute2] + "\t" + time] == undefined){
-		    temp2[mergedAnnotations[i][iAttribute2] + "\t" + time] = 0;
+		if(temp2[mergedAnnotationsCurrent[i][iAttribute2] + "\t" + time] == undefined){
+		    temp2[mergedAnnotationsCurrent[i][iAttribute2] + "\t" + time] = 0;
 		}
 		if(!(category in categories)){
 		    categories[category] = 0;
@@ -2196,7 +2198,7 @@ function drawGraph(){
 
 	    // your annotations
 	    key = categoryYours + "\t" + time;
-	    if(username == mergedAnnotations[i][fn_username]){
+	    if(username == mergedAnnotationsCurrent[i][fn_username]){
 		if(key in temp){
 		    temp[key]++;
 		} else {
@@ -2205,7 +2207,7 @@ function drawGraph(){
 	    }
 
 	    // freq
-	    key = mergedAnnotations[i][iAttribute2] + "\t" + time;
+	    key = mergedAnnotationsCurrent[i][iAttribute2] + "\t" + time;
 	    if(key in temp2){
 		temp2[key]++;
 	    } else {
@@ -2321,11 +2323,11 @@ function drawGraph(){
 
     // initialize graph settings
     let yMax;
-    let isZoomEnabled;
+//    let isZoomEnabled;
     let xTickRotate;
     if(selectedGraph == 'selector-timeline-graph'){
 	yMax = yMaxTimeLineChart;
-	isZoomEnabled = true;
+//	isZoomEnabled = true;
 	xTickRotate = 90;
     } else {
 	yMax = evaluationGrade;
@@ -2421,26 +2423,16 @@ function drawGraph(){
 		    + histgramInterval * 1000;
 
 		updateMergedAnnotationsCurrent(begin, end);
-		
-		if(zoomType == 'scroll'){
-		    chart.zoom(zoomDomain);
-		} else {
-		    zoomType = 'scroll';
-		    replaceGraph(chart);
-		}
+		isZoomEnabled = false;
+		replaceGraph(chart);
 	    },
 	}
 	
     });
 
-    console.log("ffsda");
     zoomDomainFull[0] = 0;
     zoomDomainFull[1] = xTimes.length;
-    if(zoomDomain.length != 0 && selectedGraph != 'selector-summary-graph'){
-	console.log("zd2:" + zoomDomain);
-	chart.zoom(zoomDomain);
-    }
-    
+
     // play video by clicking a tick
     var videoID = getVideoID();
     if(videoID != ""){
