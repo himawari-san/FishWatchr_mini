@@ -2387,6 +2387,19 @@ function drawGraph(){
 		    }
 		}
 	    },
+            position: function(data, width, height, element){
+		if(data[0].x + 1 > (arrayColumns[0].length-1) / 2){
+                    return {
+			top: 0,
+			left: element.getBoundingClientRect().left,
+                    };              
+		} else {
+                    return {
+			top: 0,
+			left: element.getBoundingClientRect().right - width,
+                    };              
+		}
+            },
 	},
 	zoom: {
 	    enabled: isZoomEnabled,
