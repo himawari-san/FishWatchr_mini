@@ -2410,6 +2410,9 @@ function drawGraph(){
 		tick: {
 		    rotate: xTickRotate,
 		    multiline: false,
+		    culling: {
+			max: 30,
+		    }
 		},
 	    },
 	    y: {
