@@ -1802,6 +1802,9 @@ function getCurrentStartRecordingTime(){
 	console.log("get_merged_data.php failed!\n" + error);
 	setInnerText("currentStartRecordingTime",
 		     i18nUtil.get("fwm-m-record-current-recording-time-fail"));
+    }).finally(function(){
+	spinner.hide();
+	spinner.dispose();
     });
 }
 
