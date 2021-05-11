@@ -1,4 +1,4 @@
-const systemInfo = "FishWatchr Mini ver.2.0b01" + "\n" + "2021-05-02";
+const systemInfo = "FishWatchr Mini ver.2.0b02" + "\n" + "2021-05-11";
 var now = "";
 var nBoxes = 8;
 var currentPageId = "home";
