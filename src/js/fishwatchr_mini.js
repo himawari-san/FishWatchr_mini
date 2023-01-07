@@ -1889,7 +1889,7 @@ function generateGraph(){
 	var len = mergedAnnotations.length;
 	if(len == 0){
 	    timeMedian = 0;
-	} else if(len % 2 == 0){
+	} else if(len % 2 == 0 && len > 1){
 	    timeMedian = (mergedAnnotations[len/2][fn_ptime] + mergedAnnotations[len/2 + 1][fn_ptime]) / 2;
 	} else {
 	    timeMedian = mergedAnnotations[(len+1)/2][fn_ptime];
